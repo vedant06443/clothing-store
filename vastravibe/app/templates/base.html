@@ -7,7 +7,8 @@
   <title>{% block title %}Suyog Collection — Premium Indian Fashion{% endblock %}</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+  <link rel="icon" type="image/png" href="/static/images/favicon.png">
+  <link rel="apple-touch-icon" href="/static/images/favicon.png">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,8 +43,12 @@
     <div class="desktop-nav-inner">
       <!-- Website logo/name on left -->
       <div class="desktop-logo-wrap">
-        <a href="/" class="navbar-logo">Suyog <span>Collection</span>
-          <small class="navbar-tagline">Indian Fashion</small>
+        <a href="/" class="navbar-logo">
+          <img src="/static/images/logo.png" alt="Suyog Collection Logo" class="brand-logo-img">
+          <span class="brand-text-wrap">
+            <span class="brand-name">Suyog <span class="brand-highlight">Collection</span></span>
+            <small class="navbar-tagline">Indian Fashion</small>
+          </span>
         </a>
       </div>
 
@@ -117,7 +122,10 @@
 
     <!-- Center: Brand Logo -->
     <div class="mobile-header-center">
-      <a href="/" class="navbar-logo">Suyog <span>Collection</span></a>
+      <a href="/" class="navbar-logo">
+        <img src="/static/images/logo.png" alt="Suyog Collection Logo" class="brand-logo-img brand-logo-mobile">
+        <span class="brand-name">Suyog <span class="brand-highlight">Collection</span></span>
+      </a>
     </div>
 
     <!-- Right: Wishlist & Cart -->
@@ -155,7 +163,10 @@
 <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
 <aside class="mobile-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
   <div class="mobile-drawer-header">
-    <a href="/" class="navbar-logo" style="font-size:1.2rem">Suyog <span>Collection</span></a>
+    <a href="/" class="navbar-logo" style="font-size:1.15rem">
+      <img src="/static/images/logo.png" alt="Suyog Collection Logo" class="brand-logo-img brand-logo-drawer">
+      <span class="brand-name" style="font-size:1.15rem">Suyog <span class="brand-highlight">Collection</span></span>
+    </a>
     <button class="mobile-drawer-close" id="mobile-drawer-close" aria-label="Close Navigation Menu">✕</button>
   </div>
 
@@ -231,7 +242,10 @@
       <!-- Column 1: Brand & Bio -->
       <div>
         <div class="footer-brand">
-          <div class="footer-logo">Suyog <span>Collection</span></div>
+          <div class="footer-logo">
+            <img src="/static/images/logo.png" alt="Suyog Collection Logo" class="brand-logo-img brand-logo-footer">
+            <span>Suyog <span class="brand-highlight">Collection</span></span>
+          </div>
           <p class="footer-desc">Celebrating the art of Indian textiles. Curated, authentic Indian fashion that blends timeless heritage with modern elegance.</p>
         </div>
         <div class="social-links" style="margin-top:16px">

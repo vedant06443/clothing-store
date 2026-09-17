@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     CLOUDINARY_API_SECRET: str = ""
 
     # Admin defaults
-    ADMIN_EMAIL: str = "admin@vastravibe.com"
+    ADMIN_EMAIL: str = "admin@suyogcollection.com"
     ADMIN_PASSWORD: str = "Admin@12345"
 
 

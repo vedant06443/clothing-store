@@ -209,7 +209,10 @@ a.btn,
 .mobile-header-center .navbar-logo {
   font-size: 1.25rem;
   margin: 0 auto;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .mobile-header-right {
@@ -396,7 +399,7 @@ a.btn,
 /* ─── Hero Section (Desktop vs Mobile) ─── */
 .landing-hero {
   position: relative;
-  background: linear-gradient(135deg, #1f0b15 0%, #3a1124 55%, #180611 100%);
+  background: linear-gradient(135deg, #180D05 0%, #2A1406 55%, #571C07 100%);
   color: #ffffff;
   overflow: hidden;
   padding: 70px 0 80px;

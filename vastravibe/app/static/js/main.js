@@ -518,7 +518,7 @@ const Checkout = {
           name: document.getElementById('user-name')?.value || '',
           email: document.getElementById('user-email')?.value || ''
         },
-        theme: { color: '#8B1A4A' },
+        theme: { color: '#C2410C' },
         modal: { ondismiss: () => { if (btn) { btn.disabled = false; btn.textContent = 'Pay Online'; } } }
       };
 
