@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed — #{{ order.order_number }} — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width:800px">
+
+  <div class="text-center mb-4">
+    <div style="width:72px;height:72px;background:rgba(46,125,50,0.1);color:var(--success);border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 16px">
+      ✓
+    </div>
+    <h1 style="font-family:var(--font-display);font-size:2.2rem;color:var(--dark);margin-bottom:8px">Order Confirmed!</h1>
+    <p style="color:var(--text-muted);font-size:0.95rem">
+      Thank you for shopping with Suyog Collection. Your order <strong>#{{ order.order_number }}</strong> has been placed.
+    </p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header d-flex justify-between align-center">
+      <div>
+        <span style="font-size:0.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Order Details</span>
+        <div style="font-weight:700;font-size:1.05rem">#{{ order.order_number }}</div>
+      </div>
+      <span class="status-badge status-{{ order.status.value.lower() }}">{{ order.status.value }}</span>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+        <div>
+          <div class="form-label" style="margin-bottom:4px">Delivery Address</div>
+          <div style="font-size:0.85rem;line-height:1.6">
+            <strong>{{ order.shipping_address_snapshot.get('full_name', '') }}</strong><br>
+            {{ order.shipping_address_snapshot.get('address_line1', '') }}<br>
+            {% if order.shipping_address_snapshot.get('address_line2') %}{{ order.shipping_address_snapshot.get('address_line2') }}<br>{% endif %}
+            {{ order.shipping_address_snapshot.get('city', '') }}, {{ order.shipping_address_snapshot.get('state', '') }} - {{ order.shipping_address_snapshot.get('postal_code', '') }}<br>
+            Phone: {{ order.shipping_address_snapshot.get('phone', '') }}
+          </div>
+        </div>
+        <div>
+          <div class="form-label" style="margin-bottom:4px">Payment Information</div>
+          <div style="font-size:0.85rem;line-height:1.6">
+            Method: <strong>{{ order.payment_method }}</strong><br>
+            Status: <span class="status-badge status-{{ order.payment_status.value.lower() }}">{{ order.payment_status.value }}</span><br>
+            Placed On: {{ order.created_at.strftime('%d %B %Y, %I:%M %p') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-label" style="margin-bottom:12px">Ordered Items</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        {% for item in order.items %}
+        <div class="d-flex justify-between align-center" style="padding:8px 0;border-bottom:1px solid var(--border)">
+          <div class="d-flex align-center gap-2">
+            <img src="{{ item.product.primary_image if item.product else '/static/images/placeholder.jpg' }}" alt="{{ item.product_name }}" style="width:48px;height:60px;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+            <div>
+              <div style="font-weight:600;font-size:0.9rem">{{ item.product_name }}</div>
+              <div style="font-size:0.75rem;color:var(--text-muted)">
+                Qty: {{ item.quantity }} {% if item.color %}| Color: {{ item.color }}{% endif %} {% if item.size %}| Size: {{ item.size }}{% endif %}
+              </div>
+            </div>
+          </div>
+          <div style="font-weight:700;font-size:0.95rem">
+            ₹{{ "{:,.0f}".format(item.total_price) }}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div style="margin-top:20px;padding-top:16px;border-top:1px dashed var(--border)">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>₹{{ "{:,.0f}".format(order.subtotal) }}</span>
+        </div>
+        {% if order.discount > 0 %}
+        <div class="summary-row" style="color:var(--success)">
+          <span>Discount ({{ order.coupon_code }})</span>
+          <span>-₹{{ "{:,.0f}".format(order.discount) }}</span>
+        </div>
+        {% endif %}
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>{% if order.shipping_charge == 0 %}FREE{% else %}₹{{ "{:,.0f}".format(order.shipping_charge) }}{% endif %}</span>
+        </div>
+        <div class="summary-total">
+          <span>Total Paid / Payable</span>
+          <span style="color:var(--primary)">₹{{ "{:,.0f}".format(order.total) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 justify-between">
+    <a href="/orders/{{ order.id }}/track" class="btn btn-outline" style="flex:1">📍 Track Delivery</a>
+    <a href="/sarees" class="btn btn-primary" style="flex:1">Continue Shopping →</a>
+  </div>
+
+</div>
+{% endblock %}

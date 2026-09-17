@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout — Suyog Collection{% endblock %}
+
+{% block extra_css %}
+<!-- Razorpay Checkout Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{% endblock %}
+
+{% block content %}
+<input type="hidden" id="user-name" value="{{ user.full_name if user else '' }}">
+<input type="hidden" id="user-email" value="{{ user.email if user else '' }}">
+
+<div class="checkout-page premium-page-shell">
+  <div class="container py-4">
+    <div class="breadcrumb mb-3">
+      <a href="/">Home</a>
+      <span class="separator">/</span>
+      <a href="/cart">Cart</a>
+      <span class="separator">/</span>
+      <span class="current">Checkout</span>
+    </div>
+
+    <div class="page-heading-row compact mb-4">
+      <div>
+        <div class="page-kicker" style="color:var(--primary);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px">Secure checkout</div>
+        <h1 class="page-title" style="font-family:var(--font-brand);font-size:clamp(1.4rem, 3vw, 2rem);margin:0">Finalize Your Order</h1>
+      </div>
+    </div>
+
+    <!-- Checkout Steps Header -->
+    <div class="checkout-steps d-flex justify-content-center align-items-center mb-4 gap-2 gap-md-4">
+      <div class="checkout-step done d-flex align-items-center gap-2">
+        <div class="step-circle" style="width:28px;height:28px;border-radius:50%;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.8rem">✓</div>
+        <div class="step-label" style="font-size:0.82rem;font-weight:600">Bag</div>
+      </div>
+      <div style="width:20px;height:2px;background:var(--primary)"></div>
+      <div class="checkout-step active d-flex align-items-center gap-2">
+        <div class="step-circle" style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.8rem">2</div>
+        <div class="step-label" style="font-size:0.82rem;font-weight:700;color:var(--primary)">Delivery & Payment</div>
+      </div>
+      <div style="width:20px;height:2px;background:var(--border)"></div>
+      <div class="checkout-step d-flex align-items-center gap-2">
+        <div class="step-circle" style="width:28px;height:28px;border-radius:50%;background:var(--cream);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:0.8rem">3</div>
+        <div class="step-label" style="font-size:0.82rem;color:var(--text-muted)">Confirmation</div>
+      </div>
+    </div>
+
+    <div class="checkout-layout">
+
+      <!-- Left Column: 1. Address, 2. Contact, 4. Payment -->
+      <div>
+
+        <!-- Section 1: Delivery Address -->
+        <div class="card mb-3 premium-panel" style="background:#fff;border-radius:16px;border:1px solid var(--border)">
+          <div class="card-header d-flex justify-content-between align-items-center" style="background:var(--cream);padding:14px 20px;border-bottom:1px solid var(--border)">
+            <h2 style="font-size:1.05rem;font-weight:700;margin:0;font-family:var(--font-brand)">1. Delivery Address</h2>
+            <button class="btn btn-sm btn-outline" onclick="openAddressModal()" style="min-height:36px;font-size:0.78rem">+ Add Address</button>
+          </div>
+          <div class="card-body" style="padding:18px 20px">
+            {% if addresses %}
+              <div id="address-list" style="display:flex;flex-direction:column;gap:12px">
+                {% for addr in addresses %}
+                <div class="address-card {% if addr.is_default %}selected{% endif %}"
+                     data-address-id="{{ addr.id }}"
+                     data-is-default="{{ 'true' if addr.is_default else 'false' }}"
+                     style="border:1.5px solid {% if addr.is_default %}var(--primary){% else %}var(--border){% endif %};border-radius:10px;padding:14px;cursor:pointer;background:{% if addr.is_default %}rgba(139,26,74,0.02){% else %}#fff{% endif %}"
+                     onclick="selectAddressCard(this)">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                      <strong style="font-size:0.95rem">{{ addr.full_name }}</strong>
+                      <span class="badge" style="background:var(--cream);color:var(--text);margin-left:6px;font-size:0.65rem">{{ addr.address_type }}</span>
+                      {% if addr.is_default %}<span class="badge" style="background:var(--primary);color:#fff;margin-left:4px;font-size:0.65rem">Default</span>{% endif %}
+                    </div>
+                    <span class="address-check" style="font-size:1.1rem;color:{% if addr.is_default %}var(--primary){% else %}var(--border){% endif %}">●</span>
+                  </div>
+                  <div style="font-size:0.82rem;color:var(--text);line-height:1.5">
+                    {{ addr.address_line1 }}{% if addr.address_line2 %}, {{ addr.address_line2 }}{% endif %}<br>
+                    {% if addr.landmark %}Landmark: {{ addr.landmark }}<br>{% endif %}
+                    {{ addr.city }}, {{ addr.state }} - <strong>{{ addr.postal_code }}</strong><br>
+                    Phone: {{ addr.phone }}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-center py-3">
+                <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:14px">Please add a shipping address to proceed with your order.</p>
+                <button class="btn btn-primary btn-sm" onclick="openAddressModal()">+ Add Delivery Address</button>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Section 2: Contact Information -->
+        <div class="card mb-3 premium-panel" style="background:#fff;border-radius:16px;border:1px solid var(--border)">
+          <div class="card-header" style="background:var(--cream);padding:14px 20px;border-bottom:1px solid var(--border)">
+            <h2 style="font-size:1.05rem;font-weight:700;margin:0;font-family:var(--font-brand)">2. Contact Information</h2>
+          </div>
+          <div class="card-body" style="padding:16px 20px">
+            <div class="row g-2" style="font-size:0.85rem">
+              <div class="col-sm-6">
+                <label style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase;font-weight:700">Account Name</label>
+                <div style="font-weight:600">{{ user.full_name if user else 'Guest Patron' }}</div>
+              </div>
+              <div class="col-sm-6">
+                <label style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase;font-weight:700">Order Updates Sent To</label>
+                <div style="font-weight:600">{{ user.email if user else 'Provided at confirmation' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Festive Gift Wrap Option -->
+        <div class="card mb-3 premium-panel alt-panel" style="background:var(--cream);border:1px solid var(--border);border-radius:16px">
+          <div class="card-body" style="padding:16px 20px">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:0.88rem;margin:0">
+              <input type="checkbox" id="gift-wrap-checkbox" onchange="toggleGiftWrap(this)" style="width:18px;height:18px;accent-color:var(--primary)">
+              <span>🎁 Add Luxury Festive Gift Packaging & Greeting Card (+ ₹99)</span>
+            </label>
+            <div id="gift-message-box" style="display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)">
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted)">Personalized Greeting Note (e.g. Wedding or Festive wishes)</label>
+              <textarea id="gift-greeting-note" class="form-control" rows="2" placeholder="Wishing you celebration, elegance and joy..." style="margin-top:4px;font-size:0.85rem"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Payment Method (UPI, Cards, COD, Net Banking) -->
+        <div class="card premium-panel mb-4" style="background:#fff;border-radius:16px;border:1px solid var(--border)">
+          <div class="card-header" style="background:var(--cream);padding:14px 20px;border-bottom:1px solid var(--border)">
+            <h2 style="font-size:1.05rem;font-weight:700;margin:0;font-family:var(--font-brand)">4. Payment Method</h2>
+          </div>
+          <div class="card-body" style="padding:20px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <!-- UPI Option -->
+              <label class="payment-method-card" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:12px;background:#FAF7F8">
+                <input type="radio" name="payment_choice" value="upi" checked style="width:18px;height:18px;accent-color:var(--primary)">
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:0.92rem">⚡ UPI (Google Pay, PhonePe, Paytm, BHIM)</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted)">Instant confirmation with 0% extra gateway fees</div>
+                </div>
+                <span class="badge" style="background:var(--primary);color:#fff;font-size:0.65rem">Fastest</span>
+              </label>
+
+              <!-- Credit / Debit Card -->
+              <label class="payment-method-card" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:12px">
+                <input type="radio" name="payment_choice" value="card" style="width:18px;height:18px;accent-color:var(--primary)">
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:0.92rem">💳 Credit / Debit Card (Visa, Mastercard, RuPay)</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted)">Secure 256-bit encrypted Razorpay payment</div>
+                </div>
+              </label>
+
+              <!-- Net Banking -->
+              <label class="payment-method-card" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:12px">
+                <input type="radio" name="payment_choice" value="netbanking" style="width:18px;height:18px;accent-color:var(--primary)">
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:0.92rem">🏦 Net Banking</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted)">All major Indian banks supported (HDFC, ICICI, SBI, Axis)</div>
+                </div>
+              </label>
+
+              <!-- Cash on Delivery -->
+              <label class="payment-method-card" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:12px">
+                <input type="radio" name="payment_choice" value="cod" style="width:18px;height:18px;accent-color:var(--primary)">
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:0.92rem">💵 Cash on Delivery (COD)</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted)">Pay upon delivery at your doorstep via cash or UPI QR</div>
+                </div>
+              </label>
+            </div>
+
+            <!-- Hidden actual action buttons for Razorpay and COD hooks -->
+            <button id="pay-online-btn" style="display:none"></button>
+            <button id="pay-cod-btn" style="display:none"></button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: 3. Order Summary & 5. Place Order -->
+      <div>
+        <aside class="order-summary premium-summary" style="background:#fff;border-radius:16px;border:1px solid var(--border);position:sticky;top:90px;box-shadow:var(--shadow-sm);overflow:hidden">
+          <div class="summary-header" style="background:var(--cream);padding:14px 20px;font-family:var(--font-brand);font-size:1.05rem;font-weight:700;border-bottom:1px solid var(--border)">
+            3. Order Summary ({{ cart.item_count }} Items)
+          </div>
+          <div class="summary-body" style="padding:20px">
+            <!-- Item List Preview -->
+            <div style="max-height:200px;overflow-y:auto;margin-bottom:14px;padding-right:4px">
+              {% for item in cart['items'] %}
+              <div class="d-flex gap-3 align-items-center mb-2" style="font-size:0.82rem;padding-bottom:8px;border-bottom:1px dashed var(--border)">
+                <img src="{{ item.product.primary_image }}" alt="{{ item.product.name }}" style="width:44px;height:56px;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+                <div style="flex:1">
+                  <div style="font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ item.product.name }}</div>
+                  <div style="color:var(--text-muted);font-size:0.75rem">Qty: {{ item.quantity }} {% if item.size %}| {{ item.size }}{% endif %}</div>
+                  <div style="font-weight:700;color:var(--primary)">₹{{ "{:,.0f}".format(item.total_price) }}</div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="summary-row d-flex justify-content-between mb-2">
+              <span style="color:var(--text-muted);font-size:0.85rem">Subtotal</span>
+              <span id="checkout-subtotal" data-amount="{{ cart.subtotal }}" style="font-weight:600">₹{{ "{:,.0f}".format(cart.subtotal) }}</span>
+            </div>
+
+            {% if cart.savings > 0 %}
+            <div class="summary-row d-flex justify-content-between mb-2" style="color:var(--success);font-size:0.85rem">
+              <span>Discount</span>
+              <span style="font-weight:600">-₹{{ "{:,.0f}".format(cart.savings) }}</span>
+            </div>
+            {% endif %}
+
+            <div class="summary-row d-flex justify-content-between mb-2" style="font-size:0.85rem">
+              <span style="color:var(--text-muted)">Shipping</span>
+              <span>
+                {% if cart.shipping_charge == 0 %}
+                <span style="color:var(--success);font-weight:700">FREE</span>
+                {% else %}
+                ₹{{ "{:,.0f}".format(cart.shipping_charge) }}
+                {% endif %}
+              </span>
+            </div>
+
+            <div class="summary-row d-flex justify-content-between mb-2" id="checkout-discount-row" style="font-size:0.85rem">
+              <span style="color:var(--text-muted)">Coupon Discount</span>
+              <span id="checkout-discount" style="color:var(--success);font-weight:600">-₹0</span>
+            </div>
+
+            <div class="summary-divider" style="height:1px;background:var(--border);margin:14px 0"></div>
+
+            <!-- Grand Total -->
+            <div class="summary-total d-flex justify-content-between align-items-center mb-3" style="font-size:1.15rem;font-weight:700">
+              <span>TOTAL</span>
+              <span id="checkout-total" style="color:var(--primary)">₹{{ "{:,.0f}".format(cart.total) }}</span>
+            </div>
+
+            <!-- Coupon application -->
+            <div class="coupon-section mb-3">
+              <div class="coupon-input-group d-flex gap-2">
+                <input type="text" class="coupon-input form-control" id="checkout-coupon-input" placeholder="Coupon code" style="font-size:0.82rem">
+                <button class="btn btn-sm btn-outline" id="checkout-apply-coupon" style="min-height:36px;font-size:0.8rem">Apply</button>
+              </div>
+            </div>
+
+            <!-- Section 5: Place Order Button -->
+            <button id="master-place-order-btn" onclick="triggerSelectedPayment()" class="btn btn-primary btn-full btn-lg w-100" style="min-height:50px;font-weight:700;font-size:1rem;border-radius:var(--radius-sm)">
+              PLACE ORDER
+            </button>
+
+            <div class="text-center mt-3" style="font-size:0.75rem;color:var(--text-muted)">
+              🔒 Safe & Secure 256-Bit SSL Checkout
+            </div>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Address -->
+<div class="modal-overlay" id="address-modal">
+  <div class="modal" style="border-radius:16px;overflow:hidden">
+    <div class="modal-header" style="background:var(--cream);padding:16px 20px;border-bottom:1px solid var(--border)">
+      <h3 class="modal-title" style="font-family:var(--font-brand);font-size:1.1rem;margin:0">Add Delivery Address</h3>
+      <button class="modal-close" onclick="closeAddressModal()" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px">
+      <form id="address-form" onsubmit="handleAddressSubmit(event)">
+        <div class="form-group mb-2">
+          <label class="form-label" style="font-size:0.8rem;font-weight:600">Full Name *</label>
+          <input type="text" id="addr-name" class="form-control" required placeholder="Recipient's Name">
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label" style="font-size:0.8rem;font-weight:600">Phone Number *</label>
+          <input type="tel" id="addr-phone" class="form-control" required placeholder="10-digit mobile number">
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label" style="font-size:0.8rem;font-weight:600">Address Line 1 *</label>
+          <input type="text" id="addr-line1" class="form-control" required placeholder="Flat No. 102, Shanti Vihar">
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label" style="font-size:0.8rem;font-weight:600">Address Line 2 (Optional)</label>
+          <input type="text" id="addr-line2" class="form-control" placeholder="MG Road / Landmark">
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <label class="form-label" style="font-size:0.8rem;font-weight:600">City *</label>
+            <input type="text" id="addr-city" class="form-control" required placeholder="Mumbai">
+          </div>
+          <div class="col-6">
+            <label class="form-label" style="font-size:0.8rem;font-weight:600">State *</label>
+            <input type="text" id="addr-state" class="form-control" required placeholder="Maharashtra">
+          </div>
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <label class="form-label" style="font-size:0.8rem;font-weight:600">Postal PIN *</label>
+            <input type="text" id="addr-pin" class="form-control" required placeholder="400001">
+          </div>
+          <div class="col-6">
+            <label class="form-label" style="font-size:0.8rem;font-weight:600">Address Type</label>
+            <select id="addr-type" class="form-select">
+              <option value="Home">Home</option>
+              <option value="Work">Work</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group mb-3">
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer">
+            <input type="checkbox" id="addr-default" checked>
+            Set as default delivery address
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100" style="min-height:44px;font-weight:700">Save and Use Address</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openAddressModal() {
+  document.getElementById('address-modal').classList.add('open');
+}
+function closeAddressModal() {
+  document.getElementById('address-modal').classList.remove('open');
+}
+
+function toggleGiftWrap(checkbox) {
+  const msgBox = document.getElementById('gift-message-box');
+  if (msgBox) msgBox.style.display = checkbox.checked ? 'block' : 'none';
+  Toast.info(checkbox.checked ? 'Festive Gift Packaging added (+ ₹99)' : 'Gift Packaging removed');
+}
+
+function selectAddressCard(el) {
+  document.querySelectorAll('.address-card').forEach(c => {
+    c.classList.remove('selected');
+    c.style.borderColor = 'var(--border)';
+    c.style.backgroundColor = '#fff';
+    const check = c.querySelector('.address-check');
+    if (check) check.style.color = 'var(--border)';
+  });
+  el.classList.add('selected');
+  el.style.borderColor = 'var(--primary)';
+  el.style.backgroundColor = 'rgba(139,26,74,0.02)';
+  const check = el.querySelector('.address-check');
+  if (check) check.style.color = 'var(--primary)';
+}
+
+function triggerSelectedPayment() {
+  const choice = document.querySelector('input[name="payment_choice"]:checked')?.value || 'upi';
+  if (choice === 'cod') {
+    document.getElementById('pay-cod-btn')?.click();
+  } else {
+    document.getElementById('pay-online-btn')?.click();
+  }
+}
+
+async function handleAddressSubmit(e) {
+  e.preventDefault();
+  const payload = {
+    full_name: document.getElementById('addr-name').value,
+    phone: document.getElementById('addr-phone').value,
+    address_line1: document.getElementById('addr-line1').value,
+    address_line2: document.getElementById('addr-line2').value || null,
+    city: document.getElementById('addr-city').value,
+    state: document.getElementById('addr-state').value,
+    postal_code: document.getElementById('addr-pin').value,
+    address_type: document.getElementById('addr-type').value,
+    is_default: document.getElementById('addr-default').checked
+  };
+
+  try {
+    const res = await API.post('/api/addresses/', payload);
+    Toast.success('Address saved successfully!');
+    closeAddressModal();
+    location.reload();
+  } catch (err) {
+    Toast.error(err.message);
+  }
+}
+</script>
+{% endblock %}

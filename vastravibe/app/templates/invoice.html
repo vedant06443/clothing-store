@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tax Invoice — #{{ order.order_number }} — Suyog Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; color: #2C1A20; margin: 0; padding: 40px; font-size: 14px; background: #fff; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    .invoice-container { max-width: 800px; margin: 0 auto; border: 1px solid #E8D5DC; padding: 40px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .invoice-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #8B1A4A; padding-bottom: 24px; margin-bottom: 28px; }
+    .brand-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: #8B1A4A; letter-spacing: -0.5px; }
+    .brand-title span { color: #C9A84C; }
+    .invoice-badge { background: #8B1A4A; color: #fff; padding: 6px 14px; border-radius: 4px; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+    .info-block h4 { margin: 0 0 8px 0; color: #8A6575; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+    .info-block p { margin: 0; font-size: 13px; line-height: 1.6; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+    th { background: #FDF8F0; color: #8A6575; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; padding: 12px; text-align: left; border-bottom: 1px solid #E8D5DC; }
+    td { padding: 14px 12px; border-bottom: 1px solid #E8D5DC; font-size: 13px; }
+    .totals-area { display: flex; justify-content: flex-end; }
+    .totals-table { width: 280px; }
+    .totals-table tr td:first-child { color: #8A6575; padding: 6px 0; }
+    .totals-table tr td:last-child { text-align: right; font-weight: 600; padding: 6px 0; }
+    .grand-total td { font-size: 16px; font-weight: 700; color: #8B1A4A; border-top: 2px solid #8B1A4A; padding-top: 12px; }
+    .footer-note { text-align: center; font-size: 12px; color: #8A6575; margin-top: 40px; padding-top: 20px; border-top: 1px solid #E8D5DC; }
+    .print-btn { background: #8B1A4A; color: #fff; border: none; padding: 10px 24px; border-radius: 99px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; text-decoration: none; }
+    @media print {
+      body { padding: 0; }
+      .invoice-container { border: none; box-shadow: none; padding: 0; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="invoice-container">
+  <div class="no-print" style="display:flex;justify-content:space-between;align-items:center">
+    <a href="/orders/{{ order.id }}" style="color:#8B1A4A;text-decoration:none;font-weight:500">← Back to Order</a>
+    <button onclick="window.print()" class="print-btn">🖨 Print / Save as PDF</button>
+  </div>
+
+  <div class="invoice-header">
+    <div>
+      <div class="brand-title">Suyog <span>Collection</span></div>
+      <div style="color:#8A6575;font-size:12px;margin-top:4px">Authentic Indian Ethnic Fashion • GSTIN: 27AABCV1234F1Z8</div>
+    </div>
+    <div style="text-align:right">
+      <span class="invoice-badge">TAX INVOICE</span>
+      <div style="margin-top:8px;font-weight:700;font-size:15px">#{{ order.order_number }}</div>
+      <div style="font-size:12px;color:#8A6575">Date: {{ order.created_at.strftime('%d %B %Y') }}</div>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-block">
+      <h4>Billed / Shipped To</h4>
+      <p>
+        <strong>{{ order.shipping_address_snapshot.get('full_name', '') }}</strong><br>
+        {{ order.shipping_address_snapshot.get('address_line1', '') }}<br>
+        {% if order.shipping_address_snapshot.get('address_line2') %}{{ order.shipping_address_snapshot.get('address_line2') }}<br>{% endif %}
+        {{ order.shipping_address_snapshot.get('city', '') }}, {{ order.shipping_address_snapshot.get('state', '') }} - {{ order.shipping_address_snapshot.get('postal_code', '') }}<br>
+        Phone: {{ order.shipping_address_snapshot.get('phone', '') }}
+      </p>
+    </div>
+    <div class="info-block">
+      <h4>Payment & Dispatch Info</h4>
+      <p>
+        Payment Method: <strong>{{ order.payment_method }}</strong><br>
+        Payment Status: <strong>{{ order.payment_status.value }}</strong><br>
+        Order Status: <strong>{{ order.status.value }}</strong><br>
+        {% if order.tracking_number %}
+        Courier: {{ order.courier_name or 'BlueDart Express' }} (AWB: {{ order.tracking_number }})
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item Description</th>
+        <th>Size/Color</th>
+        <th style="text-align:center">Qty</th>
+        <th style="text-align:right">Unit Price</th>
+        <th style="text-align:right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.items %}
+      <tr>
+        <td><strong>{{ item.product_name }}</strong></td>
+        <td>{{ item.size or 'Free Size' }} / {{ item.color or 'Standard' }}</td>
+        <td style="text-align:center">{{ item.quantity }}</td>
+        <td style="text-align:right">₹{{ "{:,.2f}".format(item.unit_price) }}</td>
+        <td style="text-align:right">₹{{ "{:,.2f}".format(item.total_price) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="totals-area">
+    <table class="totals-table">
+      <tr>
+        <td>Subtotal</td>
+        <td>₹{{ "{:,.2f}".format(order.subtotal) }}</td>
+      </tr>
+      {% if order.discount > 0 %}
+      <tr>
+        <td style="color:#2E7D32">Discount ({{ order.coupon_code }})</td>
+        <td style="color:#2E7D32">-₹{{ "{:,.2f}".format(order.discount) }}</td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td>Shipping</td>
+        <td>{% if order.shipping_charge == 0 %}FREE{% else %}₹{{ "{:,.2f}".format(order.shipping_charge) }}{% endif %}</td>
+      </tr>
+      <tr>
+        <td>Estimated GST (Included)</td>
+        <td>₹{{ "{:,.2f}".format(order.subtotal * 0.05) }}</td>
+      </tr>
+      <tr class="grand-total">
+        <td>Total Payable</td>
+        <td>₹{{ "{:,.2f}".format(order.total) }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    Thank you for shopping with Suyog Collection! For any queries, contact support@suyogcollection.com.<br>
+    This is a computer-generated tax invoice and requires no signature.
+  </div>
+</div>
+
+</body>
+</html>

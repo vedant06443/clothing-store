@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} — Suyog Collection{% endblock %}
+{% block meta_description %}Shop exquisite {{ title }} at Suyog Collection. Handcrafted Indian fashion, authentic fabrics, and free shipping across India.{% endblock %}
+
+{% block content %}
+<div class="collection-page-wrapper">
+  <!-- ─── Collection Header & Banner ─── -->
+  <header class="collection-header-section">
+    <div class="container">
+      <nav class="collection-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <a href="/products">Collections</a>
+        <span class="sep">/</span>
+        <span class="current">{{ title }}</span>
+      </nav>
+
+      <div class="collection-title-row">
+        <div class="collection-title-box">
+          <h1 class="collection-heading">{{ title }}</h1>
+          <span class="collection-count-badge">{{ total }} Designs</span>
+        </div>
+        <p class="collection-description">
+          {% if 'saree' in title|lower %}
+          Explore our luxurious saree curation — from rich Banarasi silks and royal Kanjivarams to breezy Georgettes, Organzas, and contemporary festive drapes.
+          {% elif 'kurti' in title|lower %}
+          Discover elegant designer kurtis, anarkalis, and tunics crafted with pure cotton, silk, and intricate embroidery for every occasion.
+          {% elif 'lehenga' in title|lower %}
+          Make a breathtaking statement with our bridal and celebratory lehengas featuring opulent handwork and majestic silhouettes.
+          {% else %}
+          Discover curated Indian fashion and ethnic ensembles designed with impeccable craftsmanship, premium textiles, and timeless elegance.
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="collection-highlight-band">
+        <span class="highlight-pill">New season drop</span>
+        <span class="highlight-meta">Handpicked festive edits</span>
+        <span class="highlight-meta">Free shipping over ₹999</span>
+      </div>
+
+      <!-- Quick Filter Chips (Mangaldeep Inspired) -->
+      <div class="collection-chips-wrapper">
+        <div class="collection-chips-scroll">
+          {% set cur_fabrics = request.query_params.get('fabrics', '') %}
+          {% set cur_occ = request.query_params.get('occasions', '') %}
+          {% set cur_max = request.query_params.get('max_price', '') %}
+
+          <a href="{{ request.url.path }}" class="chip-item {% if not cur_fabrics and not cur_occ and not cur_max %}active{% endif %}">
+            All {{ title }}
+          </a>
+
+          {% if 'saree' in title|lower %}
+            <a href="?fabrics=Silk" class="chip-item {% if cur_fabrics == 'Silk' %}active{% endif %}">Banarasi Silk</a>
+            <a href="?fabrics=Georgette" class="chip-item {% if cur_fabrics == 'Georgette' %}active{% endif %}">Georgette</a>
+            <a href="?fabrics=Chiffon" class="chip-item {% if cur_fabrics == 'Chiffon' %}active{% endif %}">Chiffon</a>
+            <a href="?fabrics=Organza" class="chip-item {% if cur_fabrics == 'Organza' %}active{% endif %}">Organza</a>
+            <a href="?occasions=Wedding" class="chip-item {% if cur_occ == 'Wedding' %}active{% endif %}">Wedding & Bridal</a>
+            <a href="?occasions=Festive" class="chip-item {% if cur_occ == 'Festive' %}active{% endif %}">Festive Wear</a>
+            <a href="?max_price=2000" class="chip-item {% if cur_max == '2000' %}active{% endif %}">Under ₹2,000</a>
+            <a href="?max_price=5000" class="chip-item {% if cur_max == '5000' %}active{% endif %}">Under ₹5,000</a>
+          {% else %}
+            <a href="?fabrics=Silk" class="chip-item {% if cur_fabrics == 'Silk' %}active{% endif %}">Silk</a>
+            <a href="?fabrics=Cotton" class="chip-item {% if cur_fabrics == 'Cotton' %}active{% endif %}">Cotton</a>
+            <a href="?fabrics=Georgette" class="chip-item {% if cur_fabrics == 'Georgette' %}active{% endif %}">Georgette</a>
+            <a href="?occasions=Festive" class="chip-item {% if cur_occ == 'Festive' %}active{% endif %}">Festive</a>
+            <a href="?occasions=Party" class="chip-item {% if cur_occ == 'Party' %}active{% endif %}">Party Wear</a>
+            <a href="?max_price=2000" class="chip-item {% if cur_max == '2000' %}active{% endif %}">Under ₹2,000</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── Main Collection Body ─── -->
+  <div class="container collection-body-container">
+    <div class="collection-layout">
+
+      <!-- ─── Filter Sidebar / Drawer ─── -->
+      <aside class="filter-sidebar" id="filter-sidebar">
+        <div class="filter-card">
+          <div class="filter-header">
+            <div class="filter-header-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+                <line x1="1" y1="14" x2="7" y2="14"></line>
+                <line x1="9" y1="8" x2="15" y2="8"></line>
+                <line x1="17" y1="16" x2="23" y2="16"></line>
+              </svg>
+              <span>Filter By</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <a href="{{ request.url.path }}" id="clear-filters" class="clear-all-link">Clear All</a>
+              <button type="button" id="mobile-filter-close" class="mobile-filter-close-btn d-lg-none" aria-label="Close filters" style="background:none;border:none;font-size:1.3rem;cursor:pointer;padding:4px 8px">✕</button>
+            </div>
+          </div>
+
+          <!-- Price Filter -->
+          <div class="filter-section">
+            <div class="filter-section-title">Price Range</div>
+            <div class="filter-options-radio">
+              {% for label, min_val, max_val in [('Under ₹1,000', '', '1000'), ('₹1,000 – ₹2,000', '1000', '2000'), ('₹2,000 – ₹5,000', '2000', '5000'), ('Above ₹5,000', '5000', '')] %}
+              <label class="filter-radio-pill">
+                <input type="radio" name="price_range" value="{{ min_val }}-{{ max_val }}"
+                  {% if request.query_params.get('min_price') == min_val and request.query_params.get('max_price') == max_val %}checked{% endif %}
+                  onclick="applyPriceFilter('{{ min_val }}', '{{ max_val }}')">
+                <span>{{ label }}</span>
+              </label>
+              {% endfor %}
+              <div class="price-custom-box">
+                <input type="number" id="min-price" placeholder="Min ₹" value="{{ request.query_params.get('min_price', '') }}">
+                <span class="price-dash">–</span>
+                <input type="number" id="max-price" placeholder="Max ₹" value="{{ request.query_params.get('max_price', '') }}">
+                <button id="apply-price-filter" class="btn-apply-price" onclick="applyCustomPrice()">Go</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Swatches -->
+          <div class="filter-section">
+            <div class="filter-section-title">Color</div>
+            <div class="color-swatches-grid">
+              {% set color_map = {'Red': '#DC2626', 'Maroon': '#8B1A4A', 'Pink': '#EC4899', 'Green': '#16A34A', 'Teal': '#0D9488', 'Blue': '#2563EB', 'Navy': '#1E3A5F', 'Yellow': '#EAB308', 'Orange': '#EA580C', 'Purple': '#9333EA', 'White': '#FFFFFF', 'Black': '#1A1A1A'} %}
+              {% for color, hex in color_map.items() %}
+              <div class="color-swatch-item"
+                style="background-color: {{ hex }}; {% if hex == '#FFFFFF' %}border: 1px solid #ddd;{% endif %}"
+                title="{{ color }}"
+                onclick="toggleColorFilter('{{ color }}', this)"
+                data-color="{{ color }}">
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Fabric -->
+          <div class="filter-section">
+            <div class="filter-section-title">Fabric</div>
+            <div class="filter-checkbox-list">
+              {% set selected_fabrics = (request.query_params.get('fabrics', '')).split(',') %}
+              {% for fabric in ['Silk', 'Georgette', 'Chiffon', 'Organza', 'Cotton', 'Linen', 'Velvet', 'Crepe'] %}
+              <label class="filter-check-item">
+                <input type="checkbox" name="fabric_choice" value="{{ fabric }}"
+                  {% if fabric in selected_fabrics %}checked{% endif %}
+                  onchange="toggleParamFilter('fabrics', '{{ fabric }}', this.checked)">
+                <span class="filter-check-name">{{ fabric }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Occasion -->
+          <div class="filter-section">
+            <div class="filter-section-title">Occasion</div>
+            <div class="filter-checkbox-list">
+              {% set selected_occ = (request.query_params.get('occasions', '')).split(',') %}
+              {% for occ in ['Wedding', 'Festive', 'Party', 'Casual', 'Office'] %}
+              <label class="filter-check-item">
+                <input type="checkbox" name="occ_choice" value="{{ occ }}"
+                  {% if occ in selected_occ %}checked{% endif %}
+                  onchange="toggleParamFilter('occasions', '{{ occ }}', this.checked)">
+                <span class="filter-check-name">{{ occ }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+        </div><!-- /filter-card -->
+      </aside>
+
+      <!-- ─── Product Content ─── -->
+      <main class="collection-main-content">
+        <!-- Modern Sort & View Toolbar -->
+        <div class="collection-toolbar">
+          <div class="toolbar-left">
+            <button id="mobile-filter-open" class="mobile-filter-btn" aria-label="Open Filters">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+              </svg>
+              <span>Filter</span>
+            </button>
+            <span class="results-counter">
+              Showing <strong>{{ ((page-1)*24)+1 }}–{{ [page*24, total] | min }}</strong> of <strong>{{ total }}</strong> designs
+            </span>
+          </div>
+
+          <div class="toolbar-right">
+            <div class="sort-selector-wrap">
+              <label for="sort-select" class="sort-label">Sort by:</label>
+              <select class="sort-select" id="sort-select" onchange="handleSortChange(this.value)">
+                <option value="featured" {% if sort == 'featured' %}selected{% endif %}>Featured</option>
+                <option value="newest" {% if sort == 'newest' %}selected{% endif %}>New Arrivals</option>
+                <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                <option value="rating" {% if sort == 'rating' %}selected{% endif %}>Customer Rating</option>
+                <option value="bestselling" {% if sort == 'bestselling' %}selected{% endif %}>Best Selling</option>
+                <option value="discount" {% if sort == 'discount' %}selected{% endif %}>Highest Discount</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Grid -->
+        {% if products %}
+        <div class="products-grid">
+          {% for product in products %}
+            {% include "partials/product_card.html" %}
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if pages > 1 %}
+        <nav class="pagination-bar" aria-label="Page navigation">
+          {% if page > 1 %}
+          <a href="?page={{ page-1 }}&sort={{ sort }}" class="page-btn prev-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Prev
+          </a>
+          {% endif %}
+
+          <div class="page-numbers">
+            {% for p in range(1, pages+1) %}
+              {% if p == page %}
+              <span class="page-num active">{{ p }}</span>
+              {% elif p <= 3 or p >= pages-2 or (p >= page-1 and p <= page+1) %}
+              <a href="?page={{ p }}&sort={{ sort }}" class="page-num">{{ p }}</a>
+              {% elif p == 4 or p == pages-3 %}
+              <span class="page-ellipsis">…</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% if page < pages %}
+          <a href="?page={{ page+1 }}&sort={{ sort }}" class="page-btn next-btn">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          {% endif %}
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-collection-state">
+          <div class="empty-icon-art">🪷</div>
+          <h3 class="empty-headline">No matching sarees found</h3>
+          <p class="empty-subtext">Try refining your selected filters or explore our complete ethnic catalog.</p>
+          <a href="{{ request.url.path }}" class="btn btn-primary" style="margin-top:16px;">View All Designs</a>
+        </div>
+        {% endif %}
+      </main>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function handleSortChange(sortVal) {
+  const url = new URL(window.location.href);
+  url.searchParams.set('sort', sortVal);
+  url.searchParams.set('page', '1');
+  window.location.href = url.toString();
+}
+
+function applyPriceFilter(min, max) {
+  const url = new URL(window.location.href);
+  if (min) url.searchParams.set('min_price', min);
+  else url.searchParams.delete('min_price');
+  if (max) url.searchParams.set('max_price', max);
+  else url.searchParams.delete('max_price');
+  url.searchParams.set('page', '1');
+  window.location.href = url.toString();
+}
+
+function applyCustomPrice() {
+  const min = document.getElementById('min-price').value.trim();
+  const max = document.getElementById('max-price').value.trim();
+  applyPriceFilter(min, max);
+}
+
+function toggleColorFilter(color, el) {
+  const url = new URL(window.location.href);
+  let colors = (url.searchParams.get('colors') || '').split(',').filter(Boolean);
+  if (colors.includes(color)) {
+    colors = colors.filter(c => c !== color);
+    el.classList.remove('selected');
+  } else {
+    colors.push(color);
+    el.classList.add('selected');
+  }
+  if (colors.length) url.searchParams.set('colors', colors.join(','));
+  else url.searchParams.delete('colors');
+  url.searchParams.set('page', '1');
+  window.location.href = url.toString();
+}
+
+function toggleParamFilter(paramName, value, isChecked) {
+  const url = new URL(window.location.href);
+  let items = (url.searchParams.get(paramName) || '').split(',').filter(Boolean);
+  if (isChecked) {
+    if (!items.includes(value)) items.push(value);
+  } else {
+    items = items.filter(v => v !== value);
+  }
+  if (items.length) url.searchParams.set(paramName, items.join(','));
+  else url.searchParams.delete(paramName);
+  url.searchParams.set('page', '1');
+  window.location.href = url.toString();
+}
+
+// Active indicator setup & Mobile Drawer Toggles
+document.addEventListener('DOMContentLoaded', () => {
+  const url = new URL(window.location.href);
+  const activeColors = (url.searchParams.get('colors') || '').split(',').filter(Boolean);
+  document.querySelectorAll('.color-swatch-item').forEach(swatch => {
+    if (activeColors.includes(swatch.dataset.color)) swatch.classList.add('selected');
+  });
+
+  // Mobile Filter Drawer Toggle
+  const mobileBtn = document.getElementById('mobile-filter-open');
+  const sidebar = document.getElementById('filter-sidebar');
+  if (mobileBtn && sidebar) {
+    mobileBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('drawer-open');
+    });
+  }
+});
+</script>
+{% endblock %}

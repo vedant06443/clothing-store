@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Style Studio — Mix & Match Indian Outfits — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="separator">/</span>
+    <span class="current">Style Studio</span>
+  </div>
+
+  <div class="text-center mb-4">
+    <span class="section-tag">Interactive Lookbook</span>
+    <h1 style="font-family:var(--font-display);font-size:2.4rem">Suyog Collection Style Studio</h1>
+    <p style="color:var(--text-muted);max-width:600px;margin:0 auto">
+      Mix and match handwoven Sarees, designer Blouses, Dupattas, and Accessories to curate your perfect festive or wedding ensemble.
+    </p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+
+    <!-- Left Column: Lookbook Live Preview Canvas -->
+    <div class="card" style="position:sticky;top:calc(var(--navbar-height) + 20px)">
+      <div class="card-header d-flex justify-between align-center">
+        <h2 style="font-size:1.1rem;font-weight:600">✨ Your Curated Ensemble</h2>
+        <span id="ensemble-total-badge" class="badge badge-sale" style="font-size:0.85rem">Total: ₹0</span>
+      </div>
+      <div class="card-body text-center">
+
+        <div id="ensemble-preview" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;min-height:280px;background:var(--cream);padding:16px;border-radius:var(--radius-md)">
+          <div id="preview-saree" style="aspect-ratio:3/4;border:2px dashed var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#fff;padding:8px">
+            <span style="font-size:2rem;color:var(--text-muted)">🥻</span>
+            <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select Saree</span>
+          </div>
+          <div id="preview-blouse" style="aspect-ratio:3/4;border:2px dashed var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#fff;padding:8px">
+            <span style="font-size:2rem;color:var(--text-muted)">👗</span>
+            <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select Blouse / Top</span>
+          </div>
+        </div>
+
+        <div style="text-align:left;margin-bottom:20px">
+          <div style="font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Selected Items</div>
+          <div id="ensemble-items-list" style="font-size:0.88rem;color:var(--text);display:flex;flex-direction:column;gap:6px">
+            <span style="color:var(--text-muted)">No items selected yet. Pick items from the right to build your look.</span>
+          </div>
+        </div>
+
+        <button id="add-ensemble-to-cart" class="btn btn-primary btn-full btn-lg" onclick="addEnsembleToCart()" disabled>
+          🛒 Add Full Ensemble to Bag
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Column: Interactive Wardrobe Picker -->
+    <div>
+      <!-- Step 1: Sarees / Main Attire -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 style="font-size:1.05rem;font-weight:600">1. Select Saree / Base Outfit</h3>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px">
+            {% for p in sarees %}
+            <div class="studio-item"
+                 style="border:2px solid var(--border);border-radius:var(--radius-sm);padding:8px;cursor:pointer;transition:var(--transition);text-align:center"
+                 onclick="selectStudioItem('saree', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', this)">
+              <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="aspect-ratio:3/4;width:100%;object-fit:cover;border-radius:4px;margin-bottom:6px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              <div style="font-size:0.78rem;font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
+              <div style="font-size:0.75rem;color:var(--primary);font-weight:700">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Designer Blouses & Kurtis -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 style="font-size:1.05rem;font-weight:600">2. Pair with Designer Blouse / Top</h3>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px">
+            {% for p in blouses %}
+            <div class="studio-item"
+                 style="border:2px solid var(--border);border-radius:var(--radius-sm);padding:8px;cursor:pointer;transition:var(--transition);text-align:center"
+                 onclick="selectStudioItem('blouse', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', this)">
+              <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="aspect-ratio:3/4;width:100%;object-fit:cover;border-radius:4px;margin-bottom:6px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              <div style="font-size:0.78rem;font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
+              <div style="font-size:0.75rem;color:var(--primary);font-weight:700">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Saree Draping Interactive Guide -->
+      <div class="card">
+        <div class="card-header">
+          <h3 style="font-size:1.05rem;font-weight:600">📖 Traditional Draping Guide</h3>
+        </div>
+        <div class="card-body" style="font-size:0.88rem;line-height:1.7">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
+              <strong>Nivi Style (Classic)</strong>
+              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">The universal standard drape from Andhra Pradesh, perfect with silk sarees and statement pallu.</p>
+            </div>
+            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
+              <strong>Bengali Style</strong>
+              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">Front box pleats with an ornate pallu wrapped over the shoulder with a decorative key bunch.</p>
+            </div>
+            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
+              <strong>Gujarati / Seedha Pallu</strong>
+              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">The pallu is brought from the back over the right shoulder to showcase heavy zari work.</p>
+            </div>
+            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
+              <strong>Nauvari (Maharashtrian)</strong>
+              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">Traditional trouser-like dhoti drape offering regal freedom of movement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const selectedEnsemble = {
+  saree: null,
+  blouse: null
+};
+
+function selectStudioItem(type, id, name, price, img, el) {
+  // Clear previous selection for this type
+  el.closest('.card-body').querySelectorAll('.studio-item').forEach(i => {
+    i.style.borderColor = 'var(--border)';
+    i.style.backgroundColor = 'transparent';
+  });
+  el.style.borderColor = 'var(--primary)';
+  el.style.backgroundColor = 'rgba(139,26,74,0.04)';
+
+  selectedEnsemble[type] = { id, name, price, img };
+
+  // Update preview
+  const previewEl = document.getElementById(`preview-${type}`);
+  if (previewEl) {
+    previewEl.innerHTML = `
+      <img src="${img}" style="width:100%;height:100%;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+      <span style="font-size:0.75rem;font-weight:600;margin-top:4px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">${name}</span>
+    `;
+  }
+
+  // Update summary & total
+  let total = 0;
+  let itemsHtml = '';
+  Object.keys(selectedEnsemble).forEach(k => {
+    const item = selectedEnsemble[k];
+    if (item) {
+      total += item.price;
+      itemsHtml += `<div>• <strong>${item.name}</strong> — ₹${item.price.toLocaleString('en-IN')}</div>`;
+    }
+  });
+
+  document.getElementById('ensemble-items-list').innerHTML = itemsHtml || '<span style="color:var(--text-muted)">Select items to view look.</span>';
+  document.getElementById('ensemble-total-badge').textContent = `Total: ₹${total.toLocaleString('en-IN')}`;
+
+  const addBtn = document.getElementById('add-ensemble-to-cart');
+  if (addBtn) addBtn.disabled = total === 0;
+}
+
+async function addEnsembleToCart() {
+  const addBtn = document.getElementById('add-ensemble-to-cart');
+  addBtn.disabled = true;
+  addBtn.textContent = 'Adding look to bag...';
+
+  try {
+    for (const k of Object.keys(selectedEnsemble)) {
+      const item = selectedEnsemble[k];
+      if (item) {
+        await Cart.add(item.id, 1);
+      }
+    }
+    Toast.success('Complete ensemble added to your shopping bag!');
+    setTimeout(() => window.location.href = '/cart', 1000);
+  } catch (err) {
+    Toast.error('Failed to add ensemble items: ' + err.message);
+    addBtn.disabled = false;
+    addBtn.textContent = '🛒 Add Full Ensemble to Bag';
+  }
+}
+</script>
+{% endblock %}

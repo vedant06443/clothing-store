@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center" style="max-width:600px">
+  <div style="font-size:6rem;font-family:var(--font-display);color:var(--gold);line-height:1;margin-bottom:12px">500</div>
+  <h1 style="font-family:var(--font-heading);font-size:2rem;margin-bottom:12px">Internal Server Error</h1>
+  <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:28px">
+    Something went wrong on our servers. Our team has been notified and is working on fixing it.
+  </p>
+  <div class="d-flex gap-2 justify-center" style="justify-content:center">
+    <a href="/" class="btn btn-primary">Back to Home</a>
+  </div>
+</div>
+{% endblock %}

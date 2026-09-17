@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} — Suyog Collection{% endblock %}
+{% block meta_description %}{{ product.name }} by {{ product.brand }}. {{ product.fabric }} fabric. ₹{{ "{:,.0f}".format(product.discount_price or product.price) }} at Suyog Collection.{% endblock %}
+
+{% block content %}
+
+<!-- Hidden product ID for JS -->
+<input type="hidden" id="product-id" value="{{ product.id }}">
+<input type="hidden" id="user-name" value="{{ user.full_name if user else '' }}">
+<input type="hidden" id="user-email" value="{{ user.email if user else '' }}">
+
+<div class="product-detail">
+  <div class="container">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <span class="separator">/</span>
+      <a href="/{{ product.category.slug }}">{{ product.category.name }}</a>
+      <span class="separator">/</span>
+      <span class="current">{{ product.name }}</span>
+    </div>
+
+    <!-- Product Main Layout -->
+    <div class="premium-product-shell">
+
+      <!-- ─── Gallery ─── -->
+      <div class="product-gallery detail-panel">
+        {% if product.images|length > 1 %}
+        <div class="gallery-thumbnails">
+          {% for img in product.images %}
+          <div class="gallery-thumb {% if loop.first %}active{% endif %}"
+               data-img="{{ img.display_url }}"
+               onclick="setMainImage(this)">
+            <img src="{{ img.display_url }}" alt="{{ product.name }}" loading="lazy" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="gallery-main" style="{% if product.images|length <= 1 %}flex:1{% endif %}">
+          <img id="gallery-main-img"
+               src="{{ product.primary_image }}"
+               alt="{{ product.name }}"
+               onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+          <button class="gallery-zoom" onclick="openZoom()" title="Zoom">🔍</button>
+        </div>
+      </div>
+
+      <!-- ─── Product Info ─── -->
+      <div class="product-detail-info detail-panel">
+        <div class="detail-badges">
+          <span class="detail-tag">{{ product.category.name }}</span>
+          {% if product.discount_percent %}
+          <span class="detail-tag accent">{{ product.discount_percent }}% off</span>
+          {% endif %}
+        </div>
+        <div class="product-detail-brand">{{ product.brand }}</div>
+        <h1 class="product-detail-title">{{ product.name }}</h1>
+
+        <!-- Rating -->
+        <div class="product-detail-rating">
+          <div class="rating-stars-large">
+            {% for i in range(5) %}
+              {% if i < product.rating | int %}★{% elif i < product.rating %}½{% else %}☆{% endif %}
+            {% endfor %}
+          </div>
+          <span class="rating-value">{{ product.rating }}</span>
+          <a href="#reviews" class="rating-reviews">{{ product.review_count }} reviews</a>
+          {% if product.review_count > 0 %}
+          <span style="color:var(--success);font-size:.82rem">✓ Verified</span>
+          {% endif %}
+        </div>
+
+        <!-- Price -->
+        <div class="product-detail-price">
+          {% if product.discount_price %}
+            <span class="detail-price-current">₹{{ "{:,.0f}".format(product.discount_price) }}</span>
+            <span class="detail-price-original">₹{{ "{:,.0f}".format(product.price) }}</span>
+            <span class="detail-price-badge">{{ product.discount_percent }}% OFF</span>
+          {% else %}
+            <span class="detail-price-current">₹{{ "{:,.0f}".format(product.price) }}</span>
+          {% endif %}
+        </div>
+
+        <!-- Meta info -->
+        <div class="product-detail-meta">
+          {% if product.fabric %}
+          <div class="meta-item">
+            <span class="meta-label">Fabric</span>
+            <span class="meta-value">{{ product.fabric }}</span>
+          </div>
+          {% endif %}
+          {% if product.occasion %}
+          <div class="meta-item">
+            <span class="meta-label">Occasion</span>
+            <span class="meta-value">{{ product.occasion }}</span>
+          </div>
+          {% endif %}
+          <div class="meta-item">
+            <span class="meta-label">Category</span>
+            <span class="meta-value">{{ product.category.name }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Brand</span>
+            <span class="meta-value">{{ product.brand }}</span>
+          </div>
+        </div>
+
+        <!-- Color Selection -->
+        {% if colors %}
+        <div class="variant-section">
+          <div class="variant-label">Color: <span id="selected-color-label" style="color:var(--primary);text-transform:none;font-weight:400">Select a color</span></div>
+          <div class="color-options">
+            {% set color_map = {'Red': '#DC2626', 'Blue': '#2563EB', 'Green': '#16A34A', 'Pink': '#EC4899', 'Black': '#1F2937', 'White': '#F3F4F6', 'Yellow': '#EAB308', 'Purple': '#9333EA', 'Orange': '#EA580C', 'Maroon': '#9B1C1C', 'Navy': '#1E3A5F', 'Teal': '#0D9488', 'Beige': '#F5DEB3', 'Cream': '#FFFDD0', 'Brown': '#92400E', 'Grey': '#6B7280'} %}
+            {% for color in colors %}
+            <div class="color-option"
+                 style="background: {{ color_map.get(color, '#888') }}"
+                 title="{{ color }}"
+                 data-color="{{ color }}"
+                 onclick="selectColor('{{ color }}', this)"></div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Size Selection & Guide -->
+        <div class="variant-section">
+          <div class="d-flex justify-between align-center mb-2">
+            <div class="variant-label" style="margin:0">Select Size: <span id="selected-size-label" style="color:var(--primary);text-transform:none;font-weight:700">{% if sizes %}{{ sizes[0] }}{% else %}Free Size{% endif %}</span></div>
+            <button type="button" onclick="openSizeGuide()" style="background:none;border:none;color:var(--primary);font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:underline">
+              📏 Size Guide & Fit Finder
+            </button>
+          </div>
+          <div class="size-options">
+            {% if sizes %}
+              {% for size in sizes %}
+              <div class="size-option {% if loop.first %}selected{% endif %}" data-size="{{ size }}" onclick="selectSize('{{ size }}', this)">{{ size }}</div>
+              {% endfor %}
+            {% else %}
+              {% for size in ['S', 'M', 'L', 'XL', 'XXL'] %}
+              <div class="size-option {% if loop.first %}selected{% endif %}" data-size="{{ size }}" onclick="selectSize('{{ size }}', this)">{{ size }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="variant-section">
+          <div class="variant-label">Quantity</div>
+          <div class="quantity-selector">
+            <button class="qty-btn" id="qty-minus" aria-label="Decrease quantity">−</button>
+            <input type="number" class="qty-input" id="quantity-input" value="1" min="1" max="{{ product.stock }}" aria-label="Quantity">
+            <button class="qty-btn" id="qty-plus" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+
+        <!-- Stock Indicator -->
+        <div class="stock-indicator {% if product.stock == 0 %}out-stock{% elif product.stock < 10 %}low-stock{% else %}in-stock{% endif %}">
+          <div class="stock-dot"></div>
+          {% if product.stock == 0 %}
+          Out of Stock
+          {% elif product.stock < 10 %}
+          Only {{ product.stock }} left in stock!
+          {% else %}
+          In Stock — Ready to Dispatch
+          {% endif %}
+        </div>
+
+        <!-- CTA Buttons -->
+        {% if product.stock > 0 %}
+        <div class="detail-actions-row">
+          <button class="add-to-cart-btn" id="add-to-cart-detail" aria-label="Add to Cart">
+            🛒 ADD TO CART
+          </button>
+          <button class="btn-buy-now" id="buy-now-btn" aria-label="Buy Now">
+            ⚡ BUY NOW
+          </button>
+          <button class="btn-wishlist-detail {% if in_wishlist %}active{% endif %}"
+                  id="wishlist-detail-btn"
+                  title="Wishlist"
+                  aria-label="Add to Wishlist"
+                  onclick="Wishlist.toggle({{ product.id }}, this)">
+            {% if in_wishlist %}♥{% else %}♡{% endif %}
+          </button>
+        </div>
+        {% else %}
+        <div class="detail-actions-row">
+          <button class="add-to-cart-btn out-of-stock" disabled aria-label="Out of stock">Sold Out</button>
+          <button class="btn-wishlist-detail {% if in_wishlist %}active{% endif %}"
+                  aria-label="Add to Wishlist"
+                  onclick="Wishlist.toggle({{ product.id }}, this)">
+            {% if in_wishlist %}♥{% else %}♡{% endif %}
+          </button>
+        </div>
+        {% endif %}
+
+        <!-- 🚚 Pincode Delivery Checker Box -->
+        <div style="background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin:20px 0">
+          <div style="font-size:0.82rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;color:var(--text)">
+            🚚 Check Delivery & COD Availability
+          </div>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="pincode-input" placeholder="Enter 6-digit Pincode" maxlength="6"
+                   style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem">
+            <button type="button" class="btn btn-primary btn-sm" onclick="checkPincode()">Check</button>
+          </div>
+          <div id="pincode-result" style="display:none;margin-top:8px;font-size:0.8rem;line-height:1.4"></div>
+        </div>
+
+        <!-- Delivery info -->
+        <div class="delivery-info">
+          <div class="delivery-item"><span class="delivery-icon">🚚</span> Free delivery above ₹999</div>
+          <div class="delivery-item"><span class="delivery-icon">↩️</span> 7-day easy returns</div>
+          <div class="delivery-item"><span class="delivery-icon">✓</span> Genuine product</div>
+          <div class="delivery-item"><span class="delivery-icon">🔒</span> Secure checkout</div>
+        </div>
+
+        <!-- Description (collapsible) -->
+        {% if product.description %}
+        <details style="margin-top:16px;border:1px solid var(--border);border-radius:var(--radius-sm)">
+          <summary style="padding:12px 16px;cursor:pointer;font-weight:600;font-size:.88rem;list-style:none;display:flex;justify-content:space-between">
+            Description
+            <span>▼</span>
+          </summary>
+          <div style="padding:0 16px 16px;font-size:.88rem;line-height:1.8;color:var(--text)">
+            {{ product.description }}
+          </div>
+        </details>
+        {% endif %}
+
+        {% if product.care_instructions %}
+        <details style="margin-top:8px;border:1px solid var(--border);border-radius:var(--radius-sm)">
+          <summary style="padding:12px 16px;cursor:pointer;font-weight:600;font-size:.88rem;list-style:none;display:flex;justify-content:space-between">
+            Care Instructions
+            <span>▼</span>
+          </summary>
+          <div style="padding:0 16px 16px;font-size:.88rem;line-height:1.8;color:var(--text)">
+            {{ product.care_instructions }}
+          </div>
+        </details>
+        {% endif %}
+      </div>
+    </div><!-- /product main grid -->
+
+    <!-- ─── Reviews Section ─── -->
+    <div class="reviews-section" id="reviews">
+      <h2 class="section-title" style="font-size:1.6rem;margin-bottom:24px">Customer Reviews</h2>
+
+      {% if product.reviews %}
+      <div class="rating-summary">
+        <div class="rating-big">
+          <div class="rating-number">{{ product.rating }}</div>
+          <div style="color:var(--gold);font-size:1.2rem;margin:4px 0">
+            {% for i in range(5) %}
+              {% if i < product.rating | int %}★{% else %}☆{% endif %}
+            {% endfor %}
+          </div>
+          <div style="font-size:.78rem;color:var(--text-muted)">{{ product.review_count }} reviews</div>
+        </div>
+
+        <div class="rating-bars">
+          {% for star in [5,4,3,2,1] %}
+          {% set count = product.reviews | selectattr('rating', 'equalto', star) | list | length %}
+          {% set pct = (count / product.review_count * 100) | int if product.review_count > 0 else 0 %}
+          <div class="rating-bar-item">
+            <span>{{ star }}★</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:{{ pct }}%"></div>
+            </div>
+            <span style="min-width:30px">{{ pct }}%</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Review Star Filter Buttons -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-primary review-filter-btn" onclick="filterReviews('all', this)">All Reviews</button>
+        <button class="btn btn-sm btn-outline review-filter-btn" onclick="filterReviews(5, this)">5 ★ Only</button>
+        <button class="btn btn-sm btn-outline review-filter-btn" onclick="filterReviews(4, this)">4 ★ Only</button>
+        <button class="btn btn-sm btn-outline review-filter-btn" onclick="filterReviews('photos', this)">📸 With Photos</button>
+      </div>
+
+      <!-- Review Cards -->
+      <div id="reviews-container">
+        {% for review in product.reviews if review.is_approved %}
+        <div class="review-card" data-rating="{{ review.rating }}" data-has-photo="{{ 'true' if review.image_url else 'false' }}">
+          <div class="review-header">
+            <div>
+              <div class="reviewer-name">{{ review.user.full_name if review.user else 'Customer' }}</div>
+              <div style="color:var(--gold);font-size:.9rem;margin:4px 0">
+                {% for i in range(review.rating) %}★{% endfor %}{% for i in range(5 - review.rating) %}☆{% endfor %}
+              </div>
+              {% if review.is_verified %}
+              <span class="verified-badge">✓ Verified Purchase</span>
+              {% endif %}
+            </div>
+            <div class="review-date">{{ review.created_at.strftime('%d %b %Y') if review.created_at else '' }}</div>
+          </div>
+          {% if review.title %}
+          <div style="font-weight:600;margin-bottom:6px;font-size:.88rem">{{ review.title }}</div>
+          {% endif %}
+          {% if review.body %}
+          <div class="review-body">{{ review.body }}</div>
+          {% endif %}
+          {% if review.image_url %}
+          <div style="margin-top:12px">
+            <img src="{{ review.image_url }}" alt="Review Photo" style="width:90px;height:120px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid var(--border)" onclick="window.open('{{ review.image_url }}', '_blank')">
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      {% else %}
+      <div style="text-align:center;padding:40px;background:var(--cream);border-radius:var(--radius-md)">
+        <div style="font-size:2.5rem;margin-bottom:12px">⭐</div>
+        <div style="font-weight:600;color:var(--text-muted)">No reviews yet</div>
+        <p style="color:var(--text-muted);font-size:.88rem;margin-top:8px">Be the first to review this product!</p>
+      </div>
+      {% endif %}
+
+      <!-- Add Review Form -->
+      {% if user %}
+      <div style="margin-top:32px;padding:24px;background:var(--cream);border-radius:var(--radius-md)">
+        <h3 style="font-size:1.1rem;margin-bottom:20px">Write a Customer Review</h3>
+        <form id="review-form" onsubmit="submitReview(event, {{ product.id }})">
+          <div class="form-group">
+            <label class="form-label">Your Rating</label>
+            <div style="display:flex;gap:8px;font-size:1.5rem;color:var(--gold)" id="star-selector">
+              {% for i in range(1,6) %}
+              <span style="cursor:pointer" data-rating="{{ i }}" onclick="setRating({{ i }})">☆</span>
+              {% endfor %}
+            </div>
+            <input type="hidden" id="review-rating" value="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Review Title (optional)</label>
+            <input type="text" class="form-input" id="review-title" placeholder="Summarize your experience">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Review Feedback</label>
+            <textarea class="form-textarea" id="review-body" rows="4" placeholder="Share your thoughts about the fabric, color drape, and fit..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Add Customer Photo URL (optional)</label>
+            <input type="url" class="form-input" id="review-image-url" placeholder="https://images.unsplash.com/... (or image link)">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ─── Recommendations ─── -->
+    {% if recommendations %}
+    <div style="padding:48px 0;border-top:1px solid var(--border)">
+      <div class="section-header">
+        <div class="section-tag">You May Also Like</div>
+        <h2 class="section-title" style="font-size:1.8rem">Similar Products</h2>
+      </div>
+      <div class="products-grid">
+        {% for product in recommendations %}
+          {% include "partials/product_card.html" %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div><!-- /container -->
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function setMainImage(thumb) {
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+  document.getElementById('gallery-main-img').src = thumb.dataset.img;
+}
+
+function selectColor(color, el) {
+  document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('selected-color-label').textContent = color;
+  ProductDetail.selectedColor = color;
+}
+
+function selectSize(size, el) {
+  document.querySelectorAll('.size-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('selected-size-label').textContent = size;
+  ProductDetail.selectedSize = size;
+}
+
+function setRating(rating) {
+  document.getElementById('review-rating').value = rating;
+  document.querySelectorAll('#star-selector span').forEach((star, i) => {
+    star.textContent = i < rating ? '★' : '☆';
+  });
+}
+
+function filterReviews(criteria, btn) {
+  document.querySelectorAll('.review-filter-btn').forEach(b => {
+    b.classList.remove('btn-primary');
+    b.classList.add('btn-outline');
+  });
+  btn.classList.remove('btn-outline');
+  btn.classList.add('btn-primary');
+
+  document.querySelectorAll('#reviews-container .review-card').forEach(card => {
+    if (criteria === 'all') {
+      card.style.display = 'block';
+    } else if (criteria === 'photos') {
+      card.style.display = card.dataset.hasPhoto === 'true' ? 'block' : 'none';
+    } else {
+      card.style.display = card.dataset.rating == criteria ? 'block' : 'none';
+    }
+  });
+}
+
+async function submitReview(e, productId) {
+  e.preventDefault();
+  const rating = parseInt(document.getElementById('review-rating').value);
+  if (rating === 0) { Toast.warning('Please select a rating'); return; }
+
+  try {
+    await API.post('/api/reviews/', {
+      product_id: productId,
+      rating,
+      title: document.getElementById('review-title')?.value || null,
+      body: document.getElementById('review-body')?.value || null,
+      image_url: document.getElementById('review-image-url')?.value || null
+    });
+    Toast.success('Thank you for your review!');
+    setTimeout(() => location.reload(), 1500);
+  } catch(err) {
+    Toast.error(err.message);
+  }
+}
+
+async function checkPincode() {
+  const pin = document.getElementById('pincode-input')?.value.trim();
+  const resEl = document.getElementById('pincode-result');
+  if (!pin || pin.length !== 6 || isNaN(pin)) {
+    resEl.style.display = 'block';
+    resEl.innerHTML = '<span style="color:var(--error)">Please enter a valid 6-digit Indian Pincode.</span>';
+    return;
+  }
+
+  resEl.style.display = 'block';
+  resEl.innerHTML = '<span style="color:var(--text-muted)">Checking logistics network...</span>';
+
+  try {
+    const data = await API.get(`/api/products/pincode/check?pincode=${pin}`);
+    if (data.serviceable) {
+      resEl.innerHTML = `
+        <span style="color:#2E7D32;font-weight:600">✓ Serviceable in ${data.region}</span><br>
+        <span style="color:var(--text)">🚚 Estimated Delivery: <strong>${data.estimated_date}</strong> (FREE Shipping)</span><br>
+        <span style="color:var(--text-muted)">💵 Cash on Delivery Available</span>
+      `;
+    } else {
+      resEl.innerHTML = `<span style="color:var(--error)">✕ ${data.message}</span>`;
+    }
+  } catch (err) {
+    resEl.innerHTML = `<span style="color:var(--error)">Unable to check pincode. Please try again.</span>`;
+  }
+}
+</script>
+
+{% include "partials/size_guide_modal.html" %}
+{% endblock %}

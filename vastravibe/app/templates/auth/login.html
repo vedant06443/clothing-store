@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="auth-split-wrapper">
+  <div class="auth-split-card">
+    <!-- LEFT: Fashion Editorial Visual (Desktop 2-column) -->
+    <div class="auth-visual-side">
+      <div>
+        <span style="letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;color:var(--gold-light);font-weight:700">Suyog Couture</span>
+        <h2 style="margin-top:10px">Elegance That Defines You</h2>
+      </div>
+      <p style="font-size:0.9rem;color:rgba(255,255,255,0.85);line-height:1.6;margin:0">
+        “Tradition reimagined for modern celebrations. Access exclusive handcrafted edits, personalized style recommendations, and fast-track checkout.”
+      </p>
+      <div style="font-size:0.78rem;color:var(--gold-light)">
+        ✨ Over 10,000 Happy Patrons Across India
+      </div>
+    </div>
+
+    <!-- RIGHT: Login Form -->
+    <div class="auth-form-side">
+      <div class="mb-3">
+        <div style="color:var(--primary);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Welcome Back</div>
+        <h1 style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3vw, 2rem);margin:4px 0 6px">Sign in</h1>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin:0">Enter your credentials to access your bag, orders, and wishlist.</p>
+      </div>
+
+      {% if error %}
+      <div style="background:rgba(198,40,40,0.08);color:var(--error);padding:12px 14px;border-radius:var(--radius-sm);margin-bottom:18px;font-size:0.82rem;border-left:3px solid var(--error)">
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form action="/login{% if request.query_params.get('next') %}?next={{ request.query_params.get('next') }}{% endif %}" method="POST">
+        <div class="form-group mb-3">
+          <label class="form-label" for="email" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Email or Mobile Number</label>
+          <input type="text" id="email" name="email" class="form-control" placeholder="name@example.com or 10-digit mobile" required autofocus style="min-height:44px;font-size:0.9rem">
+        </div>
+
+        <div class="form-group mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="form-label mb-0" for="password" style="font-size:0.82rem;font-weight:600">Password</label>
+            <a href="#" style="font-size:0.78rem;color:var(--primary);text-decoration:none">Forgot Password?</a>
+          </div>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required style="min-height:44px;font-size:0.9rem">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" style="min-height:48px;font-weight:700;font-size:0.95rem;border-radius:var(--radius-sm);margin-top:10px">
+          LOGIN
+        </button>
+      </form>
+
+      <div class="divider" style="height:1px;background:var(--border);margin:24px 0"></div>
+
+      <div class="text-center" style="font-size:0.85rem;color:var(--text-muted)">
+        Don't have an account? <br class="d-sm-none">
+        <a href="/register{% if request.query_params.get('next') %}?next={{ request.query_params.get('next') }}{% endif %}" class="btn btn-outline btn-sm mt-2 w-100" style="min-height:42px;font-weight:600">
+          CREATE ACCOUNT
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% set p = product %}
+<div class="product-card">
+  <div class="product-image-wrap">
+    <a href="/product/{{ p.slug }}" class="product-image-link" aria-label="View {{ p.name }}">
+      <img src="{{ p.primary_image }}"
+           alt="{{ p.name }}"
+           loading="lazy"
+           class="primary-product-img"
+           onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+      {% if p.images and p.images|length > 1 %}
+      <img src="{{ p.images[1].display_url }}"
+           alt="{{ p.name }} view 2"
+           loading="lazy"
+           class="secondary-product-img"
+           onerror="this.style.display='none'">
+      {% endif %}
+    </a>
+
+    <!-- Top Floating Badges -->
+    <div class="product-badges-group">
+      {% if p.discount_percent > 0 %}
+        <span class="badge-discount-pill">{{ p.discount_percent }}% OFF</span>
+      {% endif %}
+      {% if p.is_new_arrival %}
+        <span class="badge-tag badge-tag-new">NEW</span>
+      {% elif p.is_bestseller %}
+        <span class="badge-tag badge-tag-best">BESTSELLER</span>
+      {% endif %}
+      {% if p.stock == 0 %}
+        <span class="badge-tag badge-tag-out">SOLD OUT</span>
+      {% endif %}
+    </div>
+
+    <!-- Wishlist Button -->
+    <button class="wishlist-btn"
+            data-product-id="{{ p.id }}"
+            title="Add to Wishlist"
+            aria-label="Add {{ p.name }} to wishlist">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </button>
+
+    <!-- Quick View Action (Desktop) -->
+    <a href="/product/{{ p.slug }}" class="product-quick-view" aria-label="Quick view {{ p.name }}">
+      <span>Quick View</span>
+    </a>
+  </div>
+
+  <div class="product-info">
+    <div class="product-meta-row">
+      <span class="product-brand">{{ p.fabric or p.brand or 'Suyog Couture' }}</span>
+      {% if p.review_count > 0 %}
+      <span class="product-mini-rating">
+        <span class="rating-star">★</span>
+        <span class="rating-val">{{ p.rating }}</span>
+      </span>
+      {% endif %}
+    </div>
+
+    <h3 class="product-name">
+      <a href="/product/{{ p.slug }}">{{ p.name }}</a>
+    </h3>
+
+    <!-- Pricing Area -->
+    <div class="product-price">
+      {% if p.discount_price %}
+        <span class="price-current">₹{{ "{:,.0f}".format(p.discount_price) }}</span>
+        <span class="price-original">₹{{ "{:,.0f}".format(p.price) }}</span>
+        <span class="price-discount-tag">{{ p.discount_percent }}% OFF</span>
+      {% else %}
+        <span class="price-current">₹{{ "{:,.0f}".format(p.price) }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Add to Cart Action -->
+    {% if p.stock > 0 %}
+    <button class="add-to-cart-btn" data-product-id="{{ p.id }}" aria-label="Add {{ p.name }} to cart">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <span>Add to Cart</span>
+    </button>
+    {% else %}
+    <button class="add-to-cart-btn out-of-stock" disabled aria-label="{{ p.name }} is sold out">
+      <span>Sold Out</span>
+    </button>
+    {% endif %}
+  </div>
+</div>

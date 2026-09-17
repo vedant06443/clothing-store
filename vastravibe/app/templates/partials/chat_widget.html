@@ -1,0 +1,102 @@
+<!-- ─── Floating Indian Fashion Stylist Assistant ─── -->
+<div id="stylist-widget" style="position:fixed;bottom:24px;right:24px;z-index:999;font-family:var(--font-sans)">
+  <!-- Floating Action Button -->
+  <button id="stylist-toggle-btn" onclick="toggleStylistChat()" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg, var(--primary), var(--velvet));color:#fff;border:2px solid var(--gold);box-shadow:0 6px 24px rgba(139,26,74,0.35);cursor:pointer;font-size:1.6rem;display:flex;align-items:center;justify-content:center;transition:transform 0.2s" title="Ask Stylist Assistant">
+    🥻
+  </button>
+
+  <!-- Chat Drawer / Window -->
+  <div id="stylist-chat-box" style="display:none;position:absolute;bottom:70px;right:0;width:340px;height:450px;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.2);border:1px solid var(--border);flex-direction:column;overflow:hidden">
+    <!-- Header -->
+    <div style="background:var(--primary);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🪷</div>
+        <div>
+          <div style="font-weight:700;font-size:0.9rem">Suyog Collection Stylist</div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:4px">
+            <span style="width:6px;height:6px;background:#25D366;border-radius:50%"></span> Online
+          </div>
+        </div>
+      </div>
+      <button onclick="toggleStylistChat()" style="background:transparent;border:none;color:#fff;font-size:1.2rem;cursor:pointer">✕</button>
+    </div>
+
+    <!-- Messages Body -->
+    <div id="stylist-messages" style="flex:1;padding:14px;overflow-y:auto;background:var(--cream);font-size:0.85rem;line-height:1.5;display:flex;flex-direction:column;gap:10px">
+      <!-- Bot Intro -->
+      <div style="background:#fff;padding:10px 12px;border-radius:12px 12px 12px 2px;box-shadow:0 1px 3px rgba(0,0,0,0.05);max-width:85%">
+        Namaste! 🙏 I am your personal Indian ethnic stylist. How can I help you sparkle today?
+      </div>
+
+      <!-- Quick prompts -->
+      <div id="stylist-prompts" style="display:flex;flex-direction:column;gap:6px">
+        <button onclick="sendStylistPrompt('What saree should I wear to a wedding reception?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+          ✨ What saree for a Wedding Reception?
+        </button>
+        <button onclick="sendStylistPrompt('How do I choose the right blouse color for a red saree?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+          🎨 Blouse pairing for Crimson Sarees
+        </button>
+        <button onclick="sendStylistPrompt('What is the difference between Banarasi and Kanjivaram?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+          📖 Banarasi vs Kanjivaram Guide
+        </button>
+      </div>
+    </div>
+
+    <!-- Input footer -->
+    <div style="padding:10px;background:#fff;border-top:1px solid var(--border);display:flex;gap:6px">
+      <input type="text" id="stylist-input" placeholder="Ask a styling question..." style="flex:1;border:1px solid var(--border);border-radius:20px;padding:8px 12px;font-size:0.82rem;outline:none" onkeydown="if(event.key==='Enter')handleStylistSubmit()">
+      <button onclick="handleStylistSubmit()" style="background:var(--primary);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center">➔</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleStylistChat() {
+  const box = document.getElementById('stylist-chat-box');
+  if (!box) return;
+  const isHidden = box.style.display === 'none' || !box.style.display;
+  box.style.display = isHidden ? 'flex' : 'none';
+}
+
+function sendStylistPrompt(text) {
+  appendUserMessage(text);
+  document.getElementById('stylist-prompts').style.display = 'none';
+
+  let reply = "That's a wonderful style choice! For traditional festivities, pure silk weaves with antique gold zari work create the most timeless royal silhouette.";
+  if (text.includes('Wedding Reception') || text.includes('reception')) {
+    reply = "🌟 For a grand reception, we recommend our **Crimson Red Royal Banarasi Katan Silk Saree** or a **Handcrafted Velvet Lehenga** paired with emerald jewelry!";
+  } else if (text.includes('Blouse') || text.includes('blouse')) {
+    reply = "🎨 For a classic Crimson or Maroon saree, contrasting with **Antique Gold Brocade**, **Emerald Green raw silk**, or a **Royal Navy embroidered blouse** looks magnificent!";
+  } else if (text.includes('Banarasi') || text.includes('Kanjivaram')) {
+    reply = "💡 **Banarasi Silk** is renowned for Mughal-inspired floral/foliage zari motifs and lighter drape, while **Kanjivaram Silk** features thick pure mulberry silk with temple borders and contrast pallu.";
+  }
+
+  setTimeout(() => appendBotMessage(reply), 600);
+}
+
+function handleStylistSubmit() {
+  const input = document.getElementById('stylist-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  sendStylistPrompt(text);
+}
+
+function appendUserMessage(text) {
+  const container = document.getElementById('stylist-messages');
+  const el = document.createElement('div');
+  el.style.cssText = 'background:var(--primary);color:#fff;padding:8px 12px;border-radius:12px 12px 2px 12px;margin-left:auto;max-width:85%;word-break:break-word';
+  el.textContent = text;
+  container.appendChild(el);
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendBotMessage(html) {
+  const container = document.getElementById('stylist-messages');
+  const el = document.createElement('div');
+  el.style.cssText = 'background:#fff;padding:10px 12px;border-radius:12px 12px 12px 2px;box-shadow:0 1px 3px rgba(0,0,0,0.05);max-width:85%;line-height:1.4';
+  el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  container.appendChild(el);
+  container.scrollTop = container.scrollHeight;
+}
+</script>

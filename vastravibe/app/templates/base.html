@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="{% block meta_description %}Suyog Collection - Discover timeless Indian fashion for every occasion. Shop sarees, kurtis, lehengas, and more with Pan-India delivery.{% endblock %}">
+  <title>{% block title %}Suyog Collection — Premium Indian Fashion{% endblock %}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Marcellus&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- AOS + Swiper + Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwUEQp10UiXE2QwYwA4M3K4Q0Q4Nn8HhW7pZ2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Core & Responsive Stylesheets -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ─── Announcement Bar ─── -->
+<div class="announcement-bar" role="banner">
+  FREE SHIPPING ON ORDERS ABOVE ₹999 | Use code <a href="/offers">WELCOME10</a> for 10% OFF!
+</div>
+
+<!-- ─── DESKTOP HEADER (>= 992px) ─── -->
+<header class="desktop-header" id="desktop-header">
+  <div class="container">
+    <div class="desktop-nav-inner">
+      <!-- Website logo/name on left -->
+      <div class="desktop-logo-wrap">
+        <a href="/" class="navbar-logo">Suyog <span>Collection</span>
+          <small class="navbar-tagline">Indian Fashion</small>
+        </a>
+      </div>
+
+      <!-- Main Desktop Navigation -->
+      <nav aria-label="Desktop Primary Navigation">
+        <ul class="desktop-nav-links">
+          <li><a href="/" {% if request.url.path == '/' %}class="active"{% endif %}>Home</a></li>
+          <li><a href="/sarees" {% if 'sarees' in request.url.path %}class="active"{% endif %}>Sarees</a></li>
+          <li><a href="/kurtis" {% if 'kurtis' in request.url.path %}class="active"{% endif %}>Kurtis</a></li>
+          <li><a href="/lehengas" {% if 'lehengas' in request.url.path %}class="active"{% endif %}>Lehengas</a></li>
+          <li><a href="/dresses" {% if 'dresses' in request.url.path %}class="active"{% endif %}>Dresses</a></li>
+          <li><a href="/new-arrivals" {% if 'new-arrivals' in request.url.path %}class="active"{% endif %}>New Arrivals</a></li>
+          <li><a href="/offers" {% if 'offers' in request.url.path %}class="active"{% endif %}>Offers</a></li>
+          <li><a href="/studio" {% if 'studio' in request.url.path %}class="active"{% endif %} style="color:var(--gold);font-weight:600">✨ Studio</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right side: Search, Wishlist, Account, Cart -->
+      <div class="desktop-nav-right">
+        <!-- Search Box -->
+        <div class="desktop-search-box">
+          <input type="text" class="desktop-search-input" id="search-input" placeholder="Search ethnic wear...">
+          <button class="desktop-search-btn" aria-label="Search" onclick="window.location.href='/search?q='+encodeURIComponent(document.getElementById('search-input').value)">
+            <i class="bi bi-search"></i>
+          </button>
+          <div class="search-suggestions" id="search-suggestions"></div>
+        </div>
+
+        <!-- Wishlist -->
+        <a href="/wishlist" class="nav-icon-btn" title="Wishlist" aria-label="View Wishlist">
+          <i class="bi bi-heart"></i>
+          {% if (wishlist_count|default(0)) > 0 %}
+          <span class="nav-badge wishlist-count">{{ wishlist_count }}</span>
+          {% endif %}
+        </a>
+
+        <!-- Account -->
+        {% if user|default(none) %}
+        <a href="/account" class="nav-icon-btn" title="My Account" aria-label="My Account">
+          <i class="bi bi-person"></i>
+        </a>
+        {% else %}
+        <a href="/login" class="nav-icon-btn" title="Sign In" aria-label="Sign In">
+          <i class="bi bi-person"></i>
+        </a>
+        {% endif %}
+
+        <!-- Cart with Count -->
+        <a href="/cart" class="nav-icon-btn" title="Shopping Cart" aria-label="Shopping Cart">
+          <i class="bi bi-bag"></i>
+          <span class="nav-badge cart-count" {% if (cart_count|default(0)) == 0 %}style="display:none"{% endif %}>{{ cart_count|default(0) }}</span>
+        </a>
+
+        {% if user|default(none) and user.is_admin %}
+        <a href="/admin" class="btn btn-sm btn-primary" style="padding:6px 12px;font-size:0.75rem">Admin</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ─── MOBILE HEADER (< 992px) ─── -->
+<header class="mobile-header" id="mobile-header">
+  <div class="mobile-header-top">
+    <!-- Left: Hamburger Button -->
+    <div class="mobile-header-left">
+      <button class="hamburger mobile-hamburger-btn" id="hamburger-btn" aria-label="Open Navigation Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Center: Brand Logo -->
+    <div class="mobile-header-center">
+      <a href="/" class="navbar-logo">Suyog <span>Collection</span></a>
+    </div>
+
+    <!-- Right: Wishlist & Cart -->
+    <div class="mobile-header-right">
+      <a href="/wishlist" class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">
+        <i class="bi bi-heart"></i>
+        {% if (wishlist_count|default(0)) > 0 %}
+        <span class="nav-badge wishlist-count">{{ wishlist_count }}</span>
+        {% endif %}
+      </a>
+
+      <a href="/cart" class="nav-icon-btn" title="Cart" aria-label="Cart">
+        <i class="bi bi-bag"></i>
+        <span class="nav-badge cart-count" {% if (cart_count|default(0)) == 0 %}style="display:none"{% endif %}>{{ cart_count|default(0) }}</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Second Row: Dedicated Compact Search Bar -->
+  <div class="mobile-search-row">
+    <div class="mobile-search-input-wrap">
+      <i class="bi bi-search mobile-search-icon-left"></i>
+      <input type="text"
+             class="mobile-search-input"
+             id="mobile-search-input"
+             placeholder="Search sarees, kurtis, lehengas..."
+             autocomplete="off">
+      <button class="mobile-search-clear" id="mobile-search-clear" aria-label="Clear search">✕</button>
+    </div>
+    <div class="search-suggestions" id="mobile-search-suggestions"></div>
+  </div>
+</header>
+
+<!-- ─── MOBILE NAVIGATION DRAWER / OFFCANVAS ─── -->
+<div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+<aside class="mobile-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
+  <div class="mobile-drawer-header">
+    <a href="/" class="navbar-logo" style="font-size:1.2rem">Suyog <span>Collection</span></a>
+    <button class="mobile-drawer-close" id="mobile-drawer-close" aria-label="Close Navigation Menu">✕</button>
+  </div>
+
+  <div class="mobile-drawer-body">
+    <!-- Main Links -->
+    <div>
+      <div class="drawer-section-title">Navigation</div>
+      <div class="drawer-links-group">
+        <a href="/" class="drawer-link"><span>🏠 Home</span></a>
+        <a href="/new-arrivals" class="drawer-link">
+          <span>✨ New Arrivals</span>
+          <span class="badge-tag badge-tag-new">FRESH</span>
+        </a>
+        <a href="/offers" class="drawer-link">
+          <span>🔥 Special Offers</span>
+          <span class="badge-tag badge-tag-best">SALE</span>
+        </a>
+        <a href="/studio" class="drawer-link"><span>🎨 Style Studio</span></a>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div>
+      <div class="drawer-section-title">Categories</div>
+      <div class="drawer-links-group">
+        <a href="/sarees" class="drawer-link"><span>🥻 Sarees</span></a>
+        <a href="/kurtis" class="drawer-link"><span>👗 Kurtis</span></a>
+        <a href="/lehengas" class="drawer-link"><span>💃 Lehengas</span></a>
+        <a href="/salwar-suits" class="drawer-link"><span>👘 Salwar Suits</span></a>
+        <a href="/dresses" class="drawer-link"><span>🌸 Dresses</span></a>
+        <a href="/products" class="drawer-link"><span>🛍️ All Collections</span></a>
+      </div>
+    </div>
+
+    <!-- Account & Customer Support -->
+    <div>
+      <div class="drawer-section-title">My Account</div>
+      <div class="drawer-links-group">
+        <a href="/wishlist" class="drawer-link"><span>♡ My Wishlist</span></a>
+        {% if user %}
+        <a href="/account" class="drawer-link"><span>👤 Profile & Saved Addresses</span></a>
+        <a href="/orders" class="drawer-link"><span>📦 My Orders</span></a>
+        {% if user.is_admin %}
+        <a href="/admin" class="drawer-link" style="color:var(--primary);font-weight:700"><span>⚙️ Admin Panel</span></a>
+        {% endif %}
+        {% else %}
+        <a href="/login" class="drawer-link"><span>🔑 Sign In</span></a>
+        <a href="/register" class="drawer-link"><span>📝 Register</span></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-footer">
+    {% if user %}
+    <div style="font-size:0.85rem;color:var(--text-muted)">Signed in as <strong>{{ user.full_name }}</strong></div>
+    <a href="/logout" class="btn btn-sm btn-outline w-100" style="color:var(--error);border-color:var(--border)">Logout</a>
+    {% else %}
+    <a href="/login" class="btn btn-primary w-100">Login / Register</a>
+    {% endif %}
+  </div>
+</aside>
+
+<!-- ─── Main Content ─── -->
+<main id="main-content">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ─── FOOTER (Desktop 4-Col, Mobile Compact Accordion) ─── -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer-grid-layout">
+      <!-- Column 1: Brand & Bio -->
+      <div>
+        <div class="footer-brand">
+          <div class="footer-logo">Suyog <span>Collection</span></div>
+          <p class="footer-desc">Celebrating the art of Indian textiles. Curated, authentic Indian fashion that blends timeless heritage with modern elegance.</p>
+        </div>
+        <div class="social-links" style="margin-top:16px">
+          <a href="#" class="social-link" title="Instagram" aria-label="Instagram">📸</a>
+          <a href="#" class="social-link" title="Facebook" aria-label="Facebook">📘</a>
+          <a href="#" class="social-link" title="YouTube" aria-label="YouTube">▶</a>
+          <a href="#" class="social-link" title="Pinterest" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <!-- Column 2: Quick Links (Accordion on mobile) -->
+      <div class="footer-accordion-item">
+        <div class="footer-accordion-header">
+          <div class="footer-title" style="margin:0">Quick Links</div>
+          <span class="footer-accordion-icon d-md-none">▼</span>
+        </div>
+        <div class="footer-accordion-body">
+          <ul class="footer-links">
+            <li><a href="/sarees">Sarees</a></li>
+            <li><a href="/kurtis">Kurtis</a></li>
+            <li><a href="/lehengas">Lehengas</a></li>
+            <li><a href="/salwar-suits">Salwar Suits</a></li>
+            <li><a href="/new-arrivals">New Arrivals</a></li>
+            <li><a href="/offers">Special Offers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Column 3: Customer Care (Accordion on mobile) -->
+      <div class="footer-accordion-item">
+        <div class="footer-accordion-header">
+          <div class="footer-title" style="margin:0">Customer Care</div>
+          <span class="footer-accordion-icon d-md-none">▼</span>
+        </div>
+        <div class="footer-accordion-body">
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Return Policy</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">FAQs</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Column 4: Contact Info -->
+      <div>
+        <div class="footer-title">Direct Contact</div>
+        <p style="font-size:.85rem;line-height:1.7;color:rgba(255,255,255,0.7)">
+          📧 hello@suyogcollection.com<br>
+          📞 +91 98765 43210<br>
+          🕘 Mon–Sat, 9am–7pm IST
+        </p>
+        <div style="margin-top:14px;font-size:0.8rem;color:var(--gold-light)">
+          🚚 Pan India Express Delivery
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div style="padding: 28px 0; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); text-align:center; margin: 28px 0 20px;">
+      <p style="color:rgba(255,255,255,0.6); font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px">Join the Vibe</p>
+      <h3 style="color:var(--white); font-family:var(--font-heading); font-size:clamp(1.1rem, 3vw, 1.4rem); margin-bottom:18px">Get exclusive festive offers & style drops</h3>
+      <form action="/newsletter/subscribe" method="POST" style="display:flex;max-width:440px;margin:0 auto;border-radius:var(--radius-full);overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)">
+        <input type="email" name="email" placeholder="Your email address" required
+          style="flex:1;padding:12px 18px;border:none;font-size:.85rem;background:rgba(255,255,255,0.1);color:var(--white);outline:none">
+        <button type="submit" style="padding:12px 22px;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-size:.85rem;">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom">
+      <p>© 2024 Suyog Collection. All rights reserved. Made with ❤️ in India.</p>
+      <p style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span>🔒 100% Secure Payments</span>
+        <span>•</span>
+        <span>💳 Razorpay / UPI</span>
+        <span>•</span>
+        <span>📦 Fast Dispatch</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Stylist Assistant Widget -->
+{% include "partials/chat_widget.html" %}
+
+<!-- Scripts: Bootstrap + Swiper + AOS + App Modules -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/responsive.js"></script>
+<script src="/static/js/cart.js"></script>
+<script src="/static/js/product.js"></script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

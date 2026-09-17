@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Bag ({{ cart.item_count }} items) — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="cart-page premium-page-shell">
+  <div class="container py-4">
+    <div class="breadcrumb mb-3">
+      <a href="/">Home</a>
+      <span class="separator">/</span>
+      <span class="current">Shopping Bag</span>
+    </div>
+
+    <div class="page-heading-row d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div>
+        <div class="page-kicker" style="color:var(--primary);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px">Your bag</div>
+        <h1 class="page-title" style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3.5vw, 2.2rem);margin:0">
+          Shopping Bag {% if cart.item_count > 0 %}<span style="font-size:1.1rem;color:var(--text-muted);font-weight:400">({{ cart.item_count }} items)</span>{% endif %}
+        </h1>
+      </div>
+      <a href="/sarees" class="btn btn-outline btn-sm" style="min-height:38px;border-radius:20px">← Continue shopping</a>
+    </div>
+
+    {% if cart['items'] %}
+    <div class="cart-layout">
+
+      <!-- Cart Items List -->
+      <div class="premium-cart-list premium-panel" style="background:#fff;border-radius:16px;border:1px solid var(--border);padding:clamp(16px, 3vw, 24px)">
+        <div class="cart-table-header d-none d-md-grid" style="grid-template-columns: 2.2fr 1fr 1fr 1fr 40px;padding-bottom:12px;border-bottom:1.5px solid var(--border);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted)">
+          <span>Product</span>
+          <span>Price</span>
+          <span>Quantity</span>
+          <span>Total</span>
+          <span></span>
+        </div>
+
+        {% for item in cart['items'] %}
+        <div class="cart-item-row" data-item-id="{{ item.id }}" style="padding:16px 0;border-bottom:1px solid var(--border)">
+          <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <!-- Product Info -->
+            <div class="d-flex gap-3 align-items-center" style="flex:2.2">
+              <a href="/product/{{ item.product.slug }}" style="flex-shrink:0;width:76px;height:98px;border-radius:8px;overflow:hidden;background:#FAF6F8">
+                <img src="{{ item.product.primary_image }}" alt="{{ item.product.name }}" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              </a>
+              <div>
+                <a href="/product/{{ item.product.slug }}" style="font-weight:600;font-size:0.92rem;color:var(--dark);text-decoration:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+                  {{ item.product.name }}
+                </a>
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px">
+                  {% if item.size %}<span>Size: <strong style="color:var(--text)">{{ item.size }}</strong></span>{% endif %}
+                  {% if item.color %}<span style="margin-left:8px">Color: <strong style="color:var(--text)">{{ item.color }}</strong></span>{% endif %}
+                </div>
+                <!-- Mobile Only Price Display -->
+                <div class="d-md-none mt-2">
+                  <span style="font-weight:700;color:var(--primary);font-size:1rem">₹{{ "{:,.0f}".format(item.product.discount_price or item.product.price) }}</span>
+                  {% if item.product.discount_price %}
+                  <span style="font-size:0.75rem;color:var(--text-muted);text-decoration:line-through;margin-left:6px">₹{{ "{:,.0f}".format(item.product.price) }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Desktop Unit Price -->
+            <div class="d-none d-md-block" style="flex:1">
+              {% if item.product.discount_price %}
+              <div style="font-weight:600">₹{{ "{:,.0f}".format(item.product.discount_price) }}</div>
+              <div style="font-size:.78rem;color:var(--text-muted);text-decoration:line-through">₹{{ "{:,.0f}".format(item.product.price) }}</div>
+              {% else %}
+              <div style="font-weight:600">₹{{ "{:,.0f}".format(item.product.price) }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Quantity & Actions Row on Mobile / Columns on Desktop -->
+            <div class="d-flex align-items-center justify-content-between justify-content-md-start gap-3" style="flex:2">
+              <!-- Quantity Selector -->
+              <div class="quantity-selector" style="border:1.5px solid var(--border);border-radius:6px;display:inline-flex;align-items:center">
+                <button class="qty-btn" onclick="updateItemQty({{ item.id }}, -1)" aria-label="Decrease quantity" style="min-width:36px;min-height:36px;border:none;background:none;font-size:1.1rem;cursor:pointer">−</button>
+                <input type="number" class="qty-input cart-qty-input" data-item-id="{{ item.id }}" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" style="width:40px;text-align:center;border:none;background:none;font-weight:600;font-size:0.9rem" readonly>
+                <button class="qty-btn" onclick="updateItemQty({{ item.id }}, 1)" aria-label="Increase quantity" style="min-width:36px;min-height:36px;border:none;background:none;font-size:1.1rem;cursor:pointer">+</button>
+              </div>
+
+              <!-- Desktop Total & Mobile Price / Remove -->
+              <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-md-block" style="font-weight:700;color:var(--dark);font-size:1rem;min-width:80px">
+                  ₹{{ "{:,.0f}".format(item.total_price) }}
+                </div>
+                <button class="remove-btn remove-cart-item" data-item-id="{{ item.id }}" title="Remove item" aria-label="Remove item" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center">
+                  🗑
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- PRICE DETAILS / Order Summary -->
+      <aside class="order-summary premium-summary" style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);position:sticky;top:90px">
+        <div class="summary-header" style="background:var(--cream);padding:16px 20px;font-family:var(--font-brand);font-size:1.1rem;font-weight:700;border-bottom:1px solid var(--border)">
+          PRICE DETAILS
+        </div>
+        <div class="summary-body" style="padding:20px">
+          <div class="summary-row d-flex justify-content-between mb-2">
+            <span style="color:var(--text-muted)">Subtotal</span>
+            <span id="cart-subtotal" data-amount="{{ cart.subtotal }}" style="font-weight:600">₹{{ "{:,.0f}".format(cart.subtotal) }}</span>
+          </div>
+
+          {% if cart.savings > 0 %}
+          <div class="summary-row d-flex justify-content-between mb-2" style="color:var(--success)">
+            <span>Product Discount</span>
+            <span style="font-weight:600">-₹{{ "{:,.0f}".format(cart.savings) }}</span>
+          </div>
+          {% endif %}
+
+          <div class="summary-row d-flex justify-content-between mb-2">
+            <span style="color:var(--text-muted)">Shipping</span>
+            <span>
+              {% if cart.shipping_charge == 0 %}
+              <span style="color:var(--success);font-weight:700">FREE</span>
+              {% else %}
+              ₹{{ "{:,.0f}".format(cart.shipping_charge) }}
+              {% endif %}
+            </span>
+          </div>
+
+          <div class="summary-row d-flex justify-content-between mb-2" id="discount-row" style="display:none">
+            <span style="color:var(--success)">Coupon Discount</span>
+            <span id="discount-amount" style="color:var(--success);font-weight:700">-₹0</span>
+          </div>
+
+          <div class="summary-divider" style="height:1px;background:var(--border);margin:16px 0"></div>
+
+          <div class="summary-total d-flex justify-content-between mb-3" style="font-size:1.2rem;font-weight:700">
+            <span>Total Payable</span>
+            <span id="cart-total" style="color:var(--primary)">₹{{ "{:,.0f}".format(cart.total) }}</span>
+          </div>
+
+          <!-- Coupon Code Input -->
+          <div class="coupon-section mb-4" style="background:#FAF6F8;padding:14px;border-radius:8px">
+            <label class="form-label" style="font-size:0.78rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px">Apply Promo Coupon</label>
+            <div class="coupon-input-group d-flex gap-2">
+              <input type="text" class="coupon-input form-control" id="coupon-code" placeholder="e.g. WELCOME10" style="font-size:0.85rem">
+              <button class="btn btn-outline" id="apply-coupon-btn" onclick="window.CartOps.applyCoupon(document.getElementById('coupon-code').value)" style="min-width:70px;min-height:40px;font-size:0.82rem;font-weight:600">Apply</button>
+            </div>
+            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:6px">Try: <strong>WELCOME10</strong> or <strong>FESTIVE20</strong></div>
+          </div>
+
+          <!-- Checkout Button -->
+          <a href="/checkout" class="btn btn-primary btn-full btn-lg w-100" style="min-height:50px;font-size:0.95rem;font-weight:700;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm)">
+            PROCEED TO CHECKOUT →
+          </a>
+
+          <div class="text-center mt-3">
+            <a href="/sarees" style="font-size:0.82rem;color:var(--text-muted);text-decoration:underline">← Continue Shopping</a>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+    {% else %}
+    <div class="empty-state text-center" style="background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);padding:80px 24px">
+      <div class="empty-icon" style="font-size:3.5rem;margin-bottom:16px">🛍️</div>
+      <h2 class="empty-title" style="font-family:var(--font-brand);font-size:1.6rem;margin-bottom:8px">Your shopping bag is empty</h2>
+      <p class="empty-desc" style="color:var(--text-muted);max-width:400px;margin:0 auto 24px;font-size:0.92rem">Explore our handwoven sarees, designer kurtis, and festive collections to find your signature style.</p>
+      <a href="/sarees" class="btn btn-primary btn-lg" style="min-height:48px;padding:12px 32px;font-weight:700">Start Shopping →</a>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

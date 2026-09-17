@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product — Suyog Collection Admin</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <div class="admin-logo-text">Suyog <span>Collection</span></div>
+      <div class="admin-badge">Admin Portal</div>
+    </div>
+    <ul class="admin-nav">
+      <li class="admin-nav-item"><a href="/admin">📊 Dashboard</a></li>
+      <li class="admin-nav-item"><a href="/admin/products" class="active">👗 Products</a></li>
+      <li class="admin-nav-item"><a href="/admin/orders">📦 Orders</a></li>
+      <div class="admin-nav-section">Store Links</div>
+      <li class="admin-nav-item"><a href="/" target="_blank">🌐 Live Storefront ↗</a></li>
+      <li class="admin-nav-item"><a href="/logout">🚪 Logout</a></li>
+    </ul>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <h1 class="admin-page-title">Add New Product</h1>
+        <p style="color:var(--text-muted);font-size:0.85rem">Create a new item in the catalogue</p>
+      </div>
+      <a href="/admin/products" class="btn btn-outline btn-sm">← Back to Products</a>
+    </div>
+
+    <div class="card" style="max-width:800px">
+      <div class="card-body">
+        <form id="product-form" onsubmit="handleProductSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Product Name *</label>
+            <input type="text" id="p-name" class="form-input" required placeholder="e.g. Royal Maroon Banarasi Silk Saree">
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="p-category" class="form-select" required>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Brand</label>
+              <input type="text" id="p-brand" class="form-input" value="Suyog Collection" placeholder="Brand name">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+            <div class="form-group">
+              <label class="form-label">Price (MRP ₹) *</label>
+              <input type="number" id="p-price" class="form-input" required placeholder="4999">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Discount Price (₹)</label>
+              <input type="number" id="p-discount-price" class="form-input" placeholder="2499">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stock Quantity *</label>
+              <input type="number" id="p-stock" class="form-input" required value="10">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-group">
+              <label class="form-label">Fabric</label>
+              <input type="text" id="p-fabric" class="form-input" placeholder="e.g. Pure Silk, Georgette, Cotton">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Occasion</label>
+              <input type="text" id="p-occasion" class="form-input" placeholder="e.g. Wedding, Festive, Party">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Primary Image (Filename, Static Path, or URL) *</label>
+            <input type="text" id="p-image" class="form-input" required placeholder="e.g. saree1.jpg, /static/images/saree1.jpg, or https://...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea id="p-description" class="form-textarea" rows="4" placeholder="Detailed description of the outfit, embroidery, weave, and style..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Care Instructions</label>
+            <input type="text" id="p-care" class="form-input" placeholder="e.g. Dry clean only. Do not iron directly on zari.">
+          </div>
+
+          <div style="display:flex;gap:20px;margin-bottom:20px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem">
+              <input type="checkbox" id="p-featured"> Featured on Homepage
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem">
+              <input type="checkbox" id="p-new" checked> New Arrival
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem">
+              <input type="checkbox" id="p-bestseller"> Bestseller
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg">Publish Product</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+<script src="/static/js/main.js"></script>
+<script>
+async function handleProductSubmit(e) {
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById('p-name').value,
+    category_id: parseInt(document.getElementById('p-category').value),
+    brand: document.getElementById('p-brand').value || 'Suyog Collection',
+    price: parseFloat(document.getElementById('p-price').value),
+    discount_price: parseFloat(document.getElementById('p-discount-price').value) || null,
+    stock: parseInt(document.getElementById('p-stock').value),
+    fabric: document.getElementById('p-fabric').value || null,
+    occasion: document.getElementById('p-occasion').value || null,
+    primary_image: document.getElementById('p-image').value,
+    description: document.getElementById('p-description').value || null,
+    care_instructions: document.getElementById('p-care').value || null,
+    is_featured: document.getElementById('p-featured').checked,
+    is_new_arrival: document.getElementById('p-new').checked,
+    is_bestseller: document.getElementById('p-bestseller').checked
+  };
+
+  try {
+    const res = await API.post('/api/admin/products', payload);
+    Toast.success('Product created successfully!');
+    setTimeout(() => window.location.href = '/admin/products', 1000);
+  } catch (err) {
+    Toast.error(err.message);
+  }
+}
+</script>
+</body>
+</html>

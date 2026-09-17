@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="auth-split-wrapper">
+  <div class="auth-split-card">
+    <!-- LEFT: Fashion Editorial Visual (Desktop 2-column) -->
+    <div class="auth-visual-side">
+      <div>
+        <span style="letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;color:var(--gold-light);font-weight:700">Suyog Couture</span>
+        <h2 style="margin-top:10px">Join the Vibe</h2>
+      </div>
+      <p style="font-size:0.9rem;color:rgba(255,255,255,0.85);line-height:1.6;margin:0">
+        “Create your personalized style profile to unlock festive member discounts, priority delivery slots, and bespoke sari drape consults.”
+      </p>
+      <div style="font-size:0.78rem;color:var(--gold-light)">
+        🎁 Enjoy 10% OFF on your first purchase with WELCOME10
+      </div>
+    </div>
+
+    <!-- RIGHT: Register Form -->
+    <div class="auth-form-side">
+      <div class="mb-3">
+        <div style="color:var(--primary);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Exclusive Membership</div>
+        <h1 style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3vw, 2rem);margin:4px 0 6px">Create account</h1>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin:0">Sign up in seconds for an extraordinary Indian fashion journey.</p>
+      </div>
+
+      {% if error %}
+      <div style="background:rgba(198,40,40,0.08);color:var(--error);padding:12px 14px;border-radius:var(--radius-sm);margin-bottom:18px;font-size:0.82rem;border-left:3px solid var(--error)">
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form action="/register{% if request.query_params.get('next') %}?next={{ request.query_params.get('next') }}{% endif %}" method="POST">
+        <div class="form-group mb-2">
+          <label class="form-label" for="full_name" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Full Name *</label>
+          <input type="text" id="full_name" name="full_name" class="form-control" placeholder="e.g. Priya Sharma" required autofocus style="min-height:44px;font-size:0.9rem">
+        </div>
+
+        <div class="form-group mb-2">
+          <label class="form-label" for="email" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Email Address *</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="name@example.com" required style="min-height:44px;font-size:0.9rem">
+        </div>
+
+        <div class="form-group mb-2">
+          <label class="form-label" for="phone" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Mobile Phone (Optional)</label>
+          <input type="tel" id="phone" name="phone" class="form-control" placeholder="10-digit mobile number" style="min-height:44px;font-size:0.9rem">
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label" for="password" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Password *</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Min. 8 characters" minlength="8" required style="min-height:44px;font-size:0.9rem">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" style="min-height:48px;font-weight:700;font-size:0.95rem;border-radius:var(--radius-sm);margin-top:10px">
+          REGISTER & CONTINUE
+        </button>
+      </form>
+
+      <div class="divider" style="height:1px;background:var(--border);margin:20px 0"></div>
+
+      <div class="text-center" style="font-size:0.85rem;color:var(--text-muted)">
+        Already have an account? <br class="d-sm-none">
+        <a href="/login{% if request.query_params.get('next') %}?next={{ request.query_params.get('next') }}{% endif %}" class="btn btn-outline btn-sm mt-2 w-100" style="min-height:42px;font-weight:600">
+          SIGN IN
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

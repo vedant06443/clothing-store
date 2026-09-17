@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.order_number }} — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width:900px">
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="separator">/</span>
+    <a href="/orders">Orders</a>
+    <span class="separator">/</span>
+    <span class="current">#{{ order.order_number }}</span>
+  </div>
+
+  <div class="d-flex justify-between align-center mb-3">
+    <div>
+      <h1 style="font-family:var(--font-display);font-size:1.8rem">Order #{{ order.order_number }}</h1>
+      <p style="color:var(--text-muted);font-size:0.85rem">Placed on {{ order.created_at.strftime('%d %B %Y at %I:%M %p') }}</p>
+    </div>
+    <span class="status-badge status-{{ order.status.value.lower() }}" style="font-size:0.85rem;padding:6px 16px">{{ order.status.value }}</span>
+  </div>
+
+  <!-- Tracking Timeline Card -->
+  <div class="card mb-3">
+    <div class="card-header">
+      <h2 style="font-size:1.05rem;font-weight:600">🚚 Delivery Timeline</h2>
+    </div>
+    <div class="card-body">
+      {% set steps = [
+        ('PENDING', 'Order Placed', 'Your order was successfully received and is awaiting confirmation'),
+        ('CONFIRMED', 'Order Confirmed', 'Seller has verified your order details'),
+        ('PROCESSING', 'Processing & Packaging', 'Items are being inspected and packed in our fulfillment center'),
+        ('SHIPPED', 'Shipped / In Transit', 'Package is on the way with courier partner'),
+        ('DELIVERED', 'Delivered', 'Package safely delivered to your address')
+      ] %}
+
+      {% set status_order = {'PENDING': 1, 'CONFIRMED': 2, 'PROCESSING': 3, 'SHIPPED': 4, 'DELIVERED': 5, 'CANCELLED': 0} %}
+      {% set current_idx = status_order.get(order.status.value, 1) %}
+
+      <div class="tracking-timeline">
+        {% if order.status.value == 'CANCELLED' %}
+        <div style="background:rgba(198,40,40,0.08);border:1px solid var(--error);padding:16px;border-radius:var(--radius-md);color:var(--error);font-weight:600">
+          ⚠️ This order was cancelled.
+        </div>
+        {% else %}
+          {% for step_code, step_title, step_desc in steps %}
+          {% set step_idx = status_order.get(step_code, 1) %}
+          <div class="tracking-step {% if step_idx < current_idx %}done{% elif step_idx == current_idx %}current{% endif %}">
+            <div class="tracking-dot">
+              {% if step_idx < current_idx %}✓{% elif step_idx == current_idx %}●{% else %}{{ loop.index }}{% endif %}
+            </div>
+            <div class="tracking-content">
+              <div class="tracking-title">{{ step_title }}</div>
+              <div class="tracking-desc">{{ step_desc }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {% if order.tracking_number %}
+      <div style="margin-top:20px;padding:12px 16px;background:var(--cream);border-radius:var(--radius-sm);font-size:0.85rem">
+        📦 Courier Partner: <strong>{{ order.courier_name or 'BlueDart Express' }}</strong> | Tracking AWB: <strong>{{ order.tracking_number }}</strong>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Order Items & Addresses -->
+  <div class="card mb-3">
+    <div class="card-header">
+      <h2 style="font-size:1.05rem;font-weight:600">Order Items</h2>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        {% for item in order.items %}
+        <div class="d-flex justify-between align-center" style="padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div class="d-flex align-center gap-2">
+            <img src="{{ item.product.primary_image if item.product else '/static/images/placeholder.jpg' }}" alt="{{ item.product_name }}" style="width:60px;height:75px;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+            <div>
+              <div style="font-weight:600">{{ item.product_name }}</div>
+              <div style="font-size:0.78rem;color:var(--text-muted)">
+                Qty: {{ item.quantity }} {% if item.color %}| {{ item.color }}{% endif %} {% if item.size %}| {{ item.size }}{% endif %}
+              </div>
+              <div style="font-size:0.82rem;color:var(--text-muted)">Unit Price: ₹{{ "{:,.0f}".format(item.unit_price) }}</div>
+            </div>
+          </div>
+          <div style="font-weight:700;font-size:1rem">
+            ₹{{ "{:,.0f}".format(item.total_price) }}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Financial Totals -->
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>₹{{ "{:,.0f}".format(order.subtotal) }}</span>
+        </div>
+        {% if order.discount > 0 %}
+        <div class="summary-row" style="color:var(--success)">
+          <span>Discount ({{ order.coupon_code }})</span>
+          <span>-₹{{ "{:,.0f}".format(order.discount) }}</span>
+        </div>
+        {% endif %}
+        <div class="summary-row">
+          <span>Shipping Charge</span>
+          <span>{% if order.shipping_charge == 0 %}FREE{% else %}₹{{ "{:,.0f}".format(order.shipping_charge) }}{% endif %}</span>
+        </div>
+        <div class="summary-total">
+          <span>Grand Total</span>
+          <span style="color:var(--primary)">₹{{ "{:,.0f}".format(order.total) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">
+      <h2 style="font-size:1.05rem;font-weight:600">Shipping & Payment Summary</h2>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <div class="form-label" style="margin-bottom:4px">Delivery To</div>
+          <div style="font-size:0.85rem;line-height:1.6">
+            <strong>{{ order.shipping_address_snapshot.get('full_name', '') }}</strong><br>
+            {{ order.shipping_address_snapshot.get('address_line1', '') }}<br>
+            {% if order.shipping_address_snapshot.get('address_line2') %}{{ order.shipping_address_snapshot.get('address_line2') }}<br>{% endif %}
+            {{ order.shipping_address_snapshot.get('city', '') }}, {{ order.shipping_address_snapshot.get('state', '') }} - {{ order.shipping_address_snapshot.get('postal_code', '') }}<br>
+            Phone: {{ order.shipping_address_snapshot.get('phone', '') }}
+          </div>
+        </div>
+        <div>
+          <div class="form-label" style="margin-bottom:4px">Payment Info</div>
+          <div style="font-size:0.85rem;line-height:1.6">
+            Method: <strong>{{ order.payment_method }}</strong><br>
+            Status: <span class="status-badge status-{{ order.payment_status.value.lower() }}">{{ order.payment_status.value }}</span><br>
+            {% if order.payment and order.payment.razorpay_payment_id %}
+            Payment ID: <code>{{ order.payment.razorpay_payment_id }}</code><br>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-between align-center" style="flex-wrap:wrap;gap:12px">
+    <div class="d-flex gap-2">
+      <a href="/orders" class="btn btn-outline">← Back to Orders</a>
+      <a href="/orders/{{ order.id }}/invoice" target="_blank" class="btn btn-outline">🖨 Tax Invoice</a>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-gold" onclick="openNotificationModal()">📱 WhatsApp & SMS Alerts</button>
+      <a href="/sarees" class="btn btn-primary">Continue Shopping →</a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Order Notifications Simulator -->
+<div class="modal-overlay" id="notif-modal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <h3 class="modal-title">📱 Live Customer Updates</h3>
+      <button class="modal-close" onclick="closeNotificationModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- WhatsApp Simulation Card -->
+      <div style="background:#EFEAE2;border-radius:12px;padding:16px;margin-bottom:20px;border-left:5px solid #25D366">
+        <div class="d-flex align-center gap-2 mb-2">
+          <span style="font-size:1.3rem">💬</span>
+          <strong style="color:#075E54">WhatsApp Order Milestone Alert</strong>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto">Just now</span>
+        </div>
+        <div style="background:#DCF8C6;padding:12px 14px;border-radius:8px;font-size:0.85rem;line-height:1.6;color:#111b21;box-shadow:0 1px 2px rgba(0,0,0,0.1)">
+          🪷 <strong>Suyog Collection Update</strong><br><br>
+          Namaste <strong>{{ order.shipping_address_snapshot.get('full_name', 'Customer') }}</strong>! Your order <strong>#{{ order.order_number }}</strong> status is currently <strong>{{ order.status.value }}</strong>.<br>
+          Total: <strong>₹{{ "{:,.0f}".format(order.total) }}</strong><br>
+          {% if order.tracking_number %}
+          🚚 Courier: <strong>{{ order.courier_name or 'BlueDart' }}</strong> (AWB: {{ order.tracking_number }})<br>
+          {% endif %}
+          Track Live: <a href="/orders/{{ order.id }}" style="color:#075E54;font-weight:600">suyogcollection.com/orders/{{ order.id }}</a>
+        </div>
+      </div>
+
+      <!-- SMS Simulation Card -->
+      <div style="background:#F4F6F8;border-radius:12px;padding:16px;border-left:5px solid #1976D2">
+        <div class="d-flex align-center gap-2 mb-2">
+          <span style="font-size:1.3rem">📨</span>
+          <strong style="color:#1976D2">SMS Delivery Notification</strong>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto">To: {{ order.shipping_address_snapshot.get('phone', 'Phone') }}</span>
+        </div>
+        <div style="background:#FFFFFF;padding:12px 14px;border-radius:8px;font-size:0.82rem;line-height:1.5;color:#2C1A20;border:1px solid var(--border)">
+          Suyog Collection: Order #{{ order.order_number }} status is {{ order.status.value }}. Total INR {{ "{:,.0f}".format(order.total) }}. Track updates at suyogcollection.com/orders/{{ order.id }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openNotificationModal() {
+  document.getElementById('notif-modal')?.classList.add('open');
+}
+function closeNotificationModal() {
+  document.getElementById('notif-modal')?.classList.remove('open');
+}
+</script>
+{% endblock %}

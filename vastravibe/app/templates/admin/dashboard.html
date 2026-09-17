@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Suyog Collection</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="admin-layout" id="admin-dashboard">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <div class="admin-logo-text">Suyog <span>Collection</span></div>
+      <div class="admin-badge">Admin Portal</div>
+    </div>
+
+    <ul class="admin-nav">
+      <li class="admin-nav-item"><a href="/admin" class="active">📊 Dashboard</a></li>
+      <li class="admin-nav-item"><a href="/admin/products">👗 Products</a></li>
+      <li class="admin-nav-item"><a href="/admin/orders">📦 Orders</a></li>
+      <div class="admin-nav-section">Store Links</div>
+      <li class="admin-nav-item"><a href="/studio" target="_blank">✨ Style Studio ↗</a></li>
+      <li class="admin-nav-item"><a href="/" target="_blank">🌐 Live Storefront ↗</a></li>
+      <li class="admin-nav-item"><a href="/logout">🚪 Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Body -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <h1 class="admin-page-title">Store Analytics & Management</h1>
+        <p style="color:var(--text-muted);font-size:0.85rem">Real-time revenue metrics, visual trends, and orders</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="/admin/products/new" class="btn btn-primary btn-sm">+ Add New Product</a>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-icon primary">🛍</div>
+        <div>
+          <div class="stat-value" id="stat-products">{{ stats.total_products if stats else '—' }}</div>
+          <div class="stat-label">Active Products</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon gold">📦</div>
+        <div>
+          <div class="stat-value" id="stat-orders">{{ stats.total_orders if stats else '—' }}</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon success">₹</div>
+        <div>
+          <div class="stat-value" id="stat-revenue">₹{{ "{:,.0f}".format(stats.total_revenue) if stats else '0' }}</div>
+          <div class="stat-label">Paid Revenue</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon warning">⏳</div>
+        <div>
+          <div class="stat-value" id="stat-pending">{{ stats.pending_orders if stats else '0' }}</div>
+          <div class="stat-label">Pending Orders</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Visual Charts Grid ─── -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:32px">
+      <!-- Sales Revenue Trend -->
+      <div class="card">
+        <div class="card-header d-flex justify-between align-center">
+          <h2 style="font-size:1rem;font-weight:600">📈 Monthly Sales Trends (₹)</h2>
+          <span style="font-size:0.75rem;color:var(--text-muted)">FY 2024</span>
+        </div>
+        <div class="card-body">
+          <canvas id="revenueChart" height="130"></canvas>
+        </div>
+      </div>
+
+      <!-- Category Sales Share -->
+      <div class="card">
+        <div class="card-header">
+          <h2 style="font-size:1rem;font-weight:600">🥻 Sales by Category</h2>
+        </div>
+        <div class="card-body">
+          <canvas id="categoryChart" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders Table -->
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-between align-center">
+        <h2 style="font-size:1.1rem;font-weight:600">Recent Customer Orders</h2>
+        <a href="/admin/orders" class="btn btn-sm btn-outline">View All Orders</a>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if recent_orders %}
+                {% for o in recent_orders %}
+                <tr>
+                  <td><strong>{{ o.order_number }}</strong></td>
+                  <td>{{ o.user.full_name if o.user else 'Guest' }}</td>
+                  <td>{{ o.created_at.strftime('%d %b %Y') }}</td>
+                  <td><strong>₹{{ "{:,.0f}".format(o.total) }}</strong></td>
+                  <td><span class="status-badge status-{{ o.payment_status.value.lower() }}">{{ o.payment_status.value }}</span></td>
+                  <td><span class="status-badge status-{{ o.status.value.lower() }}">{{ o.status.value }}</span></td>
+                  <td>
+                    <div class="d-flex gap-1">
+                      <a href="/orders/{{ o.id }}" class="btn btn-sm btn-outline" style="padding:4px 10px">View</a>
+                      <a href="/orders/{{ o.id }}/invoice" target="_blank" class="btn btn-sm btn-outline" style="padding:4px 10px" title="Print Invoice">🖨</a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="7" class="text-center py-3" style="color:var(--text-muted)">No orders recorded yet.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="/static/js/main.js"></script>
+<script>
+// Initialize Chart.js visual analytics
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Revenue Trends Line Chart
+  const revenueCtx = document.getElementById('revenueChart')?.getContext('2d');
+  if (revenueCtx) {
+    new Chart(revenueCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Revenue (₹ in Lakhs)',
+          data: [1.2, 1.8, 2.4, 3.1, 2.8, 3.9, 4.5, 5.2, 6.8, 8.4, 9.1, 11.5],
+          borderColor: '#8B1A4A',
+          backgroundColor: 'rgba(139, 26, 74, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#C9A84C',
+          pointRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  // 2. Category Share Doughnut Chart
+  const catCtx = document.getElementById('categoryChart')?.getContext('2d');
+  if (catCtx) {
+    new Chart(catCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Sarees', 'Kurtis', 'Lehengas', 'Salwar Suits', "Men's Wear"],
+        datasets: [{
+          data: [42, 24, 18, 11, 5],
+          backgroundColor: ['#8B1A4A', '#C9A84C', '#E8C97A', '#2E7D32', '#1A0A12'],
+          borderWidth: 2,
+          borderColor: '#ffffff'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+        }
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

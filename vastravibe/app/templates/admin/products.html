@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products — Suyog Collection Admin</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <div class="admin-logo-text">Suyog <span>Collection</span></div>
+      <div class="admin-badge">Admin Portal</div>
+    </div>
+    <ul class="admin-nav">
+      <li class="admin-nav-item"><a href="/admin">📊 Dashboard</a></li>
+      <li class="admin-nav-item"><a href="/admin/products" class="active">👗 Products</a></li>
+      <li class="admin-nav-item"><a href="/admin/orders">📦 Orders</a></li>
+      <div class="admin-nav-section">Store Links</div>
+      <li class="admin-nav-item"><a href="/" target="_blank">🌐 Live Storefront ↗</a></li>
+      <li class="admin-nav-item"><a href="/logout">🚪 Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Body -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <h1 class="admin-page-title">Products Management</h1>
+        <p style="color:var(--text-muted);font-size:0.85rem">Total {{ total }} items in catalogue</p>
+      </div>
+      <a href="/admin/products/new" class="btn btn-primary btn-sm">+ Add New Product</a>
+    </div>
+
+    <!-- Products Table -->
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name & SKU</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Rating</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in products %}
+              <tr>
+                <td>
+                  <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="width:40px;height:50px;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+                </td>
+                <td>
+                  <strong>{{ p.name }}</strong>
+                  <div style="font-size:0.75rem;color:var(--text-muted)">SKU: {{ p.sku or 'N/A' }} | {{ p.brand }}</div>
+                </td>
+                <td>{{ p.category.name if p.category else '—' }}</td>
+                <td>
+                  <strong>₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</strong>
+                  {% if p.discount_price %}
+                  <div style="font-size:0.75rem;color:var(--text-muted);text-decoration:line-through">₹{{ "{:,.0f}".format(p.price) }}</div>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if p.stock == 0 %}
+                  <span class="badge badge-out">0 (Out)</span>
+                  {% elif p.stock < 10 %}
+                  <span class="badge badge-sale">{{ p.stock }} (Low)</span>
+                  {% else %}
+                  <span style="color:var(--success);font-weight:600">{{ p.stock }}</span>
+                  {% endif %}
+                </td>
+                <td>★ {{ p.rating }} ({{ p.review_count }})</td>
+                <td>
+                  <div class="d-flex gap-1">
+                    <a href="/product/{{ p.slug }}" target="_blank" class="btn btn-sm btn-outline" style="padding:4px 8px" title="View product">👁</a>
+                    <button class="btn btn-sm btn-outline" style="padding:4px 8px;color:var(--error);border-color:var(--border)" onclick="deleteProduct({{ p.id }}, this.closest('tr'))">🗑</button>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+<script src="/static/js/main.js"></script>
+<script>
+async function deleteProduct(id, row) {
+  if (!confirm('Are you sure you want to delete this product?')) return;
+  try {
+    await API.delete(`/api/admin/products/${id}`);
+    row.remove();
+    Toast.success('Product deleted');
+  } catch (err) {
+    Toast.error(err.message);
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!-- ─── Ethnic Wear Size Guide & Fit Calculator Modal ─── -->
+<div class="modal-overlay" id="size-guide-modal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <h3 class="modal-title">📏 Indian Ethnic Wear Size Guide & Fit Finder</h3>
+      <button class="modal-close" onclick="closeSizeGuide()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Interactive Fit Calculator -->
+      <div style="background:var(--cream);padding:16px;border-radius:var(--radius-md);margin-bottom:24px;border:1px solid var(--border)">
+        <h4 style="margin:0 0 10px;font-size:0.95rem;color:var(--primary);font-weight:600">🎯 Interactive Fit Finder</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end">
+          <div>
+            <label style="font-size:0.75rem;font-weight:600;text-transform:uppercase;color:var(--text-muted)">Bust / Chest (Inches)</label>
+            <input type="number" id="calc-bust" class="form-input" placeholder="e.g. 36" min="28" max="52" style="margin-top:4px">
+          </div>
+          <div>
+            <label style="font-size:0.75rem;font-weight:600;text-transform:uppercase;color:var(--text-muted)">Waist (Inches)</label>
+            <input type="number" id="calc-waist" class="form-input" placeholder="e.g. 30" min="22" max="48" style="margin-top:4px">
+          </div>
+          <button type="button" class="btn btn-primary" onclick="calculateRecommendedSize()" style="height:42px">Find My Size</button>
+        </div>
+        <div id="size-calc-result" style="margin-top:12px;font-size:0.88rem;display:none;padding:10px;background:#fff;border-radius:6px;border-left:4px solid var(--primary)"></div>
+      </div>
+
+      <!-- Size Conversion Table -->
+      <h4 style="margin:0 0 10px;font-size:0.95rem;font-weight:600">Standard Garment Measurements (Inches)</h4>
+      <div style="overflow-x:auto">
+        <table class="admin-table" style="font-size:0.85rem">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>India / UK</th>
+              <th>Bust (in)</th>
+              <th>Waist (in)</th>
+              <th>Hip (in)</th>
+              <th>Saree Blouse</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>XS</strong></td>
+              <td>34</td>
+              <td>32" - 33"</td>
+              <td>26" - 27"</td>
+              <td>35" - 36"</td>
+              <td>32</td>
+            </tr>
+            <tr>
+              <td><strong>S</strong></td>
+              <td>36</td>
+              <td>34" - 35"</td>
+              <td>28" - 29"</td>
+              <td>37" - 38"</td>
+              <td>34</td>
+            </tr>
+            <tr>
+              <td><strong>M</strong></td>
+              <td>38</td>
+              <td>36" - 37"</td>
+              <td>30" - 31"</td>
+              <td>39" - 40"</td>
+              <td>36</td>
+            </tr>
+            <tr>
+              <td><strong>L</strong></td>
+              <td>40</td>
+              <td>38" - 39"</td>
+              <td>32" - 33"</td>
+              <td>41" - 42"</td>
+              <td>38</td>
+            </tr>
+            <tr>
+              <td><strong>XL</strong></td>
+              <td>42</td>
+              <td>40" - 41"</td>
+              <td>34" - 35"</td>
+              <td>43" - 44"</td>
+              <td>40</td>
+            </tr>
+            <tr>
+              <td><strong>XXL</strong></td>
+              <td>44</td>
+              <td>42" - 43"</td>
+              <td>36" - 37"</td>
+              <td>45" - 46"</td>
+              <td>42</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:16px;font-size:0.78rem;color:var(--text-muted);line-height:1.5">
+        💡 <strong>Saree Note:</strong> All sarees come in a standard length of 5.5 meters with an unstitched 0.8 meter matching blouse piece unless specified as ready-to-wear.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openSizeGuide() {
+  document.getElementById('size-guide-modal')?.classList.add('open');
+}
+function closeSizeGuide() {
+  document.getElementById('size-guide-modal')?.classList.remove('open');
+}
+
+function calculateRecommendedSize() {
+  const bust = parseFloat(document.getElementById('calc-bust').value);
+  const resEl = document.getElementById('size-calc-result');
+  if (!bust || isNaN(bust)) {
+    resEl.style.display = 'block';
+    resEl.innerHTML = '<span style="color:var(--error)">Please enter your bust measurement.</span>';
+    return;
+  }
+
+  let size = 'M';
+  let indiaSize = '38';
+  if (bust <= 33) { size = 'XS'; indiaSize = '34'; }
+  else if (bust <= 35) { size = 'S'; indiaSize = '36'; }
+  else if (bust <= 37) { size = 'M'; indiaSize = '38'; }
+  else if (bust <= 39) { size = 'L'; indiaSize = '40'; }
+  else if (bust <= 41) { size = 'XL'; indiaSize = '42'; }
+  else { size = 'XXL'; indiaSize = '44'; }
+
+  resEl.style.display = 'block';
+  resEl.innerHTML = `✨ Recommended Size: <strong style="color:var(--primary);font-size:1rem">${size} (India ${indiaSize})</strong>. Perfect tailored fit for Kurtis, Blouses & Lehengas!`;
+}
+</script>

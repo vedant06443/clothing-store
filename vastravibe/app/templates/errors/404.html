@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found — Suyog Collection{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center" style="max-width:600px">
+  <div style="font-size:6rem;font-family:var(--font-display);color:var(--primary);line-height:1;margin-bottom:12px">404</div>
+  <h1 style="font-family:var(--font-heading);font-size:2rem;margin-bottom:12px">Page Not Found</h1>
+  <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:28px">
+    The page you are looking for might have been moved, renamed, or is temporarily unavailable.
+  </p>
+  <div class="d-flex gap-2 justify-center" style="justify-content:center">
+    <a href="/" class="btn btn-primary">Return Home</a>
+    <a href="/sarees" class="btn btn-outline">Explore Sarees</a>
+  </div>
+</div>
+{% endblock %}

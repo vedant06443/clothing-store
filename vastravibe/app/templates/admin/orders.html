@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Orders — Suyog Collection Admin</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <div class="admin-logo-text">Suyog <span>Collection</span></div>
+      <div class="admin-badge">Admin Portal</div>
+    </div>
+    <ul class="admin-nav">
+      <li class="admin-nav-item"><a href="/admin">📊 Dashboard</a></li>
+      <li class="admin-nav-item"><a href="/admin/products">👗 Products</a></li>
+      <li class="admin-nav-item"><a href="/admin/orders" class="active">📦 Orders</a></li>
+      <div class="admin-nav-section">Store Links</div>
+      <li class="admin-nav-item"><a href="/" target="_blank">🌐 Live Storefront ↗</a></li>
+      <li class="admin-nav-item"><a href="/logout">🚪 Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Body -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <h1 class="admin-page-title">Orders Management</h1>
+        <p style="color:var(--text-muted);font-size:0.85rem">Track and update customer fulfillment lifecycle</p>
+      </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order Number</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Order Status</th>
+                <th>Update Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in orders %}
+              <tr>
+                <td><strong>{{ o.order_number }}</strong></td>
+                <td>
+                  {{ o.user.full_name if o.user else 'Guest' }}<br>
+                  <span style="font-size:0.75rem;color:var(--text-muted)">{{ o.user.email if o.user else '' }}</span>
+                </td>
+                <td>{{ o.created_at.strftime('%d %b %Y, %H:%M') }}</td>
+                <td><strong>₹{{ "{:,.0f}".format(o.total) }}</strong></td>
+                <td>
+                  <span class="status-badge status-{{ o.payment_status.value.lower() }}">{{ o.payment_status.value }}</span><br>
+                  <span style="font-size:0.75rem;color:var(--text-muted)">{{ o.payment_method }}</span>
+                </td>
+                <td>
+                  <span class="status-badge status-{{ o.status.value.lower() }}">{{ o.status.value }}</span>
+                </td>
+                <td>
+                  <select class="form-select" style="padding:4px 8px;font-size:0.8rem;width:auto" onchange="updateOrderStatus({{ o.id }}, this.value)">
+                    {% for st in ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] %}
+                    <option value="{{ st }}" {% if o.status.value == st %}selected{% endif %}>{{ st }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td>
+                  <a href="/orders/{{ o.id }}" target="_blank" class="btn btn-sm btn-outline">Details</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+<script src="/static/js/main.js"></script>
+<script>
+async function updateOrderStatus(orderId, newStatus) {
+  try {
+    await API.put(`/api/admin/orders/${orderId}/status`, { status: newStatus });
+    Toast.success(`Order status updated to ${newStatus}`);
+    setTimeout(() => location.reload(), 1000);
+  } catch (err) {
+    Toast.error(err.message);
+  }
+}
+</script>
+</body>
+</html>
