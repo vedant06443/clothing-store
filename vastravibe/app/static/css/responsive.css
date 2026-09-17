@@ -399,8 +399,10 @@ a.btn,
 /* ─── Hero Section (Desktop vs Mobile) ─── */
 .landing-hero {
   position: relative;
-  background: linear-gradient(135deg, #180D05 0%, #2A1406 55%, #571C07 100%);
-  color: #ffffff;
+  background: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 40%),
+              radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.35) 0%, transparent 45%),
+              linear-gradient(135deg, #FFF8DB 0%, #FEF08A 25%, #FDE047 60%, #F59E0B 100%) !important;
+  color: #1C1917 !important;
   overflow: hidden;
   padding: 70px 0 80px;
 }
@@ -412,6 +414,7 @@ a.btn,
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: 18px;
+  color: #1C1917 !important;
 }
 
 .landing-hero-title span {
@@ -419,15 +422,16 @@ a.btn,
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
-  color: var(--gold-light);
+  color: #C2410C !important;
 }
 
 .landing-hero-copy {
   font-size: clamp(0.95rem, 1.8vw, 1.15rem);
-  color: rgba(255, 255, 255, 0.85);
+  color: #44403C !important;
   max-width: 520px;
   line-height: 1.6;
   margin-bottom: 28px;
+  font-weight: 500;
 }
 
 .hero-visual-card {
