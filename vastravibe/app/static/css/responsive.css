@@ -1520,3 +1520,33 @@ a.btn,
     padding: 18px 16px;
   }
 }
+
+/* ─── Global Logo Dimension Guards ─── */
+.brand-logo-img {
+  height: 48px !important;
+  max-height: 48px !important;
+  width: auto !important;
+  max-width: 54px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.brand-logo-mobile {
+  height: 38px !important;
+  max-height: 38px !important;
+  max-width: 44px !important;
+}
+
+.brand-logo-drawer {
+  height: 36px !important;
+  max-height: 36px !important;
+  max-width: 40px !important;
+}
+
+.brand-logo-footer {
+  height: 48px !important;
+  max-height: 48px !important;
+  max-width: 54px !important;
+}
+
