@@ -80,4 +80,9 @@ def confirm_payment(
 
     db.commit()
     db.refresh(order)
+
+    # Trigger admin notification upon successful online payment confirmation
+    from app.services.notification_service import create_admin_order_notification
+    create_admin_order_notification(db, order)
+
     return order

@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Customers — Suyog Collection Admin{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-title-h1">Customer Directory</h1>
+    <div class="admin-subtitle">Registered patrons, contact details, and account statuses</div>
+  </div>
+</div>
+
+<!-- ─── Customers Table ─── -->
+<div class="admin-card">
+  <div class="admin-card-body" style="padding:0">
+    <div style="overflow-x:auto">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th>Email Address</th>
+            <th>Phone</th>
+            <th>Registered Date</th>
+            <th>Account Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if customers %}
+            {% for c in customers %}
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:34px;height:34px;border-radius:50%;background:rgba(155,28,82,0.1);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem">
+                    {{ (c.full_name[0] if c.full_name else 'C')|upper }}
+                  </div>
+                  <div>
+                    <strong style="font-size:0.92rem;color:var(--dark)">{{ c.full_name }}</strong>
+                  </div>
+                </div>
+              </td>
+              <td>{{ c.email }}</td>
+              <td>{{ c.phone or '—' }}</td>
+              <td>{{ c.created_at.strftime('%d %b %Y') if c.created_at else '—' }}</td>
+              <td>
+                <span class="badge {% if c.is_active %}badge-in{% else %}badge-out{% endif %}">
+                  {% if c.is_active %}Active Customer{% else %}Suspended{% endif %}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" class="text-center py-4" style="color:var(--text-muted)">No registered customers found.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

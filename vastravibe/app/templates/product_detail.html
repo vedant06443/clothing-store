@@ -49,87 +49,114 @@
       </div>
 
       <!-- ─── Product Info ─── -->
-      <div class="product-detail-info detail-panel">
+      <div class="product-detail-info">
+        <!-- Badges & Brand Strip -->
         <div class="detail-badges">
-          <span class="detail-tag">{{ product.category.name }}</span>
+          <span class="detail-tag">🥻 {{ product.category.name }}</span>
           {% if product.discount_percent %}
-          <span class="detail-tag accent">{{ product.discount_percent }}% off</span>
+          <span class="detail-tag accent">{{ product.discount_percent }}% OFF</span>
           {% endif %}
+          <span class="detail-tag gold">⚡ Ready to Dispatch</span>
         </div>
-        <div class="product-detail-brand">{{ product.brand }}</div>
+        <div class="product-detail-brand">{{ product.brand or 'SUYOG COLLECTION' }}</div>
         <h1 class="product-detail-title">{{ product.name }}</h1>
 
-        <!-- Rating -->
+        <!-- Rating Pill -->
         <div class="product-detail-rating">
-          <div class="rating-stars-large">
-            {% for i in range(5) %}
-              {% if i < product.rating | int %}★{% elif i < product.rating %}½{% else %}☆{% endif %}
-            {% endfor %}
+          <div class="rating-stars-badge">
+            ★ {{ product.rating }}
           </div>
-          <span class="rating-value">{{ product.rating }}</span>
-          <a href="#reviews" class="rating-reviews">{{ product.review_count }} reviews</a>
-          {% if product.review_count > 0 %}
-          <span style="color:var(--success);font-size:.82rem">✓ Verified</span>
-          {% endif %}
+          <a href="#reviews" class="rating-reviews">{{ product.review_count }} Customer Reviews</a>
+          <span class="rating-divider">•</span>
+          <span class="rating-verified-pill">✓ 100% Verified Buyer Choice</span>
         </div>
 
-        <!-- Price -->
-        <div class="product-detail-price">
-          {% if product.discount_price %}
-            <span class="detail-price-current">₹{{ "{:,.0f}".format(product.discount_price) }}</span>
-            <span class="detail-price-original">₹{{ "{:,.0f}".format(product.price) }}</span>
-            <span class="detail-price-badge">{{ product.discount_percent }}% OFF</span>
-          {% else %}
-            <span class="detail-price-current">₹{{ "{:,.0f}".format(product.price) }}</span>
-          {% endif %}
+        <!-- Luxury Price Box -->
+        <div class="product-price-box">
+          <div class="product-price-row">
+            {% if product.discount_price %}
+              <span class="detail-price-current">₹{{ "{:,.0f}".format(product.discount_price) }}</span>
+              <span class="detail-price-original">MRP ₹{{ "{:,.0f}".format(product.price) }}</span>
+              <span class="detail-price-badge">SAVE {{ product.discount_percent }}% OFF</span>
+            {% else %}
+              <span class="detail-price-current">₹{{ "{:,.0f}".format(product.price) }}</span>
+            {% endif %}
+          </div>
+          <div class="product-tax-info">
+            <span>Inclusive of all taxes</span>
+            <span>•</span>
+            <span>🚚 Free Pan-India Express Delivery on Prepaid Orders</span>
+          </div>
         </div>
 
-        <!-- Meta info -->
-        <div class="product-detail-meta">
+        <!-- Product Specifications Grid (Fabric, Occasion, Category, Weave) -->
+        <div class="product-specs-grid">
           {% if product.fabric %}
-          <div class="meta-item">
-            <span class="meta-label">Fabric</span>
-            <span class="meta-value">{{ product.fabric }}</span>
+          <div class="spec-card">
+            <div class="spec-icon">🧵</div>
+            <div class="spec-text">
+              <span class="spec-label">FABRIC</span>
+              <span class="spec-val">{{ product.fabric }}</span>
+            </div>
           </div>
           {% endif %}
           {% if product.occasion %}
-          <div class="meta-item">
-            <span class="meta-label">Occasion</span>
-            <span class="meta-value">{{ product.occasion }}</span>
+          <div class="spec-card">
+            <div class="spec-icon">✨</div>
+            <div class="spec-text">
+              <span class="spec-label">OCCASION</span>
+              <span class="spec-val">{{ product.occasion }}</span>
+            </div>
           </div>
           {% endif %}
-          <div class="meta-item">
-            <span class="meta-label">Category</span>
-            <span class="meta-value">{{ product.category.name }}</span>
+          <div class="spec-card">
+            <div class="spec-icon">🥻</div>
+            <div class="spec-text">
+              <span class="spec-label">CATEGORY</span>
+              <span class="spec-val">{{ product.category.name }}</span>
+            </div>
           </div>
-          <div class="meta-item">
-            <span class="meta-label">Brand</span>
-            <span class="meta-value">{{ product.brand }}</span>
+          <div class="spec-card">
+            <div class="spec-icon">👑</div>
+            <div class="spec-text">
+              <span class="spec-label">CRAFT</span>
+              <span class="spec-val">Pure Handloom Certified</span>
+            </div>
           </div>
         </div>
 
         <!-- Color Selection -->
         {% if colors %}
         <div class="variant-section">
-          <div class="variant-label">Color: <span id="selected-color-label" style="color:var(--primary);text-transform:none;font-weight:400">Select a color</span></div>
+          <div class="variant-header">
+            <span class="variant-title">COLOR:</span>
+            <span id="selected-color-label" class="variant-selected-val">Select a color</span>
+          </div>
           <div class="color-options">
-            {% set color_map = {'Red': '#DC2626', 'Blue': '#2563EB', 'Green': '#16A34A', 'Pink': '#EC4899', 'Black': '#1F2937', 'White': '#F3F4F6', 'Yellow': '#EAB308', 'Purple': '#9333EA', 'Orange': '#EA580C', 'Maroon': '#9B1C1C', 'Navy': '#1E3A5F', 'Teal': '#0D9488', 'Beige': '#F5DEB3', 'Cream': '#FFFDD0', 'Brown': '#92400E', 'Grey': '#6B7280'} %}
+            {% set color_map = {'Red': '#DC2626', 'Blue': '#2563EB', 'Green': '#16A34A', 'Pink': '#EC4899', 'Pastel Pink': '#F472B6', 'Black': '#1F2937', 'White': '#F9FAFB', 'Yellow': '#EAB308', 'Purple': '#9333EA', 'Orange': '#EA580C', 'Maroon': '#991B1B', 'Navy': '#1E3A8A', 'Teal': '#0D9488', 'Beige': '#F5DEB3', 'Cream': '#FFFDD0', 'Brown': '#92400E', 'Grey': '#6B7280'} %}
             {% for color in colors %}
-            <div class="color-option"
-                 style="background: {{ color_map.get(color, '#888') }}"
-                 title="{{ color }}"
-                 data-color="{{ color }}"
-                 onclick="selectColor('{{ color }}', this)"></div>
+            <div class="color-swatch-wrap">
+              <div class="color-option"
+                   style="background: {{ color_map.get(color, '#EC4899') }}"
+                   title="{{ color }}"
+                   data-color="{{ color }}"
+                   onclick="selectColor('{{ color }}', this)">
+              </div>
+              <span class="color-swatch-name">{{ color }}</span>
+            </div>
             {% endfor %}
           </div>
         </div>
         {% endif %}
 
-        <!-- Size Selection & Guide -->
+        <!-- Size Selection & Size Guide -->
         <div class="variant-section">
-          <div class="d-flex justify-between align-center mb-2">
-            <div class="variant-label" style="margin:0">Select Size: <span id="selected-size-label" style="color:var(--primary);text-transform:none;font-weight:700">{% if sizes %}{{ sizes[0] }}{% else %}Free Size{% endif %}</span></div>
-            <button type="button" onclick="openSizeGuide()" style="background:none;border:none;color:var(--primary);font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:underline">
+          <div class="variant-header">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="variant-title">SELECT SIZE:</span>
+              <span id="selected-size-label" class="variant-selected-val">{% if sizes %}{{ sizes[0] }}{% else %}Free Size{% endif %}</span>
+            </div>
+            <button type="button" onclick="openSizeGuide()" class="size-guide-btn">
               📏 Size Guide & Fit Finder
             </button>
           </div>
@@ -139,42 +166,41 @@
               <div class="size-option {% if loop.first %}selected{% endif %}" data-size="{{ size }}" onclick="selectSize('{{ size }}', this)">{{ size }}</div>
               {% endfor %}
             {% else %}
-              {% for size in ['S', 'M', 'L', 'XL', 'XXL'] %}
-              <div class="size-option {% if loop.first %}selected{% endif %}" data-size="{{ size }}" onclick="selectSize('{{ size }}', this)">{{ size }}</div>
-              {% endfor %}
+              <div class="size-option selected" data-size="Free Size" onclick="selectSize('Free Size', this)">Free Size</div>
             {% endif %}
           </div>
         </div>
 
-        <!-- Quantity -->
-        <div class="variant-section">
-          <div class="variant-label">Quantity</div>
-          <div class="quantity-selector">
-            <button class="qty-btn" id="qty-minus" aria-label="Decrease quantity">−</button>
-            <input type="number" class="qty-input" id="quantity-input" value="1" min="1" max="{{ product.stock }}" aria-label="Quantity">
-            <button class="qty-btn" id="qty-plus" aria-label="Increase quantity">+</button>
+        <!-- Quantity & Stock Indicator -->
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <span class="variant-title" style="margin:0">QTY:</span>
+            <div class="quantity-selector" style="margin:0">
+              <button class="qty-btn" id="qty-minus" aria-label="Decrease quantity">−</button>
+              <input type="number" class="qty-input" id="quantity-input" value="1" min="1" max="{{ product.stock }}" aria-label="Quantity">
+              <button class="qty-btn" id="qty-plus" aria-label="Increase quantity">+</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Stock Indicator -->
-        <div class="stock-indicator {% if product.stock == 0 %}out-stock{% elif product.stock < 10 %}low-stock{% else %}in-stock{% endif %}">
-          <div class="stock-dot"></div>
-          {% if product.stock == 0 %}
-          Out of Stock
-          {% elif product.stock < 10 %}
-          Only {{ product.stock }} left in stock!
-          {% else %}
-          In Stock — Ready to Dispatch
-          {% endif %}
+          <div class="stock-indicator {% if product.stock == 0 %}out-stock{% elif product.stock < 10 %}low-stock{% else %}in-stock{% endif %}" style="margin:0">
+            <div class="stock-dot"></div>
+            {% if product.stock == 0 %}
+            Out of Stock
+            {% elif product.stock < 10 %}
+            Only {{ product.stock }} left in stock!
+            {% else %}
+            In Stock — Ready to Dispatch
+            {% endif %}
+          </div>
         </div>
 
         <!-- CTA Buttons -->
         {% if product.stock > 0 %}
         <div class="detail-actions-row">
-          <button class="add-to-cart-btn" id="add-to-cart-detail" aria-label="Add to Cart">
+          <button class="add-to-cart-btn btn-pdp-cart" id="add-to-cart-detail" aria-label="Add to Cart">
             🛒 ADD TO CART
           </button>
-          <button class="btn-buy-now" id="buy-now-btn" aria-label="Buy Now">
+          <button class="btn-buy-now btn-pdp-buy" id="buy-now-btn" aria-label="Buy Now">
             ⚡ BUY NOW
           </button>
           <button class="btn-wishlist-detail {% if in_wishlist %}active{% endif %}"
@@ -196,26 +222,50 @@
         </div>
         {% endif %}
 
-        <!-- 🚚 Pincode Delivery Checker Box -->
-        <div style="background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin:20px 0">
-          <div style="font-size:0.82rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;color:var(--text)">
-            🚚 Check Delivery & COD Availability
+        <!-- 🚚 Delivery & Pincode Checker + Trust Pillars -->
+        <div class="delivery-trust-box">
+          <div class="delivery-pincode-header">
+            <span>🚚</span>
+            <span>Check Estimated Delivery Date</span>
           </div>
-          <div style="display:flex;gap:8px">
-            <input type="text" id="pincode-input" placeholder="Enter 6-digit Pincode" maxlength="6"
-                   style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem">
-            <button type="button" class="btn btn-primary btn-sm" onclick="checkPincode()">Check</button>
+          <div class="delivery-pincode-input-wrap">
+            <input type="text" id="pincode-input" placeholder="Enter 6-digit Pincode" maxlength="6">
+            <button type="button" class="btn-check-pin" onclick="checkPincode()">Check</button>
           </div>
-          <div id="pincode-result" style="display:none;margin-top:8px;font-size:0.8rem;line-height:1.4"></div>
+          <div id="pincode-result" style="display:none;margin-top:10px;font-size:0.82rem;font-weight:600"></div>
+
+          <div class="trust-features-grid">
+            <div class="trust-feature-item">
+              <span class="tf-icon">🚚</span>
+              <div>
+                <strong>Free Pan-India Delivery</strong>
+                <span>On all orders above ₹999</span>
+              </div>
+            </div>
+            <div class="trust-feature-item">
+              <span class="tf-icon">↩️</span>
+              <div>
+                <strong>7-Day Easy Exchange</strong>
+                <span>Doorstep pickup available</span>
+              </div>
+            </div>
+            <div class="trust-feature-item">
+              <span class="tf-icon">👑</span>
+              <div>
+                <strong>100% Pure Handloom</strong>
+                <span>Certified silk & authentic zari</span>
+              </div>
+            </div>
+            <div class="trust-feature-item">
+              <span class="tf-icon">🔒</span>
+              <div>
+                <strong>100% Secure Payments</strong>
+                <span>UPI, Cards & Netbanking</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Delivery info -->
-        <div class="delivery-info">
-          <div class="delivery-item"><span class="delivery-icon">🚚</span> Free delivery above ₹999</div>
-          <div class="delivery-item"><span class="delivery-icon">↩️</span> 7-day easy returns</div>
-          <div class="delivery-item"><span class="delivery-icon">✓</span> Genuine product</div>
-          <div class="delivery-item"><span class="delivery-icon">🔒</span> Secure checkout</div>
-        </div>
 
         <!-- Description (collapsible) -->
         {% if product.description %}

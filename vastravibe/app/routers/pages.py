@@ -17,6 +17,10 @@ from app.models.order import Order, OrderItem
 from app.models.address import Address
 from app.models.wishlist import WishlistItem
 from app.models.newsletter import NewsletterSubscriber
+from app.models.user import User
+from app.models.coupon import Coupon
+from app.models.review import Review
+from app.models.notification import Notification
 from app.utils.dependencies import get_current_user_optional, get_current_user, get_current_admin
 from app.services.product_service import (
     get_products, get_product_by_slug, get_recommendations, search_suggestions
@@ -137,11 +141,19 @@ async def search_page(request: Request, q: str = "", db: Session = Depends(get_d
 @router.get("/studio", response_class=HTMLResponse)
 async def style_studio(request: Request, db: Session = Depends(get_db)):
     user = get_current_user_optional(request, db)
-    sarees, _ = get_products(db, category_slug="sarees", per_page=12)
-    blouses, _ = get_products(db, category_slug="kurtis", per_page=12)
+    sarees, _ = get_products(db, category_slug="sarees", per_page=20)
+    blouses, _ = get_products(db, category_slug="kurtis", per_page=20)
+    lehengas, _ = get_products(db, category_slug="lehengas", per_page=20)
+    suits, _ = get_products(db, category_slug="salwar-suits", per_page=20)
+    mens, _ = get_products(db, category_slug="mens-wear", per_page=20)
+    all_products, _ = get_products(db, per_page=50)
     ctx = get_template_context(request, db, user, {
         "sarees": sarees,
-        "blouses": blouses
+        "blouses": blouses,
+        "lehengas": lehengas,
+        "suits": suits,
+        "mens": mens,
+        "all_products": all_products
     })
     return templates.TemplateResponse(request=request, name="studio.html", context=ctx)
 
@@ -452,7 +464,9 @@ async def admin_dashboard(request: Request, db: Session = Depends(get_db)):
     }
     ctx = get_template_context(request, db, user, {
         "stats": stats,
-        "recent_orders": recent_orders
+        "recent_orders": recent_orders,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
     })
     return templates.TemplateResponse(request=request, name="admin/dashboard.html", context=ctx)
 
@@ -464,10 +478,13 @@ async def admin_products_page(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse(url="/login?next=/admin/products", status_code=302)
     products = db.query(Product).order_by(Product.created_at.desc()).all()
     categories = db.query(Category).all()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
     ctx = get_template_context(request, db, user, {
         "products": products,
         "total": len(products),
-        "categories": categories
+        "categories": categories,
+        "total_products_count": len(products),
+        "pending_orders_count": pending_orders
     })
     return templates.TemplateResponse(request=request, name="admin/products.html", context=ctx)
 
@@ -478,7 +495,34 @@ async def admin_new_product_page(request: Request, db: Session = Depends(get_db)
     if not user or not user.is_admin:
         return RedirectResponse(url="/login?next=/admin/products/new", status_code=302)
     categories = db.query(Category).all()
-    ctx = get_template_context(request, db, user, {"categories": categories})
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+    ctx = get_template_context(request, db, user, {
+        "categories": categories,
+        "product": None,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
+    return templates.TemplateResponse(request=request, name="admin/product_form.html", context=ctx)
+
+
+@router.get("/admin/products/{product_id}/edit", response_class=HTMLResponse)
+async def admin_edit_product_page(product_id: int, request: Request, db: Session = Depends(get_db)):
+    user = get_current_user_optional(request, db)
+    if not user or not user.is_admin:
+        return RedirectResponse(url=f"/login?next=/admin/products/{product_id}/edit", status_code=302)
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    categories = db.query(Category).all()
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+    ctx = get_template_context(request, db, user, {
+        "categories": categories,
+        "product": product,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
     return templates.TemplateResponse(request=request, name="admin/product_form.html", context=ctx)
 
 
@@ -488,5 +532,118 @@ async def admin_orders_page(request: Request, db: Session = Depends(get_db)):
     if not user or not user.is_admin:
         return RedirectResponse(url="/login?next=/admin/orders", status_code=302)
     orders = db.query(Order).order_by(Order.created_at.desc()).all()
-    ctx = get_template_context(request, db, user, {"orders": orders})
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+    ctx = get_template_context(request, db, user, {
+        "orders": orders,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
     return templates.TemplateResponse(request=request, name="admin/orders.html", context=ctx)
+
+
+@router.get("/admin/categories", response_class=HTMLResponse)
+async def admin_categories_page(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user_optional(request, db)
+    if not user or not user.is_admin:
+        return RedirectResponse(url="/login?next=/admin/categories", status_code=302)
+    categories = db.query(Category).order_by(Category.sort_order).all()
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+    ctx = get_template_context(request, db, user, {
+        "categories": categories,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
+    return templates.TemplateResponse(request=request, name="admin/categories.html", context=ctx)
+
+
+@router.get("/admin/coupons", response_class=HTMLResponse)
+async def admin_coupons_page(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user_optional(request, db)
+    if not user or not user.is_admin:
+        return RedirectResponse(url="/login?next=/admin/coupons", status_code=302)
+    coupons = db.query(Coupon).all()
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+    ctx = get_template_context(request, db, user, {
+        "coupons": coupons,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
+    return templates.TemplateResponse(request=request, name="admin/coupons.html", context=ctx)
+
+
+@router.get("/admin/reviews", response_class=HTMLResponse)
+async def admin_reviews_page(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user_optional(request, db)
+    if not user or not user.is_admin:
+        return RedirectResponse(url="/login?next=/admin/reviews", status_code=302)
+    reviews = db.query(Review).options(joinedload(Review.user), joinedload(Review.product)).order_by(Review.created_at.desc()).all()
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+    ctx = get_template_context(request, db, user, {
+        "reviews": reviews,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
+    return templates.TemplateResponse(request=request, name="admin/reviews.html", context=ctx)
+
+
+@router.get("/admin/customers", response_class=HTMLResponse)
+async def admin_customers_page(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user_optional(request, db)
+    if not user or not user.is_admin:
+        return RedirectResponse(url="/login?next=/admin/customers", status_code=302)
+    customers = db.query(User).filter(User.is_admin == False).order_by(User.created_at.desc()).all()
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+    ctx = get_template_context(request, db, user, {
+        "customers": customers,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
+    return templates.TemplateResponse(request=request, name="admin/customers.html", context=ctx)
+
+
+@router.get("/admin/notifications", response_class=HTMLResponse)
+async def admin_notifications_page(
+    request: Request,
+    page: int = 1,
+    is_read: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    user = get_current_user_optional(request, db)
+    if not user or not user.is_admin:
+        return RedirectResponse(url="/login?next=/admin/notifications", status_code=302)
+
+    query = db.query(Notification).options(
+        joinedload(Notification.order).joinedload(Order.user),
+        joinedload(Notification.order).joinedload(Order.items)
+    )
+
+    if is_read is not None and is_read != "":
+        if str(is_read).lower() in ("true", "1", "read"):
+            query = query.filter(Notification.is_read == True)
+        elif str(is_read).lower() in ("false", "0", "unread"):
+            query = query.filter(Notification.is_read == False)
+
+    total_count = query.count()
+    notifications = query.order_by(Notification.created_at.desc()).offset((page - 1) * 20).limit(20).all()
+    unread_count = db.query(Notification).filter(Notification.is_read == False).count()
+
+    total_products = db.query(Product).count()
+    pending_orders = db.query(Order).filter(Order.status.in_(["Pending", "PENDING"])).count()
+
+    ctx = get_template_context(request, db, user, {
+        "notifications": notifications,
+        "total_notifications": total_count,
+        "unread_notifications_count": unread_count,
+        "current_page": page,
+        "current_is_read": is_read,
+        "total_products_count": total_products,
+        "pending_orders_count": pending_orders
+    })
+    return templates.TemplateResponse(request=request, name="admin/notifications.html", context=ctx)
+
+

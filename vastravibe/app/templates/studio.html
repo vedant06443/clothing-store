@@ -1,196 +1,1292 @@
 {% extends "base.html" %}
 
-{% block title %}Style Studio — Mix & Match Indian Outfits — Suyog Collection{% endblock %}
+{% block title %}Couture Style Studio — Interactive Mix & Match — Suyog Collection{% endblock %}
+{% block meta_description %}Create bespoke Indian ethnic ensembles in the Suyog Collection Style Studio. Mix and match handwoven sarees, designer blouses, festive lehengas, and accessories with instant bundle savings.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ────────── Studio Specific Styles ────────── */
+.studio-hero-banner {
+  background: radial-gradient(circle at 15% 20%, rgba(254, 240, 138, 0.7) 0%, transparent 40%),
+              linear-gradient(135deg, #FFF8DB 0%, #FEF08A 25%, #FDE047 60%, #F59E0B 100%);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  box-shadow: 0 10px 30px rgba(217, 119, 6, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.studio-grid-layout {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Studio Canvas Preview */
+.studio-preview-card {
+  position: sticky;
+  top: calc(var(--navbar-height) + 16px);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.canvas-silhouette-box {
+  position: relative;
+  height: 380px;
+  background: linear-gradient(180deg, #FFFDF8 0%, #FFF9EB 100%);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.canvas-silhouette-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: radial-gradient(var(--primary) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.mannequin-frame {
+  position: relative;
+  width: 240px;
+  height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Layered Items on Canvas */
+.canvas-layer {
+  position: absolute;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.layer-saree {
+  width: 170px;
+  height: 240px;
+  bottom: 15px;
+  left: 35px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  border: 2px solid #ffffff;
+  z-index: 2;
+}
+
+.layer-saree img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.layer-blouse {
+  width: 110px;
+  height: 125px;
+  top: 25px;
+  right: 25px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ffffff;
+  z-index: 3;
+}
+
+.layer-blouse img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.layer-dupatta {
+  width: 85px;
+  height: 180px;
+  top: 40px;
+  left: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+  border: 2px solid #ffffff;
+  z-index: 4;
+  transform: rotate(-6deg);
+}
+
+.layer-dupatta img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.layer-couple {
+  width: 110px;
+  height: 150px;
+  bottom: 20px;
+  right: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  border: 2px solid #ffffff;
+  z-index: 5;
+}
+
+.layer-couple img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Placeholder Slots */
+.slot-empty-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px;
+  border: 2px dashed rgba(217, 119, 6, 0.4);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* Lookbook Grid View */
+.lookbook-grid-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 16px;
+  min-height: 280px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--border);
+}
+
+.lookbook-slot {
+  aspect-ratio: 3/4;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 8px;
+  position: relative;
+}
+
+.lookbook-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.slot-remove-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 10;
+}
+.slot-remove-btn:hover { background: var(--error); }
+
+/* Harmony Meter */
+.harmony-meter-box {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(194, 65, 12, 0.08));
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.harmony-bar-wrap {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.harmony-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #EA580C, #F59E0B, #16A34A);
+  width: 85%;
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+/* Wardrobe Tabs */
+.wardrobe-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+}
+.wardrobe-tabs::-webkit-scrollbar { display: none; }
+
+.wardrobe-tab-btn {
+  padding: 10px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+  border-radius: 8px 8px 0 0;
+}
+
+.wardrobe-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: rgba(194, 65, 12, 0.06);
+}
+
+/* Studio Product Card */
+.studio-product-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.studio-product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--gold);
+}
+
+.studio-product-card.selected {
+  border-color: var(--primary);
+  background: rgba(194, 65, 12, 0.03);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.studio-selected-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--primary);
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.studio-product-card.selected .studio-selected-badge {
+  display: flex;
+}
+
+/* Draping Masterclass */
+.drape-style-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.drape-style-card:hover,
+.drape-style-card.active {
+  border-color: var(--primary);
+  background: rgba(194, 65, 12, 0.03);
+}
+
+.drape-style-card.active {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+@media (max-width: 991.98px) {
+  .studio-grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .studio-preview-card {
+    position: static;
+  }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="breadcrumb">
+<div class="container py-4 py-lg-5">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb mb-3">
     <a href="/">Home</a>
     <span class="separator">/</span>
-    <span class="current">Style Studio</span>
+    <span class="current">Couture Style Studio</span>
   </div>
 
-  <div class="text-center mb-4">
-    <span class="section-tag">Interactive Lookbook</span>
-    <h1 style="font-family:var(--font-display);font-size:2.4rem">Suyog Collection Style Studio</h1>
-    <p style="color:var(--text-muted);max-width:600px;margin:0 auto">
-      Mix and match handwoven Sarees, designer Blouses, Dupattas, and Accessories to curate your perfect festive or wedding ensemble.
-    </p>
+  <!-- ─── STUDIO HEADER HERO BANNER ─── -->
+  <div class="studio-hero-banner" data-aos="fade-up">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8">
+        <span class="highlight-pill mb-2">✨ Virtual Haute Couture Studio</span>
+        <h1 style="font-family:var(--font-brand);font-size:clamp(1.8rem, 4vw, 2.7rem);color:#1C1917;margin:10px 0 8px;line-height:1.15">
+          Suyog Collection <span style="color:var(--primary);font-style:italic">Design Studio</span>
+        </h1>
+        <p style="color:#44403C;font-size:1.02rem;max-width:680px;line-height:1.6;margin-bottom:16px">
+          Mix, match, and curate your signature Indian look. Pair handwoven Sarees, bespoke Blouses, and Royal Groom wear with live styling recommendations and an instant <strong>10% Studio Bundle Discount</strong>.
+        </p>
+
+        <!-- Occasion Presets -->
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#78716C;letter-spacing:1px;margin-right:4px">Presets:</span>
+          <button class="btn btn-sm btn-outline" style="background:#fff;border-color:var(--border);font-size:0.78rem" onclick="applyPreset('wedding')">👑 Royal Wedding</button>
+          <button class="btn btn-sm btn-outline" style="background:#fff;border-color:var(--border);font-size:0.78rem" onclick="applyPreset('sangeet')">💃 Sangeet Glam</button>
+          <button class="btn btn-sm btn-outline" style="background:#fff;border-color:var(--border);font-size:0.78rem" onclick="applyPreset('festive')">🪔 Festive Pooja</button>
+          <button class="btn btn-sm btn-outline" style="background:#fff;border-color:var(--border);font-size:0.78rem" onclick="applyPreset('couple')">✨ Couple Pairing</button>
+        </div>
+      </div>
+
+      <div class="col-lg-4 text-lg-end">
+        <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+          <button class="btn btn-sm btn-outline" style="background:#fff;border-color:#1C1917;color:#1C1917;font-weight:700" onclick="shuffleEnsemble()">
+            🎲 Randomize Style
+          </button>
+          <button class="btn btn-sm btn-outline" style="background:#fff;border-color:var(--border)" onclick="resetEnsemble()">
+            🧹 Reset Look
+          </button>
+        </div>
+        <div class="mt-3" style="font-size:0.8rem;color:#78716C">
+          🎁 Code <strong>STUDIO10</strong> auto-applied for ensemble bundles!
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+  <!-- ─── MAIN TWO-COLUMN STUDIO WORKSPACE ─── -->
+  <div class="studio-grid-layout">
 
-    <!-- Left Column: Lookbook Live Preview Canvas -->
-    <div class="card" style="position:sticky;top:calc(var(--navbar-height) + 20px)">
-      <div class="card-header d-flex justify-between align-center">
-        <h2 style="font-size:1.1rem;font-weight:600">✨ Your Curated Ensemble</h2>
-        <span id="ensemble-total-badge" class="badge badge-sale" style="font-size:0.85rem">Total: ₹0</span>
-      </div>
-      <div class="card-body text-center">
-
-        <div id="ensemble-preview" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;min-height:280px;background:var(--cream);padding:16px;border-radius:var(--radius-md)">
-          <div id="preview-saree" style="aspect-ratio:3/4;border:2px dashed var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#fff;padding:8px">
-            <span style="font-size:2rem;color:var(--text-muted)">🥻</span>
-            <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select Saree</span>
-          </div>
-          <div id="preview-blouse" style="aspect-ratio:3/4;border:2px dashed var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#fff;padding:8px">
-            <span style="font-size:2rem;color:var(--text-muted)">👗</span>
-            <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select Blouse / Top</span>
-          </div>
+    <!-- ─── LEFT COLUMN: Sticky Live Visualizer & Ensemble Cart ─── -->
+    <aside class="studio-preview-card" aria-label="Live Lookbook Preview">
+      <!-- Card Header with Mode Toggle -->
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#ffffff">
+        <div class="d-flex align-items-center gap-2">
+          <span style="font-size:1.1rem">🪞</span>
+          <h2 style="font-size:1.05rem;font-weight:700;margin:0;font-family:var(--font-brand)">Your Curated Look</h2>
         </div>
 
-        <div style="text-align:left;margin-bottom:20px">
-          <div style="font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Selected Items</div>
-          <div id="ensemble-items-list" style="font-size:0.88rem;color:var(--text);display:flex;flex-direction:column;gap:6px">
-            <span style="color:var(--text-muted)">No items selected yet. Pick items from the right to build your look.</span>
-          </div>
-        </div>
-
-        <button id="add-ensemble-to-cart" class="btn btn-primary btn-full btn-lg" onclick="addEnsembleToCart()" disabled>
-          🛒 Add Full Ensemble to Bag
-        </button>
-      </div>
-    </div>
-
-    <!-- Right Column: Interactive Wardrobe Picker -->
-    <div>
-      <!-- Step 1: Sarees / Main Attire -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h3 style="font-size:1.05rem;font-weight:600">1. Select Saree / Base Outfit</h3>
-        </div>
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px">
-            {% for p in sarees %}
-            <div class="studio-item"
-                 style="border:2px solid var(--border);border-radius:var(--radius-sm);padding:8px;cursor:pointer;transition:var(--transition);text-align:center"
-                 onclick="selectStudioItem('saree', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', this)">
-              <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="aspect-ratio:3/4;width:100%;object-fit:cover;border-radius:4px;margin-bottom:6px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
-              <div style="font-size:0.78rem;font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
-              <div style="font-size:0.75rem;color:var(--primary);font-weight:700">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</div>
-            </div>
-            {% endfor %}
-          </div>
+        <div class="btn-group" role="group" style="background:var(--cream);padding:3px;border-radius:99px">
+          <button type="button" id="btn-view-canvas" class="btn btn-sm" style="padding:4px 12px;font-size:0.75rem;font-weight:600;border-radius:99px;background:var(--primary);color:#fff" onclick="switchPreviewMode('canvas')">Canvas</button>
+          <button type="button" id="btn-view-grid" class="btn btn-sm" style="padding:4px 12px;font-size:0.75rem;font-weight:600;border-radius:99px;background:transparent;color:var(--text)" onclick="switchPreviewMode('grid')">Grid</button>
         </div>
       </div>
 
-      <!-- Step 2: Designer Blouses & Kurtis -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h3 style="font-size:1.05rem;font-weight:600">2. Pair with Designer Blouse / Top</h3>
-        </div>
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px">
-            {% for p in blouses %}
-            <div class="studio-item"
-                 style="border:2px solid var(--border);border-radius:var(--radius-sm);padding:8px;cursor:pointer;transition:var(--transition);text-align:center"
-                 onclick="selectStudioItem('blouse', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', this)">
-              <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="aspect-ratio:3/4;width:100%;object-fit:cover;border-radius:4px;margin-bottom:6px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
-              <div style="font-size:0.78rem;font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
-              <div style="font-size:0.75rem;color:var(--primary);font-weight:700">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</div>
+      <!-- Live Silhouette Canvas Mode -->
+      <div id="preview-canvas-mode" class="canvas-silhouette-box">
+        <div class="canvas-silhouette-bg"></div>
+
+        <div class="mannequin-frame">
+          <!-- Saree Layer -->
+          <div id="canvas-saree" class="canvas-layer layer-saree">
+            <div class="slot-empty-notice">
+              <span style="font-size:1.6rem">🥻</span>
+              <span>1. Base Saree / Lehenga</span>
             </div>
-            {% endfor %}
+          </div>
+
+          <!-- Blouse Layer -->
+          <div id="canvas-blouse" class="canvas-layer layer-blouse">
+            <div class="slot-empty-notice">
+              <span style="font-size:1.4rem">👗</span>
+              <span>2. Blouse</span>
+            </div>
+          </div>
+
+          <!-- Dupatta Layer -->
+          <div id="canvas-dupatta" class="canvas-layer layer-dupatta" style="display:none">
+            <div class="slot-empty-notice">
+              <span style="font-size:1.2rem">🧣</span>
+              <span>Dupatta</span>
+            </div>
+          </div>
+
+          <!-- Couple / Gents Layer -->
+          <div id="canvas-couple" class="canvas-layer layer-couple" style="display:none">
+            <div class="slot-empty-notice">
+              <span style="font-size:1.3rem">🤵</span>
+              <span>Groom</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drape Style Badge on Canvas -->
+        <div id="active-drape-indicator" style="position:absolute;bottom:12px;left:14px;background:rgba(255,255,255,0.9);backdrop-filter:blur(4px);padding:4px 10px;border-radius:99px;font-size:0.72rem;font-weight:700;color:var(--primary);border:1px solid var(--border)">
+          Drape: Nivi Style
+        </div>
+      </div>
+
+      <!-- Lookbook Grid Mode (Alternative view) -->
+      <div id="preview-grid-mode" class="lookbook-grid-box" style="display:none">
+        <div id="grid-slot-saree" class="lookbook-slot">
+          <span style="font-size:1.8rem">🥻</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select Saree</span>
+        </div>
+        <div id="grid-slot-blouse" class="lookbook-slot">
+          <span style="font-size:1.8rem">👗</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select Blouse</span>
+        </div>
+        <div id="grid-slot-dupatta" class="lookbook-slot">
+          <span style="font-size:1.8rem">🧣</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select Dupatta</span>
+        </div>
+        <div id="grid-slot-couple" class="lookbook-slot">
+          <span style="font-size:1.8rem">🤵</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Couple Attire</span>
+        </div>
+      </div>
+
+      <!-- Studio Summary & Controls -->
+      <div style="padding:20px">
+        <!-- AI Harmony Score -->
+        <div class="harmony-meter-box">
+          <div class="d-flex justify-between align-items-center">
+            <span style="font-size:0.8rem;font-weight:700;color:var(--primary)">🎨 AI Ensemble Harmony</span>
+            <span id="harmony-score-text" style="font-size:0.8rem;font-weight:700;color:var(--success)">88% • Balanced Look</span>
+          </div>
+          <div class="harmony-bar-wrap">
+            <div id="harmony-bar-fill" class="harmony-bar-fill" style="width:88%"></div>
+          </div>
+          <div id="harmony-tip" style="font-size:0.74rem;color:#78716C;margin-top:4px">
+            Pick a complementary blouse to complete your royal color palette.
+          </div>
+        </div>
+
+        <!-- Selected Items Breakdown -->
+        <div style="margin-bottom:16px">
+          <div class="d-flex justify-between align-items-center mb-2">
+            <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:var(--text-muted)">Selected Pieces</span>
+            <span id="items-count-badge" style="font-size:0.75rem;color:var(--text-muted)">0 items</span>
+          </div>
+          <div id="ensemble-items-list" style="display:flex;flex-direction:column;gap:8px;font-size:0.85rem">
+            <span style="color:var(--text-muted);font-style:italic">Select garments from the wardrobe rack on the right to construct your look.</span>
+          </div>
+        </div>
+
+        <!-- Pricing Breakdown -->
+        <div style="background:var(--cream);padding:14px 16px;border-radius:var(--radius-md);margin-bottom:18px;border:1px solid var(--border)">
+          <div class="d-flex justify-between mb-1" style="font-size:0.85rem;color:var(--text-muted)">
+            <span>Standard Price:</span>
+            <span id="price-subtotal">₹0</span>
+          </div>
+          <div class="d-flex justify-between mb-1" style="font-size:0.85rem;color:var(--success)">
+            <span>Studio Bundle Discount (10%):</span>
+            <span id="price-discount">-₹0</span>
+          </div>
+          <div class="d-flex justify-between pt-2" style="border-top:1px dashed var(--border);font-size:1.05rem;font-weight:700;color:var(--primary)">
+            <span>Ensemble Total:</span>
+            <span id="price-grand-total">₹0</span>
+          </div>
+        </div>
+
+        <!-- Primary CTA Buttons -->
+        <div class="d-flex flex-column gap-2">
+          <button id="add-ensemble-to-cart" class="btn btn-primary btn-full btn-lg" onclick="addEnsembleToCart()" disabled style="font-weight:700;font-size:0.95rem">
+            🛍️ Add Complete Look to Bag
+          </button>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline flex-1 btn-sm" onclick="exportLookbookCard()" style="font-size:0.78rem">
+              📸 Export Look Card
+            </button>
+            <button class="btn btn-outline flex-1 btn-sm" onclick="shareEnsembleLink()" style="font-size:0.78rem">
+              🔗 Share Ensemble
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── RIGHT COLUMN: The Modular Wardrobe Rack ─── -->
+    <main aria-label="Wardrobe Selector">
+
+      <!-- Wardrobe Category Tabs -->
+      <nav class="wardrobe-tabs" aria-label="Garment categories">
+        <button class="wardrobe-tab-btn active" onclick="switchWardrobeTab('sarees', this)">🥻 Sarees ({{ sarees|length }})</button>
+        <button class="wardrobe-tab-btn" onclick="switchWardrobeTab('blouses', this)">👗 Designer Blouses ({{ blouses|length }})</button>
+        <button class="wardrobe-tab-btn" onclick="switchWardrobeTab('lehengas', this)">💃 Lehengas ({{ lehengas|length }})</button>
+        <button class="wardrobe-tab-btn" onclick="switchWardrobeTab('suits', this)">👘 Salwar Suits ({{ suits|length }})</button>
+        <button class="wardrobe-tab-btn" onclick="switchWardrobeTab('mens', this)">🤵 Groom & Gents ({{ mens|length }})</button>
+      </nav>
+
+      <!-- Live Search & Fabric Filters Inside Studio -->
+      <div class="card mb-4" style="padding:14px 18px;border-radius:var(--radius-md)">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-6">
+            <div style="position:relative">
+              <input type="text" id="studio-search" class="form-control" placeholder="Search by fabric, color, or motif..." style="padding-left:36px;font-size:0.85rem;min-height:38px" oninput="filterWardrobeCards()">
+              <i class="bi bi-search" style="position:absolute;left:12px;top:10px;color:var(--text-muted)"></i>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex gap-2 overflow-x-auto" style="scrollbar-width:none">
+              <button class="btn btn-sm btn-outline fabric-filter-btn active" style="font-size:0.75rem;padding:4px 10px;white-space:nowrap" onclick="filterByFabric('all', this)">All Fabrics</button>
+              <button class="btn btn-sm btn-outline fabric-filter-btn" style="font-size:0.75rem;padding:4px 10px;white-space:nowrap" onclick="filterByFabric('Silk', this)">Pure Silk</button>
+              <button class="btn btn-sm btn-outline fabric-filter-btn" style="font-size:0.75rem;padding:4px 10px;white-space:nowrap" onclick="filterByFabric('Georgette', this)">Georgette</button>
+              <button class="btn btn-sm btn-outline fabric-filter-btn" style="font-size:0.75rem;padding:4px 10px;white-space:nowrap" onclick="filterByFabric('Chanderi', this)">Chanderi</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Saree Draping Interactive Guide -->
-      <div class="card">
-        <div class="card-header">
-          <h3 style="font-size:1.05rem;font-weight:600">📖 Traditional Draping Guide</h3>
+      <!-- Tab Content 1: Sarees -->
+      <section id="tab-sarees" class="wardrobe-tab-content">
+        <div class="d-flex justify-between align-items-center mb-3">
+          <h3 style="font-size:1.15rem;font-weight:700;font-family:var(--font-brand);margin:0">Handwoven Silk & Festive Sarees</h3>
+          <span style="font-size:0.8rem;color:var(--text-muted)">Click any saree to drape it live</span>
         </div>
-        <div class="card-body" style="font-size:0.88rem;line-height:1.7">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
-              <strong>Nivi Style (Classic)</strong>
-              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">The universal standard drape from Andhra Pradesh, perfect with silk sarees and statement pallu.</p>
+        <div class="row g-3" id="rack-sarees">
+          {% for p in sarees %}
+          <div class="col-6 col-md-4 studio-card-col" data-fabric="{{ p.fabric or '' }}" data-name="{{ p.name }}" data-price="{{ p.discount_price or p.price }}">
+            <div class="studio-product-card" id="card-saree-{{ p.id }}" onclick="selectStudioItem('saree', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', '{{ p.fabric or 'Silk' }}', this)">
+              <div class="studio-selected-badge">✓</div>
+              <div style="aspect-ratio:3/4;border-radius:6px;overflow:hidden;margin-bottom:8px;background:#f5f5f5">
+                <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              </div>
+              <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Handwoven Silk' }}</div>
+              <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
+              <div class="d-flex justify-between align-items-center mt-2">
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Try On</span>
+              </div>
             </div>
-            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
-              <strong>Bengali Style</strong>
-              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">Front box pleats with an ornate pallu wrapped over the shoulder with a decorative key bunch.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Tab Content 2: Blouses / Tops -->
+      <section id="tab-blouses" class="wardrobe-tab-content" style="display:none">
+        <div class="d-flex justify-between align-items-center mb-3">
+          <h3 style="font-size:1.15rem;font-weight:700;font-family:var(--font-brand);margin:0">Designer Blouses & Kurtis</h3>
+          <span style="font-size:0.8rem;color:var(--text-muted)">Pair with your selected drape</span>
+        </div>
+        <div class="row g-3" id="rack-blouses">
+          {% for p in blouses %}
+          <div class="col-6 col-md-4 studio-card-col" data-fabric="{{ p.fabric or '' }}" data-name="{{ p.name }}" data-price="{{ p.discount_price or p.price }}">
+            <div class="studio-product-card" id="card-blouse-{{ p.id }}" onclick="selectStudioItem('blouse', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', '{{ p.fabric or 'Silk' }}', this)">
+              <div class="studio-selected-badge">✓</div>
+              <div style="aspect-ratio:3/4;border-radius:6px;overflow:hidden;margin-bottom:8px;background:#f5f5f5">
+                <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              </div>
+              <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Designer Cut' }}</div>
+              <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
+              <div class="d-flex justify-between align-items-center mt-2">
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Pair</span>
+              </div>
             </div>
-            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
-              <strong>Gujarati / Seedha Pallu</strong>
-              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">The pallu is brought from the back over the right shoulder to showcase heavy zari work.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Tab Content 3: Lehengas -->
+      <section id="tab-lehengas" class="wardrobe-tab-content" style="display:none">
+        <div class="d-flex justify-between align-items-center mb-3">
+          <h3 style="font-size:1.15rem;font-weight:700;font-family:var(--font-brand);margin:0">Bridal & Festive Lehengas</h3>
+          <span style="font-size:0.8rem;color:var(--text-muted)">Heavy Zari & Designer Silhouettes</span>
+        </div>
+        <div class="row g-3" id="rack-lehengas">
+          {% for p in lehengas %}
+          <div class="col-6 col-md-4 studio-card-col" data-fabric="{{ p.fabric or '' }}" data-name="{{ p.name }}" data-price="{{ p.discount_price or p.price }}">
+            <div class="studio-product-card" id="card-lehenga-{{ p.id }}" onclick="selectStudioItem('saree', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', '{{ p.fabric or 'Lehenga' }}', this)">
+              <div class="studio-selected-badge">✓</div>
+              <div style="aspect-ratio:3/4;border-radius:6px;overflow:hidden;margin-bottom:8px;background:#f5f5f5">
+                <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              </div>
+              <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Velvet / Silk' }}</div>
+              <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
+              <div class="d-flex justify-between align-items-center mt-2">
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Select</span>
+              </div>
             </div>
-            <div style="background:var(--cream);padding:12px;border-radius:var(--radius-sm)">
-              <strong>Nauvari (Maharashtrian)</strong>
-              <p style="margin:4px 0 0;font-size:0.8rem;color:var(--text-muted)">Traditional trouser-like dhoti drape offering regal freedom of movement.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Tab Content 4: Salwar Suits -->
+      <section id="tab-suits" class="wardrobe-tab-content" style="display:none">
+        <div class="d-flex justify-between align-items-center mb-3">
+          <h3 style="font-size:1.15rem;font-weight:700;font-family:var(--font-brand);margin:0">Salwar Suits & Anarkalis</h3>
+          <span style="font-size:0.8rem;color:var(--text-muted)">Effortless celebratory poise</span>
+        </div>
+        <div class="row g-3" id="rack-suits">
+          {% for p in suits %}
+          <div class="col-6 col-md-4 studio-card-col" data-fabric="{{ p.fabric or '' }}" data-name="{{ p.name }}" data-price="{{ p.discount_price or p.price }}">
+            <div class="studio-product-card" id="card-suit-{{ p.id }}" onclick="selectStudioItem('saree', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', '{{ p.fabric or 'Georgette' }}', this)">
+              <div class="studio-selected-badge">✓</div>
+              <div style="aspect-ratio:3/4;border-radius:6px;overflow:hidden;margin-bottom:8px;background:#f5f5f5">
+                <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              </div>
+              <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Anarkali' }}</div>
+              <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
+              <div class="d-flex justify-between align-items-center mt-2">
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Select</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Tab Content 5: Couple / Groom Attire -->
+      <section id="tab-mens" class="wardrobe-tab-content" style="display:none">
+        <div class="d-flex justify-between align-items-center mb-3">
+          <h3 style="font-size:1.15rem;font-weight:700;font-family:var(--font-brand);margin:0">Royal Couple & Groom Pairing</h3>
+          <span style="font-size:0.8rem;color:var(--text-muted)">Co-ordinate wedding sherwanis and silk kurtas</span>
+        </div>
+        <div class="row g-3" id="rack-mens">
+          {% for p in mens %}
+          <div class="col-6 col-md-4 studio-card-col" data-fabric="{{ p.fabric or '' }}" data-name="{{ p.name }}" data-price="{{ p.discount_price or p.price }}">
+            <div class="studio-product-card" id="card-couple-{{ p.id }}" onclick="selectStudioItem('couple', {{ p.id }}, '{{ p.name }}', {{ p.discount_price or p.price }}, '{{ p.primary_image }}', '{{ p.fabric or 'Silk' }}', this)">
+              <div class="studio-selected-badge">✓</div>
+              <div style="aspect-ratio:3/4;border-radius:6px;overflow:hidden;margin-bottom:8px;background:#f5f5f5">
+                <img src="{{ p.primary_image }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+              </div>
+              <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Sherwani / Kurta' }}</div>
+              <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
+              <div class="d-flex justify-between align-items-center mt-2">
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Pair Groom</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ─── INTERACTIVE DRAPING MASTERCLASS GUIDE ─── -->
+      <div class="card mt-5" style="border-radius:var(--radius-lg);overflow:hidden">
+        <div class="card-header d-flex justify-between align-items-center" style="background:#FFFDF8;border-bottom:1px solid var(--border);padding:18px 24px">
+          <div>
+            <span style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:700">Draping Masterclass</span>
+            <h3 style="font-size:1.15rem;font-weight:700;font-family:var(--font-brand);margin:4px 0 0">Interactive Saree Draping Styles</h3>
+          </div>
+          <span style="font-size:0.8rem;color:var(--text-muted)">Click a drape to apply to your look</span>
+        </div>
+
+        <div class="card-body p-4">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="drape-style-card active" onclick="selectDrapeStyle('Nivi Style (Classic)', 'Standard 6-to-8 pleats with pleated pallu draped gracefully over the left shoulder.', this)">
+                <div class="d-flex justify-between align-items-center mb-1">
+                  <strong style="color:var(--primary)">Nivi Style</strong>
+                  <span class="badge" style="background:rgba(217,119,6,0.15);color:var(--primary)">Universal</span>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin:0">The quintessential Indian drape. Perfect for showcasing heavy zari borders and regal pallus.</p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="drape-style-card" onclick="selectDrapeStyle('Gujarati / Seedha Pallu', 'The pallu is brought from behind over the right shoulder to show off ornate chest embroidery.', this)">
+                <div class="d-flex justify-between align-items-center mb-1">
+                  <strong style="color:var(--primary)">Seedha Pallu</strong>
+                  <span class="badge" style="background:rgba(217,119,6,0.15);color:var(--primary)">Festive</span>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin:0">Drapes the heavy pallu forward, ideal for wedding pujas and intricate Banarasi craftsmanship.</p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="drape-style-card" onclick="selectDrapeStyle('Bengali Aathpoure', 'Front broad box pleats with an ornate pallu wrapped over the shoulder with a decorative key ring.', this)">
+                <div class="d-flex justify-between align-items-center mb-1">
+                  <strong style="color:var(--primary)">Bengali Aathpoure</strong>
+                  <span class="badge" style="background:rgba(217,119,6,0.15);color:var(--primary)">Heritage</span>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin:0">Graceful traditional box pleats that celebrate rich red and gold silk borders.</p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="drape-style-card" onclick="selectDrapeStyle('Nauvari Dhoti Style', 'Maharashtrian trouser-like 9-yard drape offering warrior poise and full movement.', this)">
+                <div class="d-flex justify-between align-items-center mb-1">
+                  <strong style="color:var(--primary)">Nauvari Style</strong>
+                  <span class="badge" style="background:rgba(217,119,6,0.15);color:var(--primary)">Royal</span>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin:0">Iconic Maharashtrian heritage drape with tucked pleats and majestic peacock borders.</p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="drape-style-card" onclick="selectDrapeStyle('Modern Belted Drape', 'Contoured silhouette cinched with an embroidered kamardhani waist belt.', this)">
+                <div class="d-flex justify-between align-items-center mb-1">
+                  <strong style="color:var(--primary)">Belted Fusion</strong>
+                  <span class="badge" style="background:rgba(217,119,6,0.15);color:var(--primary)">Modern</span>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin:0">Contemporary cocktail drape, pairing tailored blazers or waist belts with fluid silks.</p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="drape-style-card" onclick="selectDrapeStyle('Lehenga Saree Drape', 'Pleated pallu draped across the waist mimicking a voluminous wedding lehenga silhouette.', this)">
+                <div class="d-flex justify-between align-items-center mb-1">
+                  <strong style="color:var(--primary)">Lehenga Drape</strong>
+                  <span class="badge" style="background:rgba(217,119,6,0.15);color:var(--primary)">Celebration</span>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin:0">Gives any saree the flared, royal glamour of an opulent bridal lehenga.</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-    </div>
+    </main>
 
   </div>
 </div>
+
+<!-- Hidden Canvas for Lookbook Polaroid Export -->
+<canvas id="lookbook-export-canvas" width="800" height="1000" style="display:none"></canvas>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-const selectedEnsemble = {
+// State of Current Curated Ensemble
+const currentEnsemble = {
   saree: null,
-  blouse: null
+  blouse: null,
+  dupatta: null,
+  couple: null,
+  drapeStyle: 'Nivi Style (Classic)'
 };
 
-function selectStudioItem(type, id, name, price, img, el) {
-  // Clear previous selection for this type
-  el.closest('.card-body').querySelectorAll('.studio-item').forEach(i => {
-    i.style.borderColor = 'var(--border)';
-    i.style.backgroundColor = 'transparent';
-  });
-  el.style.borderColor = 'var(--primary)';
-  el.style.backgroundColor = 'rgba(139,26,74,0.04)';
+// Raw product data loaded from backend template context
+const studioCatalogue = {
+  sarees: [
+    {% for p in sarees %}
+    { id: {{ p.id }}, name: "{{ p.name|replace('"', '\\"') }}", price: {{ p.discount_price or p.price }}, img: "{{ p.primary_image }}", fabric: "{{ p.fabric or 'Silk' }}" },
+    {% endfor %}
+  ],
+  blouses: [
+    {% for p in blouses %}
+    { id: {{ p.id }}, name: "{{ p.name|replace('"', '\\"') }}", price: {{ p.discount_price or p.price }}, img: "{{ p.primary_image }}", fabric: "{{ p.fabric or 'Silk' }}" },
+    {% endfor %}
+  ],
+  lehengas: [
+    {% for p in lehengas %}
+    { id: {{ p.id }}, name: "{{ p.name|replace('"', '\\"') }}", price: {{ p.discount_price or p.price }}, img: "{{ p.primary_image }}", fabric: "{{ p.fabric or 'Lehenga' }}" },
+    {% endfor %}
+  ],
+  suits: [
+    {% for p in suits %}
+    { id: {{ p.id }}, name: "{{ p.name|replace('"', '\\"') }}", price: {{ p.discount_price or p.price }}, img: "{{ p.primary_image }}", fabric: "{{ p.fabric or 'Georgette' }}" },
+    {% endfor %}
+  ],
+  mens: [
+    {% for p in mens %}
+    { id: {{ p.id }}, name: "{{ p.name|replace('"', '\\"') }}", price: {{ p.discount_price or p.price }}, img: "{{ p.primary_image }}", fabric: "{{ p.fabric or 'Silk' }}" },
+    {% endfor %}
+  ]
+};
 
-  selectedEnsemble[type] = { id, name, price, img };
+// Switch Wardrobe Category Tabs
+function switchWardrobeTab(tabKey, el) {
+  document.querySelectorAll('.wardrobe-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.wardrobe-tab-content').forEach(c => c.style.display = 'none');
 
-  // Update preview
-  const previewEl = document.getElementById(`preview-${type}`);
-  if (previewEl) {
-    previewEl.innerHTML = `
-      <img src="${img}" style="width:100%;height:100%;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
-      <span style="font-size:0.75rem;font-weight:600;margin-top:4px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">${name}</span>
-    `;
+  if (el) el.classList.add('active');
+  const target = document.getElementById(`tab-${tabKey}`);
+  if (target) target.style.display = 'block';
+}
+
+// Switch Lookbook Preview Mode (Canvas vs Grid)
+function switchPreviewMode(mode) {
+  const btnCanvas = document.getElementById('btn-view-canvas');
+  const btnGrid = document.getElementById('btn-view-grid');
+  const canvasBox = document.getElementById('preview-canvas-mode');
+  const gridBox = document.getElementById('preview-grid-mode');
+
+  if (mode === 'canvas') {
+    canvasBox.style.display = 'flex';
+    gridBox.style.display = 'none';
+    btnCanvas.style.background = 'var(--primary)';
+    btnCanvas.style.color = '#fff';
+    btnGrid.style.background = 'transparent';
+    btnGrid.style.color = 'var(--text)';
+  } else {
+    canvasBox.style.display = 'none';
+    gridBox.style.display = 'grid';
+    btnGrid.style.background = 'var(--primary)';
+    btnGrid.style.color = '#fff';
+    btnCanvas.style.background = 'transparent';
+    btnCanvas.style.color = 'var(--text)';
+  }
+}
+
+// Select an Item in the Studio
+function selectStudioItem(layerKey, id, name, price, img, fabric, cardEl) {
+  // Update selection highlight on cards
+  if (cardEl) {
+    const parent = cardEl.closest('.row');
+    if (parent) {
+      parent.querySelectorAll('.studio-product-card').forEach(c => c.classList.remove('selected'));
+    }
+    cardEl.classList.add('selected');
   }
 
-  // Update summary & total
-  let total = 0;
-  let itemsHtml = '';
-  Object.keys(selectedEnsemble).forEach(k => {
-    const item = selectedEnsemble[k];
-    if (item) {
-      total += item.price;
-      itemsHtml += `<div>• <strong>${item.name}</strong> — ₹${item.price.toLocaleString('en-IN')}</div>`;
+  currentEnsemble[layerKey] = { id, name, price, img, fabric };
+
+  // Render on Silhouette Canvas
+  renderCanvasLayer(layerKey, currentEnsemble[layerKey]);
+
+  // Render on Grid Mode Slot
+  renderGridSlot(layerKey, currentEnsemble[layerKey]);
+
+  // Recalculate summary, totals, and AI harmony
+  updateEnsembleSummary();
+}
+
+// Render Layer on Canvas
+function renderCanvasLayer(layerKey, item) {
+  const layerEl = document.getElementById(`canvas-${layerKey}`);
+  if (!layerEl) return;
+
+  if (item) {
+    layerEl.style.display = 'block';
+    layerEl.innerHTML = `
+      <img src="${item.img}" alt="${item.name}" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+      <button class="slot-remove-btn" onclick="event.stopPropagation(); removeEnsembleItem('${layerKey}')" title="Remove piece">✕</button>
+    `;
+  } else {
+    if (layerKey === 'dupatta' || layerKey === 'couple') {
+      layerEl.style.display = 'none';
+    }
+    layerEl.innerHTML = `
+      <div class="slot-empty-notice">
+        <span>+ Select ${layerKey}</span>
+      </div>
+    `;
+  }
+}
+
+// Render Grid Slot
+function renderGridSlot(layerKey, item) {
+  const slotEl = document.getElementById(`grid-slot-${layerKey}`);
+  if (!slotEl) return;
+
+  if (item) {
+    slotEl.innerHTML = `
+      <img src="${item.img}" alt="${item.name}" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+      <button class="slot-remove-btn" onclick="removeEnsembleItem('${layerKey}')" title="Remove piece">✕</button>
+      <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:#fff;font-size:0.7rem;padding:4px 6px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+        ${item.name}
+      </div>
+    `;
+  } else {
+    slotEl.innerHTML = `
+      <span style="font-size:1.8rem">👗</span>
+      <span style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Select ${layerKey}</span>
+    `;
+  }
+}
+
+// Remove an item
+function removeEnsembleItem(layerKey) {
+  currentEnsemble[layerKey] = null;
+  renderCanvasLayer(layerKey, null);
+  renderGridSlot(layerKey, null);
+
+  // Uncheck card if present
+  document.querySelectorAll(`.studio-product-card.selected`).forEach(c => {
+    if (c.id && c.id.includes(layerKey)) {
+      c.classList.remove('selected');
     }
   });
 
-  document.getElementById('ensemble-items-list').innerHTML = itemsHtml || '<span style="color:var(--text-muted)">Select items to view look.</span>';
-  document.getElementById('ensemble-total-badge').textContent = `Total: ₹${total.toLocaleString('en-IN')}`;
-
-  const addBtn = document.getElementById('add-ensemble-to-cart');
-  if (addBtn) addBtn.disabled = total === 0;
+  updateEnsembleSummary();
 }
 
+// Update Totals and AI Harmony Score
+function updateEnsembleSummary() {
+  let subtotal = 0;
+  let itemsCount = 0;
+  let itemsHtml = '';
+
+  const activeKeys = ['saree', 'blouse', 'dupatta', 'couple'];
+  activeKeys.forEach(key => {
+    const itm = currentEnsemble[key];
+    if (itm) {
+      subtotal += itm.price;
+      itemsCount++;
+      itemsHtml += `
+        <div class="d-flex justify-between align-items-center" style="background:#fafafa;padding:6px 10px;border-radius:6px;border:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:8px;overflow:hidden">
+            <img src="${itm.img}" style="width:28px;height:28px;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+            <div style="font-size:0.8rem;font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">${itm.name}</div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span style="font-weight:700;color:var(--primary);font-size:0.85rem">₹${itm.price.toLocaleString('en-IN')}</span>
+            <button onclick="removeEnsembleItem('${key}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px">✕</button>
+          </div>
+        </div>
+      `;
+    }
+  });
+
+  const discount = itemsCount >= 2 ? Math.round(subtotal * 0.10) : 0;
+  const grandTotal = subtotal - discount;
+
+  document.getElementById('items-count-badge').textContent = `${itemsCount} item${itemsCount !== 1 ? 's' : ''}`;
+  document.getElementById('ensemble-items-list').innerHTML = itemsHtml || '<span style="color:var(--text-muted);font-style:italic">Select garments from the wardrobe rack to construct your look.</span>';
+  document.getElementById('price-subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  document.getElementById('price-discount').textContent = `-₹${discount.toLocaleString('en-IN')}`;
+  document.getElementById('price-grand-total').textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
+
+  const addBtn = document.getElementById('add-ensemble-to-cart');
+  if (addBtn) {
+    addBtn.disabled = itemsCount === 0;
+    addBtn.innerHTML = itemsCount >= 2
+      ? `🛍️ Add Complete Look to Bag (Save ₹${discount.toLocaleString('en-IN')})`
+      : `🛍️ Add Selected Piece${itemsCount > 1 ? 's' : ''} to Bag`;
+  }
+
+  // Update Dynamic AI Harmony
+  updateHarmonyScore(itemsCount);
+}
+
+// Calculate AI Harmony
+function updateHarmonyScore(itemsCount) {
+  const scoreText = document.getElementById('harmony-score-text');
+  const scoreBar = document.getElementById('harmony-bar-fill');
+  const tipEl = document.getElementById('harmony-tip');
+
+  if (itemsCount === 0) {
+    scoreText.textContent = '0% • Empty Canvas';
+    scoreBar.style.width = '10%';
+    tipEl.textContent = 'Start by picking a primary Saree or Lehenga from the rack.';
+  } else if (itemsCount === 1) {
+    scoreText.textContent = '50% • Base Chosen';
+    scoreBar.style.width = '50%';
+    tipEl.textContent = 'Select a designer blouse or coordinating dupatta for color harmony.';
+  } else if (itemsCount === 2) {
+    scoreText.textContent = '92% • Royal Festive Harmony';
+    scoreBar.style.width = '92%';
+    tipEl.textContent = 'Exquisite pairing! The zari border tones create a regal traditional balance.';
+  } else {
+    scoreText.textContent = '98% • Haute Couture Ensemble';
+    scoreBar.style.width = '98%';
+    tipEl.textContent = 'Magnificent coordination! Ideal for grand celebrations, weddings, and photoshoots.';
+  }
+}
+
+// Select Drape Style
+function selectDrapeStyle(name, desc, cardEl) {
+  document.querySelectorAll('.drape-style-card').forEach(c => c.classList.remove('active'));
+  if (cardEl) cardEl.classList.add('active');
+
+  currentEnsemble.drapeStyle = name;
+  const badge = document.getElementById('active-drape-indicator');
+  if (badge) badge.textContent = `Drape: ${name.split(' ')[0]}`;
+
+  Toast.info(`Draping changed to: ${name}`);
+}
+
+// Apply Curated Preset Looks
+function applyPreset(presetType) {
+  resetEnsemble();
+
+  if (presetType === 'wedding') {
+    if (studioCatalogue.sarees.length > 0) selectStudioItem('saree', studioCatalogue.sarees[0].id, studioCatalogue.sarees[0].name, studioCatalogue.sarees[0].price, studioCatalogue.sarees[0].img, studioCatalogue.sarees[0].fabric);
+    if (studioCatalogue.blouses.length > 0) selectStudioItem('blouse', studioCatalogue.blouses[0].id, studioCatalogue.blouses[0].name, studioCatalogue.blouses[0].price, studioCatalogue.blouses[0].img, studioCatalogue.blouses[0].fabric);
+    selectDrapeStyle('Gujarati / Seedha Pallu', '', document.querySelectorAll('.drape-style-card')[1]);
+    Toast.success('Royal Wedding preset applied!');
+  } else if (presetType === 'sangeet') {
+    if (studioCatalogue.lehengas.length > 0) {
+      selectStudioItem('saree', studioCatalogue.lehengas[0].id, studioCatalogue.lehengas[0].name, studioCatalogue.lehengas[0].price, studioCatalogue.lehengas[0].img, studioCatalogue.lehengas[0].fabric);
+    } else if (studioCatalogue.sarees.length > 1) {
+      selectStudioItem('saree', studioCatalogue.sarees[1].id, studioCatalogue.sarees[1].name, studioCatalogue.sarees[1].price, studioCatalogue.sarees[1].img, studioCatalogue.sarees[1].fabric);
+    }
+    if (studioCatalogue.blouses.length > 1) selectStudioItem('blouse', studioCatalogue.blouses[1].id, studioCatalogue.blouses[1].name, studioCatalogue.blouses[1].price, studioCatalogue.blouses[1].img, studioCatalogue.blouses[1].fabric);
+    selectDrapeStyle('Modern Belted Drape', '', document.querySelectorAll('.drape-style-card')[4]);
+    Toast.success('Sangeet Glam preset applied!');
+  } else if (presetType === 'festive') {
+    if (studioCatalogue.sarees.length > 2) selectStudioItem('saree', studioCatalogue.sarees[2].id, studioCatalogue.sarees[2].name, studioCatalogue.sarees[2].price, studioCatalogue.sarees[2].img, studioCatalogue.sarees[2].fabric);
+    else if (studioCatalogue.sarees.length > 0) selectStudioItem('saree', studioCatalogue.sarees[0].id, studioCatalogue.sarees[0].name, studioCatalogue.sarees[0].price, studioCatalogue.sarees[0].img, studioCatalogue.sarees[0].fabric);
+    selectDrapeStyle('Nivi Style (Classic)', '', document.querySelectorAll('.drape-style-card')[0]);
+    Toast.success('Festive Pooja preset applied!');
+  } else if (presetType === 'couple') {
+    if (studioCatalogue.sarees.length > 0) selectStudioItem('saree', studioCatalogue.sarees[0].id, studioCatalogue.sarees[0].name, studioCatalogue.sarees[0].price, studioCatalogue.sarees[0].img, studioCatalogue.sarees[0].fabric);
+    if (studioCatalogue.mens.length > 0) selectStudioItem('couple', studioCatalogue.mens[0].id, studioCatalogue.mens[0].name, studioCatalogue.mens[0].price, studioCatalogue.mens[0].img, studioCatalogue.mens[0].fabric);
+    Toast.success('Royal Couple Pairing preset applied!');
+  }
+}
+
+// Randomize Style Shuffle
+function shuffleEnsemble() {
+  resetEnsemble();
+
+  // Random saree
+  if (studioCatalogue.sarees.length > 0) {
+    const s = studioCatalogue.sarees[Math.floor(Math.random() * studioCatalogue.sarees.length)];
+    selectStudioItem('saree', s.id, s.name, s.price, s.img, s.fabric);
+  }
+
+  // Random blouse
+  if (studioCatalogue.blouses.length > 0) {
+    const b = studioCatalogue.blouses[Math.floor(Math.random() * studioCatalogue.blouses.length)];
+    selectStudioItem('blouse', b.id, b.name, b.price, b.img, b.fabric);
+  }
+
+  // Random drape
+  const drapes = document.querySelectorAll('.drape-style-card');
+  if (drapes.length > 0) {
+    const rDrape = drapes[Math.floor(Math.random() * drapes.length)];
+    rDrape.click();
+  }
+
+  Toast.success('🎲 Created a fresh randomized look!');
+}
+
+// Reset Entire Look
+function resetEnsemble() {
+  removeEnsembleItem('saree');
+  removeEnsembleItem('blouse');
+  removeEnsembleItem('dupatta');
+  removeEnsembleItem('couple');
+  document.querySelectorAll('.studio-product-card').forEach(c => c.classList.remove('selected'));
+  updateEnsembleSummary();
+}
+
+// Live Filter Cards by Search Input
+function filterWardrobeCards() {
+  const query = (document.getElementById('studio-search')?.value || '').toLowerCase();
+  document.querySelectorAll('.studio-card-col').forEach(col => {
+    const name = (col.getAttribute('data-name') || '').toLowerCase();
+    const fabric = (col.getAttribute('data-fabric') || '').toLowerCase();
+    const match = name.includes(query) || fabric.includes(query);
+    col.style.display = match ? 'block' : 'none';
+  });
+}
+
+// Filter Cards by Fabric Button
+function filterByFabric(fabric, btn) {
+  document.querySelectorAll('.fabric-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const query = fabric.toLowerCase();
+  document.querySelectorAll('.studio-card-col').forEach(col => {
+    if (fabric === 'all') {
+      col.style.display = 'block';
+    } else {
+      const colFabric = (col.getAttribute('data-fabric') || '').toLowerCase();
+      col.style.display = colFabric.includes(query) ? 'block' : 'none';
+    }
+  });
+}
+
+// Add All Ensemble Items to Cart with Bundle Savings
 async function addEnsembleToCart() {
   const addBtn = document.getElementById('add-ensemble-to-cart');
   addBtn.disabled = true;
-  addBtn.textContent = 'Adding look to bag...';
+  addBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Adding ensemble to bag...';
+
+  const activeKeys = ['saree', 'blouse', 'dupatta', 'couple'];
+  let count = 0;
 
   try {
-    for (const k of Object.keys(selectedEnsemble)) {
-      const item = selectedEnsemble[k];
+    for (const key of activeKeys) {
+      const item = currentEnsemble[key];
       if (item) {
         await Cart.add(item.id, 1);
+        count++;
       }
     }
-    Toast.success('Complete ensemble added to your shopping bag!');
-    setTimeout(() => window.location.href = '/cart', 1000);
+
+    if (count > 0) {
+      Toast.success(`🎉 Added ${count} ensemble piece${count > 1 ? 's' : ''} to your bag with 10% bundle savings!`);
+      setTimeout(() => window.location.href = '/cart', 1200);
+    }
   } catch (err) {
-    Toast.error('Failed to add ensemble items: ' + err.message);
+    Toast.error('Failed to add items: ' + (err.message || 'Please try again.'));
     addBtn.disabled = false;
-    addBtn.textContent = '🛒 Add Full Ensemble to Bag';
+    updateEnsembleSummary();
   }
 }
+
+// Share Ensemble Link
+function shareEnsembleLink() {
+  const ids = [];
+  ['saree', 'blouse', 'dupatta', 'couple'].forEach(k => {
+    if (currentEnsemble[k]) ids.push(`${k}:${currentEnsemble[k].id}`);
+  });
+
+  const url = `${window.location.origin}/studio${ids.length ? '?look=' + encodeURIComponent(ids.join(',')) : ''}`;
+  navigator.clipboard.writeText(url).then(() => {
+    Toast.success('📋 Lookbook link copied to clipboard!');
+  }).catch(() => {
+    Toast.info(`Share link: ${url}`);
+  });
+}
+
+// Export Lookbook Card as Image (Canvas Polaroid)
+function exportLookbookCard() {
+  const canvas = document.getElementById('lookbook-export-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#FFFDF7';
+  ctx.fillRect(0, 0, 800, 1000);
+
+  // Border & Brand Frame
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = '#D97706';
+  ctx.strokeRect(20, 20, 760, 960);
+
+  // Header Title
+  ctx.fillStyle = '#1C1917';
+  ctx.font = 'bold 36px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Suyog Collection', 400, 80);
+
+  ctx.fillStyle = '#C2410C';
+  ctx.font = 'italic 20px Georgia, serif';
+  ctx.fillText('Couture Style Studio • Curated Look', 400, 115);
+
+  // Divider
+  ctx.strokeStyle = '#FDE68A';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(100, 135);
+  ctx.lineTo(700, 135);
+  ctx.stroke();
+
+  // Drape Style & Date
+  ctx.fillStyle = '#78716C';
+  ctx.font = '16px sans-serif';
+  ctx.fillText(`Drape Technique: ${currentEnsemble.drapeStyle}`, 400, 170);
+
+  // Info Box
+  let y = 230;
+  ctx.textAlign = 'left';
+  ctx.font = 'bold 22px Georgia, serif';
+  ctx.fillStyle = '#1C1917';
+  ctx.fillText('Ensemble Breakdown:', 100, y);
+  y += 40;
+
+  let total = 0;
+  ['saree', 'blouse', 'dupatta', 'couple'].forEach(k => {
+    const item = currentEnsemble[k];
+    if (item) {
+      total += item.price;
+      ctx.font = '18px sans-serif';
+      ctx.fillStyle = '#1C1917';
+      ctx.fillText(`• ${item.name}`, 120, y);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#C2410C';
+      ctx.fillText(`₹${item.price.toLocaleString('en-IN')}`, 680, y);
+      ctx.textAlign = 'left';
+      y += 45;
+    }
+  });
+
+  if (total === 0) {
+    ctx.font = 'italic 18px sans-serif';
+    ctx.fillStyle = '#78716C';
+    ctx.fillText('No pieces selected yet.', 120, y);
+    y += 45;
+  }
+
+  y += 20;
+  ctx.strokeStyle = '#FDE68A';
+  ctx.beginPath();
+  ctx.moveTo(100, y);
+  ctx.lineTo(700, y);
+  ctx.stroke();
+  y += 40;
+
+  const discount = Math.round(total * 0.1);
+  const finalPrice = total - discount;
+
+  ctx.font = 'bold 24px Georgia, serif';
+  ctx.fillStyle = '#1C1917';
+  ctx.fillText('Complete Look Total:', 120, y);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#C2410C';
+  ctx.fillText(`₹${finalPrice.toLocaleString('en-IN')}`, 680, y);
+  ctx.textAlign = 'left';
+
+  // Footer Note
+  ctx.textAlign = 'center';
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = '#78716C';
+  ctx.fillText('Shop authentic Indian handlooms online at suyogcollection.com', 400, 930);
+
+  // Download Trigger
+  const link = document.createElement('a');
+  link.download = `suyog-couture-look-${Date.now()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+
+  Toast.success('📸 Lookbook Polaroid card exported successfully!');
+}
+
+// Auto-initialize first saree and blouse on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Check URL query for shared look
+  const params = new URLSearchParams(window.location.search);
+  const sharedLook = params.get('look');
+
+  if (sharedLook) {
+    try {
+      const parts = sharedLook.split(',');
+      parts.forEach(p => {
+        const [k, id] = p.split(':');
+        const numId = parseInt(id);
+        const item = (studioCatalogue[k + 's'] || studioCatalogue[k] || []).find(x => x.id === numId);
+        if (item) selectStudioItem(k, item.id, item.name, item.price, item.img, item.fabric);
+      });
+    } catch (e) {
+      applyPreset('wedding');
+    }
+  } else {
+    // Default preset
+    applyPreset('wedding');
+  }
+});
 </script>
 {% endblock %}

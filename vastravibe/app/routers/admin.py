@@ -1,5 +1,5 @@
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File, Query, Request, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func, desc
 from app.database import get_db
@@ -11,10 +11,13 @@ from app.models.order import Order, OrderStatus
 from app.models.coupon import Coupon
 from app.models.review import Review
 from app.models.banner import Banner
+from app.models.notification import Notification
 from app.services.order_service import admin_get_all_orders, update_order_status
+from app.services.notification_service import notification_manager
 from app.utils.dependencies import get_current_admin
-from app.utils.image_upload import upload_to_cloudinary
+from app.utils.image_upload import upload_to_cloudinary, save_product_image, delete_product_image_file
 from app.utils.helpers import slugify, calculate_discount
+from app.utils.security import decode_token
 import json
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -86,6 +89,7 @@ async def create_product(
 ):
     content_type = request.headers.get("content-type", "")
     images = []
+    uploaded_image: Optional[UploadFile] = None
 
     if "application/json" in content_type:
         data = await request.json()
@@ -125,6 +129,12 @@ async def create_product(
         is_bestseller = str(form.get("is_bestseller", "")).lower() in ("true", "1", "on")
         is_new_arrival = str(form.get("is_new_arrival", "")).lower() in ("true", "1", "on")
         primary_image = form.get("primary_image")
+        
+        # Check single primary image upload
+        img_field = form.get("image")
+        if hasattr(img_field, "filename") and img_field.filename:
+            uploaded_image = img_field
+            
         images = form.getlist("images")
 
     if not name or not str(name).strip():
@@ -156,6 +166,13 @@ async def create_product(
     except (ValueError, TypeError):
         stock = 0
 
+    # If an image file was uploaded, validate and save it BEFORE creating the DB record
+    final_primary_image = None
+    if uploaded_image:
+        final_primary_image = save_product_image(uploaded_image, product_title=str(name))
+    elif primary_image and str(primary_image).strip():
+        final_primary_image = str(primary_image).strip()
+
     slug_base = slugify(str(name))
     slug = slug_base
     counter = 1
@@ -178,22 +195,23 @@ async def create_product(
     db.add(product)
     db.flush()
 
-    # Add primary image if provided as string / path
-    if primary_image and str(primary_image).strip():
-        db.add(ProductImage(product_id=product.id, image_url=str(primary_image).strip(), is_primary=True, sort_order=0))
+    # Add primary image if available
+    if final_primary_image:
+        db.add(ProductImage(product_id=product.id, image_url=final_primary_image, is_primary=True, sort_order=0))
 
-    # Upload file images if provided
+    # Upload additional file images if provided
     for i, img_file in enumerate(images):
         if hasattr(img_file, "filename") and img_file.filename:
             url = upload_to_cloudinary(img_file, "products")
-            is_prim = (i == 0 and not primary_image)
-            db.add(ProductImage(product_id=product.id, image_url=url, is_primary=is_prim, sort_order=i if not primary_image else i + 1))
+            is_prim = (i == 0 and not final_primary_image)
+            db.add(ProductImage(product_id=product.id, image_url=url, is_primary=is_prim, sort_order=i if not final_primary_image else i + 1))
 
     db.commit()
-    return {"message": "Product created", "product_id": product.id}
+    return {"message": "Product created", "product_id": product.id, "primary_image": product.primary_image}
 
 
 @router.put("/products/{product_id}")
+@router.post("/products/{product_id}")
 async def update_product(
     product_id: int,
     request: Request,
@@ -205,14 +223,26 @@ async def update_product(
         raise HTTPException(status_code=404, detail="Product not found")
 
     content_type = request.headers.get("content-type", "")
+    uploaded_image: Optional[UploadFile] = None
+
     if "application/json" in content_type:
         data = await request.json()
     else:
         form = await request.form()
         data = dict(form)
+        img_field = form.get("image")
+        if hasattr(img_field, "filename") and img_field.filename:
+            uploaded_image = img_field
 
-    if "name" in data and data["name"] is not None:
-        product.name = str(data["name"])
+    if "name" in data and data["name"] is not None and str(data["name"]).strip():
+        product.name = str(data["name"]).strip()
+    if "category_id" in data and data["category_id"] not in (None, "", "null"):
+        try:
+            product.category_id = int(data["category_id"])
+        except (ValueError, TypeError):
+            pass
+    if "brand" in data and data["brand"] is not None:
+        product.brand = str(data["brand"]).strip()
     if "price" in data and data["price"] is not None:
         try:
             product.price = float(data["price"])
@@ -234,6 +264,18 @@ async def update_product(
             product.stock = int(data["stock"])
         except (ValueError, TypeError):
             pass
+    if "fabric" in data and data["fabric"] is not None:
+        product.fabric = str(data["fabric"]).strip()
+    if "occasion" in data and data["occasion"] is not None:
+        product.occasion = str(data["occasion"]).strip()
+    if "colors" in data and data["colors"] is not None:
+        product.colors = str(data["colors"]).strip()
+    if "sizes" in data and data["sizes"] is not None:
+        product.sizes = str(data["sizes"]).strip()
+    if "care_instructions" in data and data["care_instructions"] is not None:
+        product.care_instructions = str(data["care_instructions"]).strip()
+    if "specifications" in data and data["specifications"] is not None:
+        product.specifications = str(data["specifications"]).strip()
     if "is_featured" in data and data["is_featured"] is not None:
         product.is_featured = str(data["is_featured"]).lower() in ("true", "1", "on")
     if "is_bestseller" in data and data["is_bestseller"] is not None:
@@ -243,10 +285,42 @@ async def update_product(
     if "is_active" in data and data["is_active"] is not None:
         product.is_active = str(data["is_active"]).lower() in ("true", "1", "on")
     if "description" in data and data["description"] is not None:
-        product.description = str(data["description"])
+        product.description = str(data["description"]).strip()
+
+    # Image Handling:
+    # 1. If admin selected a new image file, validate & save it, update DB, and optionally delete old file
+    if uploaded_image:
+        new_image_url = save_product_image(uploaded_image, product_title=product.name)
+        primary_img = db.query(ProductImage).filter(ProductImage.product_id == product.id, ProductImage.is_primary == True).first()
+        if not primary_img:
+            primary_img = db.query(ProductImage).filter(ProductImage.product_id == product.id).first()
+
+        if primary_img:
+            old_url = primary_img.image_url
+            primary_img.image_url = new_image_url
+            delete_product_image_file(old_url, db)
+        else:
+            db.add(ProductImage(product_id=product.id, image_url=new_image_url, is_primary=True, sort_order=0))
+
+    # 2. If no new file uploaded, but admin changed the optional image URL field
+    elif "primary_image" in data and data["primary_image"] is not None:
+        url_val = str(data["primary_image"]).strip()
+        if url_val:
+            primary_img = db.query(ProductImage).filter(ProductImage.product_id == product.id, ProductImage.is_primary == True).first()
+            if not primary_img:
+                primary_img = db.query(ProductImage).filter(ProductImage.product_id == product.id).first()
+
+            if primary_img:
+                if primary_img.image_url != url_val:
+                    old_url = primary_img.image_url
+                    primary_img.image_url = url_val
+                    delete_product_image_file(old_url, db)
+            else:
+                db.add(ProductImage(product_id=product.id, image_url=url_val, is_primary=True, sort_order=0))
 
     db.commit()
-    return {"message": "Product updated"}
+    db.refresh(product)
+    return {"message": "Product updated", "product_id": product.id, "primary_image": product.primary_image}
 
 
 @router.delete("/products/{product_id}")
@@ -421,3 +495,144 @@ async def admin_customers(
         ],
         "total": total
     }
+
+
+# ──────────────── Notifications ────────────────
+
+@router.get("/notifications")
+async def get_admin_notifications(
+    limit: int = Query(20, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    is_read: Optional[bool] = Query(None),
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Notification).options(
+        joinedload(Notification.order).joinedload(Order.user),
+        joinedload(Notification.order).joinedload(Order.items)
+    )
+    if is_read is not None:
+        query = query.filter(Notification.is_read == is_read)
+
+    total = query.count()
+    unread_count = db.query(Notification).filter(Notification.is_read == False).count()
+    notifications = query.order_by(Notification.created_at.desc()).offset((page - 1) * limit).limit(limit).all()
+
+    items = []
+    for n in notifications:
+        order = n.order
+        if order and order.items:
+            first_item = order.items[0]
+            prod_name = first_item.product_name or (first_item.product.name if first_item.product else "Saree")
+            qty = sum(i.quantity for i in order.items)
+        else:
+            prod_name = "Product"
+            qty = 1
+
+        customer_name = (order.shipping_name if order else None) or (order.user.full_name if order and order.user else "Customer")
+        amount = order.total_amount if order else 0
+        status = order.status if order else "Confirmed"
+        payment_status = order.payment_status if order else "Paid"
+
+        items.append({
+            "id": n.id,
+            "order_id": n.order_id,
+            "order_number": order.order_number if order else f"ORD-{n.order_id}",
+            "customer_name": customer_name,
+            "product_name": prod_name,
+            "quantity": qty,
+            "amount": amount,
+            "formatted_amount": f"₹{amount:,.0f}",
+            "status": status if isinstance(status, str) else getattr(status, "value", str(status)),
+            "payment_status": payment_status if isinstance(payment_status, str) else getattr(payment_status, "value", str(payment_status)),
+            "title": n.title,
+            "message": n.message,
+            "is_read": n.is_read,
+            "created_at": n.created_at.isoformat() if n.created_at else None
+        })
+
+    return {
+        "notifications": items,
+        "unread_count": unread_count,
+        "total": total,
+        "page": page,
+        "limit": limit
+    }
+
+
+@router.get("/notifications/unread-count")
+async def get_unread_notification_count(
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    unread_count = db.query(Notification).filter(Notification.is_read == False).count()
+    return {"unread_count": unread_count}
+
+
+@router.patch("/notifications/{notification_id}/read")
+@router.post("/notifications/{notification_id}/read")
+async def mark_notification_read(
+    notification_id: int,
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    notif = db.query(Notification).filter(Notification.id == notification_id).first()
+    if not notif:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    notif.is_read = True
+    db.commit()
+    unread_count = db.query(Notification).filter(Notification.is_read == False).count()
+    return {"success": True, "message": "Notification marked as read", "unread_count": unread_count}
+
+
+@router.patch("/notifications/read-all")
+@router.post("/notifications/read-all")
+async def mark_all_notifications_read(
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    db.query(Notification).filter(Notification.is_read == False).update({"is_read": True})
+    db.commit()
+    return {"success": True, "message": "All notifications marked as read", "unread_count": 0}
+
+
+@router.websocket("/ws/notifications")
+async def admin_notifications_ws(websocket: WebSocket, db: Session = Depends(get_db)):
+    token = websocket.cookies.get("access_token")
+    if not token:
+        token = websocket.query_params.get("token")
+
+    if not token:
+        await websocket.close(code=1008)
+        return
+
+    payload = decode_token(token)
+    if not payload or not payload.get("sub"):
+        await websocket.close(code=1008)
+        return
+
+    user_id = payload.get("sub")
+    user = None
+    try:
+        user = db.query(User).filter(User.id == int(user_id), User.is_active == True).first()
+    except (ValueError, TypeError):
+        user = db.query(User).filter(User.email == str(user_id), User.is_active == True).first()
+
+    if not user or not user.is_admin:
+        await websocket.close(code=1008)
+        return
+
+    await notification_manager.connect(websocket)
+    try:
+        unread_count = db.query(Notification).filter(Notification.is_read == False).count()
+        await websocket.send_json({"type": "init", "unread_count": unread_count})
+
+        while True:
+            msg = await websocket.receive_text()
+            if msg == "ping":
+                await websocket.send_text("pong")
+    except WebSocketDisconnect:
+        notification_manager.disconnect(websocket)
+    except Exception:
+        notification_manager.disconnect(websocket)
+

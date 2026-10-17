@@ -1,0 +1,171 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Coupons & Offers — Suyog Collection Admin{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-title-h1">Coupons & Promotional Offers</h1>
+    <div class="admin-subtitle">Create discount voucher codes and festive promotional codes</div>
+  </div>
+  <button type="button" class="btn btn-primary btn-sm" onclick="openNewCouponModal()">+ Create New Coupon</button>
+</div>
+
+<!-- ─── Coupons Table ─── -->
+<div class="admin-card">
+  <div class="admin-card-body" style="padding:0">
+    <div style="overflow-x:auto">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Coupon Code</th>
+            <th>Discount</th>
+            <th>Min Order (₹)</th>
+            <th>Usage Count</th>
+            <th>Status</th>
+            <th style="text-align:right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if coupons %}
+            {% for c in coupons %}
+            <tr>
+              <td>
+                <span style="font-family:monospace;font-size:0.95rem;font-weight:700;color:var(--primary);background:rgba(155,28,82,0.08);padding:4px 10px;border-radius:6px;border:1px dashed var(--primary)">
+                  {{ c.code }}
+                </span>
+                {% if c.description %}
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">{{ c.description }}</div>
+                {% endif %}
+              </td>
+              <td>
+                <strong style="color:#15803D">
+                  {% if c.discount_type == 'percent' %}
+                  {{ c.discount_value|int }}% OFF
+                  {% else %}
+                  ₹{{ "{:,.0f}".format(c.discount_value) }} FLAT OFF
+                  {% endif %}
+                </strong>
+              </td>
+              <td>₹{{ "{:,.0f}".format(c.minimum_order or 0) }}</td>
+              <td><strong>{{ c.usage_count or 0 }}</strong> uses</td>
+              <td>
+                <span class="badge {% if c.is_active %}badge-in{% else %}badge-out{% endif %}" id="coupon-status-{{ c.id }}">
+                  {% if c.is_active %}Active{% else %}Inactive{% endif %}
+                </span>
+              </td>
+              <td style="text-align:right">
+                <button type="button" class="btn btn-sm btn-outline" onclick="toggleCoupon({{ c.id }}, {{ 'false' if c.is_active else 'true' }})">
+                  {% if c.is_active %}Deactivate{% else %}Activate{% endif %}
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="6" class="text-center py-4" style="color:var(--text-muted)">No coupons created yet. Click "+ Create New Coupon" to add one.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Coupon Modal -->
+<div id="new-coupon-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center">
+  <div class="admin-card" style="width:460px;max-width:90%;background:#fff">
+    <div class="admin-card-header">
+      <h3 style="font-size:1rem;margin:0;font-weight:700">Create New Coupon</h3>
+      <button type="button" style="background:none;border:none;font-size:1.2rem;cursor:pointer" onclick="closeNewCouponModal()">✕</button>
+    </div>
+    <div class="admin-card-body">
+      <form onsubmit="handleCreateCoupon(event)">
+        <div class="form-group mb-3">
+          <label class="form-label" style="font-weight:700">Coupon Code *</label>
+          <input type="text" id="cp-code" class="form-input" required placeholder="e.g. FESTIVE20" style="text-transform:uppercase">
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px" class="mb-3">
+          <div class="form-group">
+            <label class="form-label" style="font-weight:700">Discount Type *</label>
+            <select id="cp-type" class="form-select">
+              <option value="percent">Percentage (%)</option>
+              <option value="flat">Flat Amount (₹)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight:700">Value *</label>
+            <input type="number" id="cp-val" class="form-input" required placeholder="e.g. 20">
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label" style="font-weight:700">Minimum Order Amount (₹)</label>
+          <input type="number" id="cp-min" class="form-input" value="999" placeholder="999">
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label" style="font-weight:700">Campaign Description</label>
+          <input type="text" id="cp-desc" class="form-input" placeholder="e.g. Special festive celebration discount">
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeNewCouponModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Create Coupon</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openNewCouponModal() {
+  document.getElementById('new-coupon-modal').style.display = 'flex';
+}
+function closeNewCouponModal() {
+  document.getElementById('new-coupon-modal').style.display = 'none';
+}
+
+async function handleCreateCoupon(e) {
+  e.preventDefault();
+  const payload = {
+    code: document.getElementById('cp-code').value.trim().toUpperCase(),
+    discount_type: document.getElementById('cp-type').value,
+    discount_value: parseFloat(document.getElementById('cp-val').value),
+    minimum_order: parseFloat(document.getElementById('cp-min').value) || 0,
+    description: document.getElementById('cp-desc').value.trim()
+  };
+
+  try {
+    const res = await fetch('/api/admin/coupons', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Failed to create coupon');
+    Toast.success('Coupon created successfully!');
+    setTimeout(() => location.reload(), 800);
+  } catch (err) {
+    Toast.error(err.message);
+  }
+}
+
+async function toggleCoupon(id, activeState) {
+  try {
+    const res = await fetch(`/api/admin/coupons/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ is_active: activeState })
+    });
+    if (!res.ok) throw new Error('Failed to update coupon');
+    Toast.success(`Coupon ${activeState ? 'activated' : 'deactivated'}`);
+    setTimeout(() => location.reload(), 600);
+  } catch (err) {
+    Toast.error(err.message);
+  }
+}
+</script>
+{% endblock %}

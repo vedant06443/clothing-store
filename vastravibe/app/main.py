@@ -22,6 +22,7 @@ async def lifespan(app: FastAPI):
     # Ensure static directories exist
     Path("app/static/uploads/products").mkdir(parents=True, exist_ok=True)
     Path("app/static/uploads/categories").mkdir(parents=True, exist_ok=True)
+    Path("app/static/images/products").mkdir(parents=True, exist_ok=True)
     yield
 
 
@@ -63,6 +64,10 @@ app.include_router(admin.router)
 # HTML page routes last
 app.include_router(pages.router)
 
+# WebSocket routes
+from app.routers.admin import admin_notifications_ws
+app.websocket("/ws/admin/notifications")(admin_notifications_ws)
+
 
 # ──────────────── Error Handlers ────────────────
 
@@ -80,6 +85,12 @@ def _error_context(request: Request):
     }
 
 
+import logging
+import traceback
+
+logger = logging.getLogger("uvicorn.error")
+
+
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc):
     return templates.TemplateResponse(
@@ -91,10 +102,15 @@ async def not_found_handler(request: Request, exc):
 
 
 @app.exception_handler(500)
-async def server_error_handler(request: Request, exc):
+@app.exception_handler(Exception)
+async def server_error_handler(request: Request, exc: Exception):
+    logger.error(f"500 Internal Server Error on {request.method} {request.url.path}: {exc}")
+    traceback.print_exc()
+    ctx = _error_context(request)
+    ctx["error_detail"] = str(getattr(exc, "detail", str(exc)))
     return templates.TemplateResponse(
         request=request,
         name="errors/500.html",
-        context=_error_context(request),
+        context=ctx,
         status_code=500
     )

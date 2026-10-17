@@ -39,6 +39,10 @@ async def place_order(
         result["razorpay_order_id"] = rzp_order.get("id", "")
         result["razorpay_key"] = settings.RAZORPAY_KEY_ID
         result["demo_mode"] = rzp_order.get("demo_mode", False)
+    else:
+        # COD order is confirmed immediately upon placement
+        from app.services.notification_service import create_admin_order_notification
+        create_admin_order_notification(db, order)
 
     return result
 

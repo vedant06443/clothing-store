@@ -21,7 +21,10 @@ def get_current_user_optional(request: Request, db: Session = Depends(get_db)) -
     user_id = payload.get("sub")
     if not user_id:
         return None
-    user = db.query(User).filter(User.id == int(user_id), User.is_active == True).first()
+    try:
+        user = db.query(User).filter(User.id == int(user_id), User.is_active == True).first()
+    except (ValueError, TypeError):
+        user = db.query(User).filter(User.email == str(user_id), User.is_active == True).first()
     return user
 
 

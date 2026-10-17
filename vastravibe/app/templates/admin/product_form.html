@@ -1,154 +1,472 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Product — Suyog Collection Admin</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
+{% extends "admin/base.html" %}
 
-<div class="admin-layout">
-  <aside class="admin-sidebar">
-    <div class="admin-logo">
-      <img src="/static/images/logo.png" alt="Suyog Collection" class="admin-logo-img">
-      <div>
-        <div class="admin-logo-text">Suyog <span>Collection</span></div>
-        <div class="admin-badge">Admin Portal</div>
-      </div>
-    </div>
-    <ul class="admin-nav">
-      <li class="admin-nav-item"><a href="/admin">📊 Dashboard</a></li>
-      <li class="admin-nav-item"><a href="/admin/products" class="active">👗 Products</a></li>
-      <li class="admin-nav-item"><a href="/admin/orders">📦 Orders</a></li>
-      <div class="admin-nav-section">Store Links</div>
-      <li class="admin-nav-item"><a href="/" target="_blank">🌐 Live Storefront ↗</a></li>
-      <li class="admin-nav-item"><a href="/logout">🚪 Logout</a></li>
-    </ul>
-  </aside>
+{% block title %}{% if product %}Edit Product — {{ product.name }}{% else %}Add New Product — Suyog Collection Admin{% endif %}{% endblock %}
 
-  <main class="admin-main">
-    <div class="admin-header">
-      <div>
-        <h1 class="admin-page-title">Add New Product</h1>
-        <p style="color:var(--text-muted);font-size:0.85rem">Create a new item in the catalogue</p>
-      </div>
-      <a href="/admin/products" class="btn btn-outline btn-sm">← Back to Products</a>
-    </div>
+{% block admin_content %}
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-title-h1">{% if product %}Edit Product{% else %}Add New Product{% endif %}</h1>
+    <div class="admin-subtitle">{% if product %}Modify catalog specs, pricing, and stock for {{ product.name }}{% else %}Publish a new handcrafted ethnic piece to the catalog{% endif %}</div>
+  </div>
+  <a href="/admin/products" class="btn btn-outline btn-sm">← Back to Products</a>
+</div>
 
-    <div class="card" style="max-width:800px">
-      <div class="card-body">
-        <form id="product-form" onsubmit="handleProductSubmit(event)">
-          <div class="form-group">
-            <label class="form-label">Product Name *</label>
-            <input type="text" id="p-name" class="form-input" required placeholder="e.g. Royal Maroon Banarasi Silk Saree">
+<div class="row g-4" style="display:flex;gap:24px;flex-wrap:wrap">
+  <!-- Form Column (Left) -->
+  <div style="flex:1;min-width:320px;max-width:760px">
+    <div class="admin-card">
+      <div class="admin-card-body">
+        <form id="product-form" method="POST" enctype="multipart/form-data" onsubmit="handleProductSubmit(event)">
+          <input type="hidden" id="p-id" value="{{ product.id if product else '' }}">
+
+          <!-- Product Name -->
+          <div class="form-group mb-3">
+            <label class="form-label" style="font-weight:700">Product Title *</label>
+            <input type="text" id="p-name" class="form-input" required 
+                   value="{{ product.name if product else '' }}" 
+                   placeholder="e.g. Royal Maroon Banarasi Silk Saree"
+                   oninput="updatePreviewTitle(this.value)">
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <!-- Category & Brand -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="mb-3">
             <div class="form-group">
-              <label class="form-label">Category *</label>
+              <label class="form-label" style="font-weight:700">Category *</label>
               <select id="p-category" class="form-select" required>
                 {% for cat in categories %}
-                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                <option value="{{ cat.id }}" {% if product and product.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
                 {% endfor %}
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Brand</label>
-              <input type="text" id="p-brand" class="form-input" value="Suyog Collection" placeholder="Brand name">
+              <label class="form-label" style="font-weight:700">Brand / Collection</label>
+              <input type="text" id="p-brand" class="form-input" 
+                     value="{{ product.brand if product else 'Suyog Collection' }}" 
+                     placeholder="e.g. Suyog Collection">
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <!-- Price, Discount, Stock -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px" class="mb-3">
             <div class="form-group">
-              <label class="form-label">Price (MRP ₹) *</label>
-              <input type="number" id="p-price" class="form-input" required placeholder="4999">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Discount Price (₹)</label>
-              <input type="number" id="p-discount-price" class="form-input" placeholder="2499">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Stock Quantity *</label>
-              <input type="number" id="p-stock" class="form-input" required value="10">
-            </div>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-            <div class="form-group">
-              <label class="form-label">Fabric</label>
-              <input type="text" id="p-fabric" class="form-input" placeholder="e.g. Pure Silk, Georgette, Cotton">
+              <label class="form-label" style="font-weight:700">Price (MRP ₹) *</label>
+              <input type="number" id="p-price" class="form-input" required 
+                     value="{{ product.price|int if product else '' }}" 
+                     placeholder="4999" oninput="calculateDiscount()">
             </div>
             <div class="form-group">
-              <label class="form-label">Occasion</label>
-              <input type="text" id="p-occasion" class="form-input" placeholder="e.g. Wedding, Festive, Party">
+              <label class="form-label" style="font-weight:700">Discount Price (₹)</label>
+              <input type="number" id="p-discount-price" class="form-input" 
+                     value="{{ product.discount_price|int if product and product.discount_price else '' }}" 
+                     placeholder="2499" oninput="calculateDiscount()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-weight:700">Stock Quantity *</label>
+              <input type="number" id="p-stock" class="form-input" required 
+                     value="{{ product.stock if product else '10' }}">
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Primary Image (Filename, Static Path, or URL) *</label>
-            <input type="text" id="p-image" class="form-input" required placeholder="e.g. saree1.jpg, /static/images/saree1.jpg, or https://...">
+          <!-- Fabric & Occasion -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="mb-3">
+            <div class="form-group">
+              <label class="form-label" style="font-weight:700">Fabric</label>
+              <input type="text" id="p-fabric" class="form-input" 
+                     value="{{ product.fabric if product and product.fabric else '' }}" 
+                     placeholder="e.g. Pure Banarasi Silk, Organza">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-weight:700">Occasion</label>
+              <input type="text" id="p-occasion" class="form-input" 
+                     value="{{ product.occasion if product and product.occasion else '' }}" 
+                     placeholder="e.g. Wedding, Festive, Party">
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Description</label>
-            <textarea id="p-description" class="form-textarea" rows="4" placeholder="Detailed description of the outfit, embroidery, weave, and style..."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Care Instructions</label>
-            <input type="text" id="p-care" class="form-input" placeholder="e.g. Dry clean only. Do not iron directly on zari.">
-          </div>
-
-          <div style="display:flex;gap:20px;margin-bottom:20px">
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem">
-              <input type="checkbox" id="p-featured"> Featured on Homepage
+          <!-- Product Image Upload Section -->
+          <div class="form-group mb-3">
+            <label class="form-label" style="font-weight:700;display:flex;align-items:center;justify-content:space-between">
+              <span>Product Image {% if not product %}*{% endif %}</span>
+              <span style="font-size:0.75rem;font-weight:500;color:var(--text-muted)">JPG, JPEG, PNG, WEBP • Max 5 MB</span>
             </label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem">
-              <input type="checkbox" id="p-new" checked> New Arrival
+
+            {% if product and product.primary_image %}
+            <!-- Current Image (Edit Mode) -->
+            <div class="mb-2" style="display:flex;align-items:center;gap:14px;padding:10px 14px;background:var(--cream,#FAF7F2);border:1px solid var(--border,#E5DCD0);border-radius:8px">
+              <img id="current-display-thumb" 
+                   src="{{ product.primary_image }}" 
+                   alt="Current Product Image" 
+                   style="width:58px;height:58px;object-fit:cover;border-radius:6px;border:1px solid #ddd" 
+                   onerror="this.src='/static/images/placeholder.jpg'">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700">Current Image</div>
+                <div style="font-size:0.85rem;font-weight:500;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="{{ product.primary_image }}">
+                  {{ product.primary_image }}
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.8rem;font-weight:700;color:var(--dark);margin-bottom:6px">Replace Image:</div>
+            {% endif %}
+
+            <!-- Drag & Drop / File Input Box -->
+            <div id="image-dropzone" 
+                 style="border:2px dashed #D1C7BD;border-radius:10px;padding:22px 16px;text-align:center;background:#FAF8F5;transition:all 0.2s ease;cursor:pointer;position:relative"
+                 ondragover="handleDragOver(event)" 
+                 ondragleave="handleDragLeave(event)" 
+                 ondrop="handleFileDrop(event)">
+              
+              <input type="file" 
+                     id="p-image-file" 
+                     name="image" 
+                     accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" 
+                     style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2" 
+                     onchange="handleFileSelect(this)">
+              
+              <div id="dropzone-content">
+                <div style="font-size:2rem;margin-bottom:6px">📷</div>
+                <div style="font-weight:600;font-size:0.95rem;color:var(--dark);margin-bottom:4px">
+                  Drag &amp; Drop Image Here <span style="font-weight:400;color:var(--text-muted)">or</span> <span style="color:var(--primary,#8B2131);text-decoration:underline">Choose File</span>
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted)">
+                  JPG / PNG / WEBP • Max 5 MB
+                </div>
+              </div>
+
+              <!-- Selected File Bar -->
+              <div id="selected-file-info" style="display:none;align-items:center;justify-content:center;gap:12px;margin-top:8px;padding:8px 12px;background:#ffffff;border-radius:6px;border:1px solid #E2D9D0">
+                <span style="color:#059669;font-weight:700">✓</span>
+                <span id="selected-file-name" style="font-size:0.85rem;font-weight:600;color:#222;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+                <span id="selected-file-size" style="font-size:0.75rem;color:#777"></span>
+                <button type="button" onclick="clearSelectedFile(event)" style="background:none;border:none;color:#DC2626;cursor:pointer;font-weight:700;font-size:0.9rem;padding:2px 6px;z-index:3;position:relative" title="Remove selected image">✕</button>
+              </div>
+            </div>
+
+            <!-- Optional Image URL Fallback -->
+            <div style="margin-top:10px">
+              <button type="button" onclick="toggleUrlField()" id="toggle-url-btn" style="background:none;border:none;padding:0;font-size:0.8rem;color:var(--primary,#8B2131);font-weight:600;cursor:pointer;text-decoration:underline">
+                {% if product and product.primary_image and not product.primary_image.startswith('/static/images/products/') %}− Hide Image URL{% else %}+ Or enter external Image URL instead{% endif %}
+              </button>
+              <div id="url-input-container" style="display:{% if product and product.primary_image and not product.primary_image.startswith('/static/images/products/') %}block{% else %}none{% endif %};margin-top:8px">
+                <input type="text" id="p-image-url" name="primary_image" class="form-input" 
+                       value="{{ product.primary_image if product else '' }}" 
+                       placeholder="e.g. https://images.unsplash.com/... or /static/images/..." 
+                       oninput="handleUrlInput(this.value)">
+                <span style="font-size:0.75rem;color:var(--text-muted)">Used if no local file is selected above.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group mb-3">
+            <label class="form-label" style="font-weight:700">Product Description</label>
+            <textarea id="p-description" class="form-textarea" rows="4" 
+                      placeholder="Detailed craftsmanship, pallu details, embroidery, weave highlights...">{{ product.description if product and product.description else '' }}</textarea>
+          </div>
+
+          <!-- Care Instructions -->
+          <div class="form-group mb-3">
+            <label class="form-label" style="font-weight:700">Care Instructions</label>
+            <input type="text" id="p-care" class="form-input" 
+                   value="{{ product.care_instructions if product and product.care_instructions else 'Dry clean only. Store in muslin cloth.' }}" 
+                   placeholder="e.g. Dry clean only. Protect from direct moisture.">
+          </div>
+
+          <!-- Toggles -->
+          <div style="display:flex;gap:20px;flex-wrap:wrap;margin:18px 0;padding:14px;background:var(--cream);border-radius:8px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;font-weight:600;cursor:pointer">
+              <input type="checkbox" id="p-featured" {% if product and product.is_featured %}checked{% endif %}>
+              Featured on Homepage
             </label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem">
-              <input type="checkbox" id="p-bestseller"> Bestseller
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;font-weight:600;cursor:pointer">
+              <input type="checkbox" id="p-new" {% if (product and product.is_new_arrival) or not product %}checked{% endif %}>
+              New Arrival
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;font-weight:600;cursor:pointer">
+              <input type="checkbox" id="p-bestseller" {% if product and product.is_bestseller %}checked{% endif %}>
+              Bestseller
             </label>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-lg">Publish Product</button>
+          <button type="submit" id="submit-btn" class="btn btn-primary btn-lg" style="width:100%;font-weight:700;letter-spacing:0.5px">
+            {% if product %}💾 Update Product{% else %}🚀 Publish Product{% endif %}
+          </button>
         </form>
       </div>
     </div>
-  </main>
-</div>
+  </div>
 
-<div class="toast-container" id="toast-container"></div>
-<script src="/static/js/main.js"></script>
+  <!-- Live Card Preview (Right) -->
+  <div style="width:300px;flex-shrink:0">
+    <div class="admin-card" style="position:sticky;top:80px">
+      <div class="admin-card-header">
+        <h4 style="font-size:0.85rem;font-weight:700;margin:0">Live Preview</h4>
+      </div>
+      <div class="admin-card-body" style="text-align:center">
+        <div style="width:100%;height:320px;border-radius:10px;overflow:hidden;background:#F8F5F2;border:1px solid var(--border);margin-bottom:12px;position:relative">
+          <img id="preview-img" 
+               src="{{ product.primary_image if product and product.primary_image else '/static/images/placeholder.jpg' }}" 
+               alt="Preview" 
+               style="width:100%;height:100%;object-fit:cover"
+               onerror="this.src='/static/images/placeholder.jpg'">
+          <div id="preview-badge-new-upload" style="display:none;position:absolute;bottom:8px;left:8px;background:rgba(5,150,105,0.9);color:#fff;font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:4px">
+            New Image Selected
+          </div>
+        </div>
+        <div id="preview-title" style="font-weight:700;font-size:0.95rem;color:var(--dark);margin-bottom:6px">
+          {{ product.name if product else 'Product Title Preview' }}
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+          <strong id="preview-price" style="font-size:1.15rem;color:#9A3412">
+            ₹{{ "{:,.0f}".format(product.discount_price or product.price) if product else '4,999' }}
+          </strong>
+          <span id="preview-mrp" style="text-decoration:line-through;color:var(--text-muted);font-size:0.85rem;{% if not product or not product.discount_price %}display:none{% endif %}">
+            ₹{{ "{:,.0f}".format(product.price) if product else '' }}
+          </span>
+          <span id="preview-discount-badge" style="background:rgba(220,38,38,0.1);color:#DC2626;font-size:0.75rem;font-weight:700;padding:2px 6px;border-radius:4px;{% if not product or not product.discount_price %}display:none{% endif %}">
+            {{ product.discount_percent if product else '' }}% OFF
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
 <script>
+const ALLOWED_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
+let initialPreviewSrc = "{{ product.primary_image if product and product.primary_image else '/static/images/placeholder.jpg' }}";
+
+function updatePreviewTitle(val) {
+  document.getElementById('preview-title').textContent = val || 'Product Title Preview';
+}
+
+function updatePreviewImage(url) {
+  const img = document.getElementById('preview-img');
+  if (img) img.src = url || initialPreviewSrc || '/static/images/placeholder.jpg';
+}
+
+function calculateDiscount() {
+  const price = parseFloat(document.getElementById('p-price').value) || 0;
+  const discPrice = parseFloat(document.getElementById('p-discount-price').value) || 0;
+  const previewPrice = document.getElementById('preview-price');
+  const previewMrp = document.getElementById('preview-mrp');
+  const previewBadge = document.getElementById('preview-discount-badge');
+
+  if (discPrice && discPrice < price) {
+    const pct = Math.round(((price - discPrice) / price) * 100);
+    previewPrice.textContent = `₹${discPrice.toLocaleString()}`;
+    previewMrp.textContent = `₹${price.toLocaleString()}`;
+    previewMrp.style.display = 'inline';
+    previewBadge.textContent = `${pct}% OFF`;
+    previewBadge.style.display = 'inline';
+  } else {
+    previewPrice.textContent = price ? `₹${price.toLocaleString()}` : '—';
+    previewMrp.style.display = 'none';
+    previewBadge.style.display = 'none';
+  }
+}
+
+// ── Drag & Drop & File Select Handlers ──
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const dropzone = document.getElementById('image-dropzone');
+  if (dropzone) {
+    dropzone.style.borderColor = 'var(--primary, #8B2131)';
+    dropzone.style.background = '#F5ECE8';
+  }
+}
+
+function handleDragLeave(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const dropzone = document.getElementById('image-dropzone');
+  if (dropzone) {
+    dropzone.style.borderColor = '#D1C7BD';
+    dropzone.style.background = '#FAF8F5';
+  }
+}
+
+function handleFileDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  handleDragLeave(e);
+  const files = e.dataTransfer.files;
+  if (files && files.length > 0) {
+    const fileInput = document.getElementById('p-image-file');
+    fileInput.files = files;
+    processSelectedFile(files[0]);
+  }
+}
+
+function handleFileSelect(input) {
+  if (input.files && input.files[0]) {
+    processSelectedFile(input.files[0]);
+  }
+}
+
+function processSelectedFile(file) {
+  const name = file.name;
+  const ext = '.' + name.split('.').pop().toLowerCase();
+
+  // Validate format
+  if (!ALLOWED_EXTS.includes(ext)) {
+    Toast.error("Only JPG, JPEG, PNG and WEBP images are allowed.");
+    clearSelectedFile();
+    return;
+  }
+
+  // Validate size
+  if (file.size > MAX_BYTES) {
+    Toast.error("Image size must be less than 5 MB.");
+    clearSelectedFile();
+    return;
+  }
+
+  // Show selected file info bar
+  const infoBar = document.getElementById('selected-file-info');
+  const nameSpan = document.getElementById('selected-file-name');
+  const sizeSpan = document.getElementById('selected-file-size');
+  const badge = document.getElementById('preview-badge-new-upload');
+
+  if (infoBar) infoBar.style.display = 'flex';
+  if (nameSpan) nameSpan.textContent = file.name;
+  if (sizeSpan) sizeSpan.textContent = `(${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+  if (badge) badge.style.display = 'block';
+
+  // Immediate Preview using FileReader
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const previewImg = document.getElementById('preview-img');
+    if (previewImg) {
+      previewImg.src = e.target.result;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearSelectedFile(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  const fileInput = document.getElementById('p-image-file');
+  if (fileInput) fileInput.value = '';
+
+  const infoBar = document.getElementById('selected-file-info');
+  if (infoBar) infoBar.style.display = 'none';
+
+  const badge = document.getElementById('preview-badge-new-upload');
+  if (badge) badge.style.display = 'none';
+
+  // Restore preview to URL input or original
+  const urlVal = document.getElementById('p-image-url') ? document.getElementById('p-image-url').value.trim() : '';
+  updatePreviewImage(urlVal || initialPreviewSrc);
+}
+
+function toggleUrlField() {
+  const container = document.getElementById('url-input-container');
+  const btn = document.getElementById('toggle-url-btn');
+  if (container.style.display === 'none' || !container.style.display) {
+    container.style.display = 'block';
+    btn.textContent = '− Hide Image URL';
+  } else {
+    container.style.display = 'none';
+    btn.textContent = '+ Or enter external Image URL instead';
+  }
+}
+
+function handleUrlInput(val) {
+  const fileInput = document.getElementById('p-image-file');
+  // Only update preview if no file is currently selected
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+    updatePreviewImage(val.trim());
+  }
+}
+
+// ── Submit Handler ──
+
 async function handleProductSubmit(e) {
   e.preventDefault();
-  const payload = {
-    name: document.getElementById('p-name').value,
-    category_id: parseInt(document.getElementById('p-category').value),
-    brand: document.getElementById('p-brand').value || 'Suyog Collection',
-    price: parseFloat(document.getElementById('p-price').value),
-    discount_price: parseFloat(document.getElementById('p-discount-price').value) || null,
-    stock: parseInt(document.getElementById('p-stock').value),
-    fabric: document.getElementById('p-fabric').value || null,
-    occasion: document.getElementById('p-occasion').value || null,
-    primary_image: document.getElementById('p-image').value,
-    description: document.getElementById('p-description').value || null,
-    care_instructions: document.getElementById('p-care').value || null,
-    is_featured: document.getElementById('p-featured').checked,
-    is_new_arrival: document.getElementById('p-new').checked,
-    is_bestseller: document.getElementById('p-bestseller').checked
-  };
+  const productId = document.getElementById('p-id').value;
+  const isEditing = !!productId;
+  const submitBtn = document.getElementById('submit-btn');
+
+  const fileInput = document.getElementById('p-image-file');
+  const hasSelectedFile = fileInput && fileInput.files && fileInput.files.length > 0;
+  const urlInput = document.getElementById('p-image-url');
+  const urlVal = urlInput ? urlInput.value.trim() : '';
+
+  // Validation: If adding new product and neither image file nor URL is provided
+  if (!isEditing && !hasSelectedFile && !urlVal) {
+    Toast.error("Please select an image.");
+    return;
+  }
+
+  // Create multipart/form-data
+  const formData = new FormData();
+  formData.append('name', document.getElementById('p-name').value.trim());
+  formData.append('category_id', document.getElementById('p-category').value);
+  formData.append('brand', document.getElementById('p-brand').value.trim());
+  formData.append('price', document.getElementById('p-price').value);
+  
+  const discountPrice = document.getElementById('p-discount-price').value;
+  if (discountPrice) {
+    formData.append('discount_price', discountPrice);
+  }
+  
+  formData.append('stock', document.getElementById('p-stock').value || '0');
+  formData.append('fabric', document.getElementById('p-fabric').value.trim());
+  formData.append('occasion', document.getElementById('p-occasion').value.trim());
+  formData.append('description', document.getElementById('p-description').value.trim());
+  formData.append('care_instructions', document.getElementById('p-care').value.trim());
+  formData.append('is_featured', document.getElementById('p-featured').checked);
+  formData.append('is_new_arrival', document.getElementById('p-new').checked);
+  formData.append('is_bestseller', document.getElementById('p-bestseller').checked);
+
+  // If a file was selected, append it as 'image'
+  if (hasSelectedFile) {
+    formData.append('image', fileInput.files[0]);
+  }
+  // Also pass URL if provided
+  if (urlVal) {
+    formData.append('primary_image', urlVal);
+  }
 
   try {
-    const res = await API.post('/api/admin/products', payload);
-    Toast.success('Product created successfully!');
-    setTimeout(() => window.location.href = '/admin/products', 1000);
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving Product...';
+    }
+
+    const url = isEditing ? `/api/admin/products/${productId}` : `/api/admin/products`;
+    const method = isEditing ? 'PUT' : 'POST';
+
+    // Submit multipart/form-data (browser sets boundary automatically)
+    const res = await fetch(url, {
+      method: method,
+      body: formData
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.detail || 'Image upload failed. Please try again.');
+    }
+
+    Toast.success(isEditing ? 'Product updated successfully!' : 'Product published successfully!');
+    setTimeout(() => {
+      window.location.href = '/admin/products';
+    }, 800);
   } catch (err) {
-    Toast.error(err.message);
+    Toast.error(err.message || 'Image upload failed. Please try again.');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = isEditing ? '💾 Update Product' : '🚀 Publish Product';
+    }
   }
 }
 </script>
-</body>
-</html>
+{% endblock %}

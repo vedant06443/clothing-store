@@ -32,5 +32,12 @@ class Settings(BaseSettings):
     ADMIN_EMAIL: str = "admin@suyogcollection.com"
     ADMIN_PASSWORD: str = "Admin@12345"
 
+    # SMTP / Email Notifications
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_USE_TLS: bool = True
+
 
 settings = Settings()

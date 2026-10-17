@@ -159,10 +159,13 @@ def get_user_orders(db: Session, user_id: int):
     ).filter(Order.user_id == user_id).order_by(Order.created_at.desc()).all()
 
 
-def get_order(db: Session, order_id: int, user_id: int) -> Order:
-    order = db.query(Order).options(
+def get_order(db: Session, order_id: int, user_id: Optional[int] = None) -> Order:
+    query = db.query(Order).options(
         joinedload(Order.items).joinedload(OrderItem.product)
-    ).filter(Order.id == order_id, Order.user_id == user_id).first()
+    ).filter(Order.id == order_id)
+    if user_id is not None:
+        query = query.filter(Order.user_id == user_id)
+    order = query.first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     return order

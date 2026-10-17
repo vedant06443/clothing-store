@@ -12,9 +12,11 @@ from app.models.review import Review
 from app.models.coupon import Coupon, CouponUsage
 from app.models.banner import Banner
 from app.models.newsletter import NewsletterSubscriber
+from app.models.notification import Notification
 
 __all__ = [
     "User", "Category", "Product", "ProductImage", "ProductVariant",
     "WishlistItem", "CartItem", "Address", "Order", "OrderItem",
-    "Payment", "Review", "Coupon", "CouponUsage", "Banner", "NewsletterSubscriber"
+    "Payment", "Review", "Coupon", "CouponUsage", "Banner", "NewsletterSubscriber",
+    "Notification"
 ]

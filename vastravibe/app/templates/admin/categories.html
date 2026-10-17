@@ -1,0 +1,124 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Categories — Suyog Collection Admin{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-title-h1">Collections & Categories</h1>
+    <div class="admin-subtitle">Organize ethnic wear collections displayed in the top navbar and category carousels</div>
+  </div>
+  <button type="button" class="btn btn-primary btn-sm" onclick="openNewCategoryModal()">+ Add New Category</button>
+</div>
+
+<!-- ─── Categories Table ─── -->
+<div class="admin-card">
+  <div class="admin-card-body" style="padding:0">
+    <div style="overflow-x:auto">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th style="width:70px">Icon</th>
+            <th>Category Name</th>
+            <th>Slug & URL</th>
+            <th>Status</th>
+            <th style="text-align:right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cat in categories %}
+          <tr>
+            <td>
+              <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;border:1.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem">
+                {% if cat.image_url %}
+                <img src="{{ cat.display_image }}" alt="{{ cat.name }}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='/static/images/placeholder.jpg'">
+                {% else %}
+                {{ cat.icon or '🥻' }}
+                {% endif %}
+              </div>
+            </td>
+            <td>
+              <strong style="font-size:0.95rem;color:var(--dark)">{{ cat.name }}</strong>
+              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">{{ cat.description or 'Handcrafted ethnic wear collection' }}</div>
+            </td>
+            <td>
+              <code style="background:var(--cream);padding:4px 8px;border-radius:4px;font-size:0.8rem">/{{ cat.slug }}</code>
+            </td>
+            <td>
+              <span class="badge {% if cat.is_active %}badge-in{% else %}badge-out{% endif %}">
+                {% if cat.is_active %}Active{% else %}Hidden{% endif %}
+              </span>
+            </td>
+            <td style="text-align:right">
+              <a href="/{{ cat.slug }}" target="_blank" class="admin-action-btn" title="View in Storefront">
+                👁️
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category Modal -->
+<div id="new-cat-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center">
+  <div class="admin-card" style="width:440px;max-width:90%;background:#fff">
+    <div class="admin-card-header">
+      <h3 style="font-size:1rem;margin:0;font-weight:700">Add New Category</h3>
+      <button type="button" style="background:none;border:none;font-size:1.2rem;cursor:pointer" onclick="closeNewCategoryModal()">✕</button>
+    </div>
+    <div class="admin-card-body">
+      <form onsubmit="handleCreateCategory(event)">
+        <div class="form-group mb-3">
+          <label class="form-label" style="font-weight:700">Category Name *</label>
+          <input type="text" id="cat-name" class="form-input" required placeholder="e.g. Bridal Lehengas">
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label" style="font-weight:700">Description</label>
+          <textarea id="cat-desc" class="form-textarea" rows="2" placeholder="Brief tagline for collection..."></textarea>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeNewCategoryModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Create Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openNewCategoryModal() {
+  const m = document.getElementById('new-cat-modal');
+  m.style.display = 'flex';
+}
+function closeNewCategoryModal() {
+  const m = document.getElementById('new-cat-modal');
+  m.style.display = 'none';
+}
+async function handleCreateCategory(e) {
+  e.preventDefault();
+  const name = document.getElementById('cat-name').value.trim();
+  const desc = document.getElementById('cat-desc').value.trim();
+
+  const formData = new FormData();
+  formData.append('name', name);
+  if (desc) formData.append('description', desc);
+
+  try {
+    const res = await fetch('/api/admin/categories', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) throw new Error('Failed to create category');
+    Toast.success('Category created successfully!');
+    setTimeout(() => location.reload(), 800);
+  } catch (err) {
+    Toast.error(err.message);
+  }
+}
+</script>
+{% endblock %}

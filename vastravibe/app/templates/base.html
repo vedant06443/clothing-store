@@ -25,8 +25,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwUEQp10UiXE2QwYwA4M3K4Q0Q4Nn8HhW7pZ2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- Core & Responsive Stylesheets -->
-  <link rel="stylesheet" href="/static/css/style.css?v=2.2">
-  <link rel="stylesheet" href="/static/css/responsive.css?v=2.2">
+  <link rel="stylesheet" href="/static/css/style.css?v=2.3">
+  <link rel="stylesheet" href="/static/css/responsive.css?v=2.3">
 
   {% block extra_css %}{% endblock %}
 </head>
@@ -34,7 +34,7 @@
 
 <!-- ─── Announcement Bar ─── -->
 <div class="announcement-bar" role="banner">
-  FREE SHIPPING ON ORDERS ABOVE ₹999 | Use code <a href="/offers">WELCOME10</a> for 10% OFF!
+  ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹999 &nbsp;|&nbsp; Use code <a href="/offers">WELCOME10</a> for 10% OFF!
 </div>
 
 <!-- ─── DESKTOP HEADER (>= 992px) ─── -->
@@ -44,25 +44,27 @@
       <!-- Website logo/name on left -->
       <div class="desktop-logo-wrap">
         <a href="/" class="navbar-logo">
-          <img src="/static/images/logo.png" alt="Suyog Collection Logo" class="brand-logo-img" height="48" width="48" style="height:48px;width:auto;max-height:48px;max-width:54px;object-fit:contain">
+          <img src="/static/images/logo.png" alt="Suyog Collection Logo" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;max-height:46px;max-width:52px;object-fit:contain">
           <span class="brand-text-wrap">
             <span class="brand-name">Suyog <span class="brand-highlight">Collection</span></span>
-            <small class="navbar-tagline">Indian Fashion</small>
+            <small class="navbar-tagline">Traditional Indian Wear</small>
           </span>
         </a>
       </div>
 
-      <!-- Main Desktop Navigation -->
+      <!-- Main Desktop Navigation (Mangaldeep Collections) -->
       <nav aria-label="Desktop Primary Navigation">
         <ul class="desktop-nav-links">
           <li><a href="/" {% if request.url.path == '/' %}class="active"{% endif %}>Home</a></li>
           <li><a href="/sarees" {% if 'sarees' in request.url.path %}class="active"{% endif %}>Sarees</a></li>
-          <li><a href="/kurtis" {% if 'kurtis' in request.url.path %}class="active"{% endif %}>Kurtis</a></li>
-          <li><a href="/lehengas" {% if 'lehengas' in request.url.path %}class="active"{% endif %}>Lehengas</a></li>
-          <li><a href="/dresses" {% if 'dresses' in request.url.path %}class="active"{% endif %}>Dresses</a></li>
+          <li><a href="/salwar-suits" {% if 'salwar-suits' in request.url.path %}class="active"{% endif %}>Salwar Suits</a></li>
+          <li><a href="/lehengas" {% if 'lehengas' in request.url.path %}class="active"{% endif %}>Lehenga Choli</a></li>
+          <li><a href="/kurtis" {% if 'kurtis' in request.url.path %}class="active"{% endif %}>Kurti</a></li>
+          <li><a href="/dresses" {% if 'dresses' in request.url.path %}class="active"{% endif %}>Gown</a></li>
+          <li><a href="/mens-wear" {% if 'mens-wear' in request.url.path %}class="active"{% endif %}>Mens Wear</a></li>
           <li><a href="/new-arrivals" {% if 'new-arrivals' in request.url.path %}class="active"{% endif %}>New Arrivals</a></li>
-          <li><a href="/offers" {% if 'offers' in request.url.path %}class="active"{% endif %}>Offers</a></li>
-          <li><a href="/studio" {% if 'studio' in request.url.path %}class="active"{% endif %} style="color:var(--gold);font-weight:600">✨ Studio</a></li>
+          <li><a href="/studio" {% if 'studio' in request.url.path %}class="active"{% endif %} style="color:var(--gold);font-weight:600">✨ Style Studio</a></li>
+          <li><a href="/offers" {% if 'offers' in request.url.path %}class="active"{% endif %} style="color:#DC2626;font-weight:600">Sale %</a></li>
         </ul>
       </nav>
 
@@ -197,6 +199,7 @@
         <a href="/lehengas" class="drawer-link"><span>💃 Lehengas</span></a>
         <a href="/salwar-suits" class="drawer-link"><span>👘 Salwar Suits</span></a>
         <a href="/dresses" class="drawer-link"><span>🌸 Dresses</span></a>
+        <a href="/mens-wear" class="drawer-link"><span>👳 Mens Wear</span></a>
         <a href="/products" class="drawer-link"><span>🛍️ All Collections</span></a>
       </div>
     </div>
@@ -336,6 +339,17 @@
 
 <!-- Stylist Assistant Widget -->
 {% include "partials/chat_widget.html" %}
+
+<!-- Floating WhatsApp Support -->
+<a href="https://wa.me/919876543210?text=Hi%20Suyog%20Collection%2C%20I%20have%20an%20inquiry%20about%20your%20collection." 
+   target="_blank" 
+   class="wa-floating-btn" 
+   id="wa-shopping-btn" 
+   title="Chat on WhatsApp" 
+   aria-label="Chat with us on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+  <span class="wa-floating-tooltip">💬 Chat on WhatsApp</span>
+</a>
 
 <!-- Scripts: Bootstrap + Swiper + AOS + App Modules -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

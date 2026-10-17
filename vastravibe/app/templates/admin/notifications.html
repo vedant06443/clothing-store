@@ -1,0 +1,191 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Order Notifications — Suyog Collection Admin{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+  <div>
+    <h1 class="admin-title-h1">Order Notifications</h1>
+    <div class="admin-subtitle">Live order alerts and purchase activities across the store</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button type="button" class="btn btn-outline btn-sm" onclick="markAllNotificationsAsRead()" id="page-mark-all-btn">
+      ✓ Mark all as read
+    </button>
+  </div>
+</div>
+
+<!-- ─── Filter Tabs & Summary ─── -->
+<div class="admin-card mb-4" style="padding:14px 20px">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="/admin/notifications" class="btn btn-sm {% if not current_is_read %}btn-primary{% else %}btn-outline{% endif %}">
+        All ({{ total_notifications }})
+      </a>
+      <a href="/admin/notifications?is_read=false" class="btn btn-sm {% if current_is_read == 'false' %}btn-primary{% else %}btn-outline{% endif %}">
+        🔴 Unread ({{ unread_notifications_count }})
+      </a>
+      <a href="/admin/notifications?is_read=true" class="btn btn-sm {% if current_is_read == 'true' %}btn-primary{% else %}btn-outline{% endif %}">
+        Read
+      </a>
+    </div>
+
+    <div style="font-size:0.85rem;color:var(--text-muted)">
+      Live auto-sync enabled ⚡
+    </div>
+  </div>
+</div>
+
+<!-- ─── Notifications Table ─── -->
+<div class="admin-card">
+  <div class="admin-card-body" style="padding:0">
+    <div style="overflow-x:auto">
+      <table class="admin-table" id="notifications-table">
+        <thead>
+          <tr>
+            <th style="width:40px"></th>
+            <th>Notification</th>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Amount</th>
+            <th>Placed On</th>
+            <th>Status</th>
+            <th style="text-align:right">Action</th>
+          </tr>
+        </thead>
+        <tbody id="notifications-table-body">
+          {% if notifications %}
+            {% for n in notifications %}
+            {% set o = n.order %}
+            {% set first_item = o.items[0] if o and o.items else none %}
+            {% set prod_name = first_item.product_name or (first_item.product.name if first_item and first_item.product else 'Saree') if first_item else 'Handcrafted Piece' %}
+            <tr class="notif-row {% if not n.is_read %}unread-row{% endif %}" id="notif-row-{{ n.id }}" style="{% if not n.is_read %}background:rgba(180, 83, 9, 0.04);{% endif %}">
+              <td style="text-align:center">
+                {% if not n.is_read %}
+                <span class="unread-dot" title="Unread" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#DC2626"></span>
+                {% else %}
+                <span class="read-dot" title="Read" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#D1D5DB"></span>
+                {% endif %}
+              </td>
+              <td>
+                <strong style="color:var(--dark);font-size:0.92rem">{{ n.title }}</strong>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">ID: #{{ n.id }}</div>
+              </td>
+              <td>
+                <span style="font-family:monospace;font-weight:700;color:var(--dark);font-size:0.9rem">
+                  {{ o.order_number if o else ('#' ~ n.order_id) }}
+                </span>
+              </td>
+              <td>
+                <strong style="font-size:0.88rem">{{ o.shipping_name if o else 'Customer' }}</strong>
+                <div style="font-size:0.75rem;color:var(--text-muted)">{{ o.shipping_phone if o else '' }}</div>
+              </td>
+              <td>
+                <div style="font-size:0.85rem;font-weight:600;color:var(--dark);max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ prod_name }}">
+                  {{ prod_name }}
+                  {% if o and o.items and o.items|length > 1 %}
+                  <span style="color:var(--text-muted);font-size:0.75rem;font-weight:400">(+{{ o.items|length - 1 }} more)</span>
+                  {% endif %}
+                </div>
+                <div style="font-size:0.72rem;color:var(--text-muted)">Qty: {{ o.items|sum(attribute='quantity') if o and o.items else 1 }}</div>
+              </td>
+              <td>
+                <strong style="color:#9A3412;font-size:0.95rem">₹{{ "{:,.0f}".format(((o.total_amount if o and o.total_amount else 0) or 0)|float) }}</strong>
+                <div style="font-size:0.72rem;color:var(--text-muted)">{{ o.payment_method if o else 'Online' }}</div>
+              </td>
+              <td>
+                <div style="font-size:0.82rem">{{ n.created_at.strftime('%d %b %Y') if n.created_at else '—' }}</div>
+                <div style="font-size:0.72rem;color:var(--text-muted)">{{ n.created_at.strftime('%I:%M %p') if n.created_at else '' }}</div>
+              </td>
+              <td>
+                {% if not n.is_read %}
+                <span class="status-badge" style="background:rgba(220,38,38,0.1);color:#DC2626;font-size:0.75rem;font-weight:700" id="badge-read-{{ n.id }}">Unread</span>
+                {% else %}
+                <span class="status-badge" style="background:#F3F4F6;color:#6B7280;font-size:0.75rem;font-weight:600" id="badge-read-{{ n.id }}">Read</span>
+                {% endif %}
+              </td>
+              <td style="text-align:right">
+                <div style="display:inline-flex;gap:8px;justify-content:flex-end;align-items:center">
+                  {% if not n.is_read %}
+                  <button type="button" class="btn btn-outline btn-sm" style="padding:4px 8px;font-size:0.75rem" onclick="markNotificationRead({{ n.id }}, this)" id="btn-read-{{ n.id }}" title="Mark as read">
+                    ✓
+                  </button>
+                  {% endif %}
+                  <a href="/orders/{{ n.order_id }}" target="_blank" class="btn btn-primary btn-sm" style="padding:4px 10px;font-size:0.8rem;font-weight:600" onclick="markNotificationRead({{ n.id }})">
+                    View Order ↗
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="9" style="text-align:center;padding:48px 16px;color:var(--text-muted)">
+                <div style="font-size:2rem;margin-bottom:8px">🔔</div>
+                <div style="font-weight:600;font-size:1rem;color:var(--dark);margin-bottom:4px">No notifications found</div>
+                <div style="font-size:0.85rem">New order notifications will appear here immediately as purchases occur.</div>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function markNotificationRead(notifId, btn) {
+  try {
+    const res = await fetch(`/api/admin/notifications/${notifId}/read`, {
+      method: 'PATCH'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const row = document.getElementById(`notif-row-${notifId}`);
+      if (row) {
+        row.style.background = '';
+        row.classList.remove('unread-row');
+        const dot = row.querySelector('.unread-dot');
+        if (dot) {
+          dot.className = 'read-dot';
+          dot.style.background = '#D1D5DB';
+        }
+      }
+      const badge = document.getElementById(`badge-read-${notifId}`);
+      if (badge) {
+        badge.textContent = 'Read';
+        badge.style.background = '#F3F4F6';
+        badge.style.color = '#6B7280';
+      }
+      if (btn) btn.style.display = 'none';
+
+      // Update global bell badge if available
+      if (typeof updateBellBadge === 'function') {
+        updateBellBadge(data.unread_count);
+      }
+    }
+  } catch (err) {
+    console.error('Failed to mark read', err);
+  }
+}
+
+async function markAllNotificationsAsRead() {
+  try {
+    const res = await fetch('/api/admin/notifications/read-all', {
+      method: 'PATCH'
+    });
+    if (res.ok) {
+      Toast.success('All notifications marked as read');
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }
+  } catch (err) {
+    Toast.error('Failed to mark all as read');
+  }
+}
+</script>
+{% endblock %}

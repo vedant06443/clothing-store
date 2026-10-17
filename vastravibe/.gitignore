@@ -25,3 +25,6 @@ htmlcov/
 # Static Uploads
 app/static/uploads/*
 !app/static/uploads/.gitkeep
+app/static/images/products/*
+!app/static/images/products/.gitkeep
+

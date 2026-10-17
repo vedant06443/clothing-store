@@ -70,6 +70,18 @@ class Order(Base):
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
     payment = relationship("Payment", back_populates="order", uselist=False)
 
+    @property
+    def total(self):
+        return self.total_amount or 0.0
+
+    @property
+    def discount(self):
+        return self.discount_amount or 0.0
+
+    @property
+    def shipping_charge(self):
+        return self.shipping_amount or 0.0
+
 
 class OrderItem(Base):
     __tablename__ = "order_items"
@@ -90,3 +102,11 @@ class OrderItem(Base):
     order = relationship("Order", back_populates="items")
     product = relationship("Product", back_populates="order_items")
     review = relationship("Review", back_populates="order_item", uselist=False)
+
+    @property
+    def unit_price(self):
+        return self.price or 0.0
+
+    @property
+    def total_price(self):
+        return self.total or 0.0
