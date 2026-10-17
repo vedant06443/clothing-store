@@ -52,9 +52,9 @@
                 </div>
                 <!-- Mobile Only Price Display -->
                 <div class="d-md-none mt-2">
-                  <span style="font-weight:700;color:var(--primary);font-size:1rem">₹{{ "{:,.0f}".format(item.product.discount_price or item.product.price) }}</span>
-                  {% if item.product.discount_price %}
-                  <span style="font-size:0.75rem;color:var(--text-muted);text-decoration:line-through;margin-left:6px">₹{{ "{:,.0f}".format(item.product.price) }}</span>
+                  <span style="font-weight:700;color:var(--primary);font-size:1rem">₹{{ "{:,.0f}".format(item.product.discount_price or item.product.price or 0 if item.product else item.unit_price or 0) }}</span>
+                  {% if item.product and item.product.discount_price %}
+                  <span style="font-size:0.75rem;color:var(--text-muted);text-decoration:line-through;margin-left:6px">₹{{ "{:,.0f}".format(item.product.price or 0) }}</span>
                   {% endif %}
                 </div>
               </div>
@@ -62,11 +62,11 @@
 
             <!-- Desktop Unit Price -->
             <div class="d-none d-md-block" style="flex:1">
-              {% if item.product.discount_price %}
-              <div style="font-weight:600">₹{{ "{:,.0f}".format(item.product.discount_price) }}</div>
-              <div style="font-size:.78rem;color:var(--text-muted);text-decoration:line-through">₹{{ "{:,.0f}".format(item.product.price) }}</div>
+              {% if item.product and item.product.discount_price %}
+              <div style="font-weight:600">₹{{ "{:,.0f}".format(item.product.discount_price or 0) }}</div>
+              <div style="font-size:.78rem;color:var(--text-muted);text-decoration:line-through">₹{{ "{:,.0f}".format(item.product.price or 0) }}</div>
               {% else %}
-              <div style="font-weight:600">₹{{ "{:,.0f}".format(item.product.price) }}</div>
+              <div style="font-weight:600">₹{{ "{:,.0f}".format(item.product.price or 0 if item.product else item.unit_price or 0) }}</div>
               {% endif %}
             </div>
 
@@ -75,14 +75,14 @@
               <!-- Quantity Selector -->
               <div class="quantity-selector" style="border:1.5px solid var(--border);border-radius:6px;display:inline-flex;align-items:center">
                 <button class="qty-btn" onclick="updateItemQty({{ item.id }}, -1)" aria-label="Decrease quantity" style="min-width:36px;min-height:36px;border:none;background:none;font-size:1.1rem;cursor:pointer">−</button>
-                <input type="number" class="qty-input cart-qty-input" data-item-id="{{ item.id }}" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" style="width:40px;text-align:center;border:none;background:none;font-weight:600;font-size:0.9rem" readonly>
+                <input type="number" class="qty-input cart-qty-input" data-item-id="{{ item.id }}" value="{{ item.quantity }}" min="1" max="{{ item.product.stock if item.product else 10 }}" style="width:40px;text-align:center;border:none;background:none;font-weight:600;font-size:0.9rem" readonly>
                 <button class="qty-btn" onclick="updateItemQty({{ item.id }}, 1)" aria-label="Increase quantity" style="min-width:36px;min-height:36px;border:none;background:none;font-size:1.1rem;cursor:pointer">+</button>
               </div>
 
               <!-- Desktop Total & Mobile Price / Remove -->
               <div class="d-flex align-items-center gap-3">
                 <div class="d-none d-md-block" style="font-weight:700;color:var(--dark);font-size:1rem;min-width:80px">
-                  ₹{{ "{:,.0f}".format(item.total_price) }}
+                  ₹{{ "{:,.0f}".format(item.total_price or 0) }}
                 </div>
                 <button class="remove-btn remove-cart-item" data-item-id="{{ item.id }}" title="Remove item" aria-label="Remove item" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center">
                   🗑
@@ -103,23 +103,23 @@
         <div class="summary-body" style="padding:20px">
           <div class="summary-row d-flex justify-content-between mb-2">
             <span style="color:var(--text-muted)">Subtotal</span>
-            <span id="cart-subtotal" data-amount="{{ cart.subtotal }}" style="font-weight:600">₹{{ "{:,.0f}".format(cart.subtotal) }}</span>
+            <span id="cart-subtotal" data-amount="{{ cart.subtotal or 0 }}" style="font-weight:600">₹{{ "{:,.0f}".format(cart.subtotal or 0) }}</span>
           </div>
 
-          {% if cart.savings > 0 %}
+          {% if (cart.savings or cart.discount or 0) > 0 %}
           <div class="summary-row d-flex justify-content-between mb-2" style="color:var(--success)">
             <span>Product Discount</span>
-            <span style="font-weight:600">-₹{{ "{:,.0f}".format(cart.savings) }}</span>
+            <span style="font-weight:600">-₹{{ "{:,.0f}".format(cart.savings or cart.discount or 0) }}</span>
           </div>
           {% endif %}
 
           <div class="summary-row d-flex justify-content-between mb-2">
             <span style="color:var(--text-muted)">Shipping</span>
             <span>
-              {% if cart.shipping_charge == 0 %}
+              {% if (cart.shipping_charge or cart.shipping or 0) == 0 %}
               <span style="color:var(--success);font-weight:700">FREE</span>
               {% else %}
-              ₹{{ "{:,.0f}".format(cart.shipping_charge) }}
+              ₹{{ "{:,.0f}".format(cart.shipping_charge or cart.shipping or 0) }}
               {% endif %}
             </span>
           </div>
@@ -133,7 +133,7 @@
 
           <div class="summary-total d-flex justify-content-between mb-3" style="font-size:1.2rem;font-weight:700">
             <span>Total Payable</span>
-            <span id="cart-total" style="color:var(--primary)">₹{{ "{:,.0f}".format(cart.total) }}</span>
+            <span id="cart-total" style="color:var(--primary)">₹{{ "{:,.0f}".format(cart.total or cart.total_amount or 0) }}</span>
           </div>
 
           <!-- Coupon Code Input -->

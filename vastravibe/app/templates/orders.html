@@ -42,7 +42,7 @@
                 </div>
               </div>
             </div>
-            <div style="font-weight:700">₹{{ "{:,.0f}".format(item.total_price) }}</div>
+            <div style="font-weight:700">₹{{ "{:,.0f}".format(item.total_price or 0) }}</div>
           </div>
           {% endfor %}
         </div>
@@ -51,7 +51,7 @@
 
         <div class="d-flex justify-between align-center">
           <div style="font-size:0.85rem">
-            Payment: <strong>{{ order.payment_method }}</strong> | Total: <strong style="color:var(--primary);font-size:1.05rem">₹{{ "{:,.0f}".format(order.total) }}</strong>
+            Payment: <strong>{{ order.payment_method }}</strong> | Total: <strong style="color:var(--primary);font-size:1.05rem">₹{{ "{:,.0f}".format(order.total or 0) }}</strong>
           </div>
           <div class="d-flex gap-2">
             <a href="/orders/{{ order.id }}/track" class="btn btn-sm btn-gold">📍 Track Order</a>

@@ -586,7 +586,7 @@
               <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Handwoven Silk' }}</div>
               <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
               <div class="d-flex justify-between align-items-center mt-2">
-                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price or 0) }}</span>
                 <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Try On</span>
               </div>
             </div>
@@ -612,7 +612,7 @@
               <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Designer Cut' }}</div>
               <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
               <div class="d-flex justify-between align-items-center mt-2">
-                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price or 0) }}</span>
                 <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Pair</span>
               </div>
             </div>
@@ -638,7 +638,7 @@
               <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Velvet / Silk' }}</div>
               <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
               <div class="d-flex justify-between align-items-center mt-2">
-                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price or 0) }}</span>
                 <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Select</span>
               </div>
             </div>
@@ -664,7 +664,7 @@
               <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Anarkali' }}</div>
               <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
               <div class="d-flex justify-between align-items-center mt-2">
-                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price or 0) }}</span>
                 <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Select</span>
               </div>
             </div>
@@ -690,7 +690,7 @@
               <div style="font-size:0.72rem;color:var(--gold);font-weight:700;text-transform:uppercase">{{ p.fabric or 'Sherwani / Kurta' }}</div>
               <div style="font-size:0.84rem;font-weight:700;color:var(--text);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ p.name }}</div>
               <div class="d-flex justify-between align-items-center mt-2">
-                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price) }}</span>
+                <span style="font-size:0.88rem;color:var(--primary);font-weight:800">₹{{ "{:,.0f}".format(p.discount_price or p.price or 0) }}</span>
                 <span class="btn btn-sm btn-outline" style="padding:2px 8px;font-size:0.72rem">Pair Groom</span>
               </div>
             </div>

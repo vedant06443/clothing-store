@@ -98,8 +98,8 @@
         <td><strong>{{ item.product_name }}</strong></td>
         <td>{{ item.size or 'Free Size' }} / {{ item.color or 'Standard' }}</td>
         <td style="text-align:center">{{ item.quantity }}</td>
-        <td style="text-align:right">₹{{ "{:,.2f}".format(item.unit_price) }}</td>
-        <td style="text-align:right">₹{{ "{:,.2f}".format(item.total_price) }}</td>
+        <td style="text-align:right">₹{{ "{:,.2f}".format(item.unit_price or 0) }}</td>
+        <td style="text-align:right">₹{{ "{:,.2f}".format(item.total_price or 0) }}</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -109,25 +109,25 @@
     <table class="totals-table">
       <tr>
         <td>Subtotal</td>
-        <td>₹{{ "{:,.2f}".format(order.subtotal) }}</td>
+        <td>₹{{ "{:,.2f}".format(order.subtotal or 0) }}</td>
       </tr>
-      {% if order.discount > 0 %}
+      {% if (order.discount or 0) > 0 %}
       <tr>
-        <td style="color:#2E7D32">Discount ({{ order.coupon_code }})</td>
-        <td style="color:#2E7D32">-₹{{ "{:,.2f}".format(order.discount) }}</td>
+        <td style="color:#2E7D32">Discount ({{ order.coupon_code or '' }})</td>
+        <td style="color:#2E7D32">-₹{{ "{:,.2f}".format(order.discount or 0) }}</td>
       </tr>
       {% endif %}
       <tr>
         <td>Shipping</td>
-        <td>{% if order.shipping_charge == 0 %}FREE{% else %}₹{{ "{:,.2f}".format(order.shipping_charge) }}{% endif %}</td>
+        <td>{% if (order.shipping_charge or 0) == 0 %}FREE{% else %}₹{{ "{:,.2f}".format(order.shipping_charge or 0) }}{% endif %}</td>
       </tr>
       <tr>
         <td>Estimated GST (Included)</td>
-        <td>₹{{ "{:,.2f}".format(order.subtotal * 0.05) }}</td>
+        <td>₹{{ "{:,.2f}".format((order.subtotal or 0) * 0.05) }}</td>
       </tr>
       <tr class="grand-total">
         <td>Total Payable</td>
-        <td>₹{{ "{:,.2f}".format(order.total) }}</td>
+        <td>₹{{ "{:,.2f}".format(order.total or 0) }}</td>
       </tr>
     </table>
   </div>

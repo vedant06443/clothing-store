@@ -82,6 +82,19 @@ class Order(Base):
     def shipping_charge(self):
         return self.shipping_amount or 0.0
 
+    @property
+    def shipping_address_snapshot(self):
+        return {
+            "full_name": self.shipping_name or (self.user.full_name if self.user else "") or "",
+            "phone": self.shipping_phone or (self.user.phone if self.user else "") or "",
+            "address_line1": self.shipping_address or "",
+            "address_line2": "",
+            "city": self.shipping_city or "",
+            "state": self.shipping_state or "",
+            "postal_code": self.shipping_pincode or "",
+        }
+
+
 
 class OrderItem(Base):
     __tablename__ = "order_items"

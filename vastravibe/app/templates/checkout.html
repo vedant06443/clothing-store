@@ -189,11 +189,11 @@
             <div style="max-height:200px;overflow-y:auto;margin-bottom:14px;padding-right:4px">
               {% for item in cart['items'] %}
               <div class="d-flex gap-3 align-items-center mb-2" style="font-size:0.82rem;padding-bottom:8px;border-bottom:1px dashed var(--border)">
-                <img src="{{ item.product.primary_image }}" alt="{{ item.product.name }}" style="width:44px;height:56px;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
+                <img src="{{ item.product.primary_image if item.product else '/static/images/placeholder.jpg' }}" alt="{{ item.product.name if item.product else 'Product' }}" style="width:44px;height:56px;object-fit:cover;border-radius:4px" onerror="this.onerror=null;this.src='/static/images/placeholder.jpg'">
                 <div style="flex:1">
-                  <div style="font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ item.product.name }}</div>
+                  <div style="font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ item.product.name if item.product else 'Item' }}</div>
                   <div style="color:var(--text-muted);font-size:0.75rem">Qty: {{ item.quantity }} {% if item.size %}| {{ item.size }}{% endif %}</div>
-                  <div style="font-weight:700;color:var(--primary)">₹{{ "{:,.0f}".format(item.total_price) }}</div>
+                  <div style="font-weight:700;color:var(--primary)">₹{{ "{:,.0f}".format(item.total_price or 0) }}</div>
                 </div>
               </div>
               {% endfor %}
@@ -201,23 +201,23 @@
 
             <div class="summary-row d-flex justify-content-between mb-2">
               <span style="color:var(--text-muted);font-size:0.85rem">Subtotal</span>
-              <span id="checkout-subtotal" data-amount="{{ cart.subtotal }}" style="font-weight:600">₹{{ "{:,.0f}".format(cart.subtotal) }}</span>
+              <span id="checkout-subtotal" data-amount="{{ cart.subtotal or 0 }}" style="font-weight:600">₹{{ "{:,.0f}".format(cart.subtotal or 0) }}</span>
             </div>
 
-            {% if cart.savings > 0 %}
+            {% if (cart.savings or cart.discount or 0) > 0 %}
             <div class="summary-row d-flex justify-content-between mb-2" style="color:var(--success);font-size:0.85rem">
               <span>Discount</span>
-              <span style="font-weight:600">-₹{{ "{:,.0f}".format(cart.savings) }}</span>
+              <span style="font-weight:600">-₹{{ "{:,.0f}".format(cart.savings or cart.discount or 0) }}</span>
             </div>
             {% endif %}
 
             <div class="summary-row d-flex justify-content-between mb-2" style="font-size:0.85rem">
               <span style="color:var(--text-muted)">Shipping</span>
               <span>
-                {% if cart.shipping_charge == 0 %}
+                {% if (cart.shipping_charge or cart.shipping or 0) == 0 %}
                 <span style="color:var(--success);font-weight:700">FREE</span>
                 {% else %}
-                ₹{{ "{:,.0f}".format(cart.shipping_charge) }}
+                ₹{{ "{:,.0f}".format(cart.shipping_charge or cart.shipping or 0) }}
                 {% endif %}
               </span>
             </div>
@@ -232,7 +232,7 @@
             <!-- Grand Total -->
             <div class="summary-total d-flex justify-content-between align-items-center mb-3" style="font-size:1.15rem;font-weight:700">
               <span>TOTAL</span>
-              <span id="checkout-total" style="color:var(--primary)">₹{{ "{:,.0f}".format(cart.total) }}</span>
+              <span id="checkout-total" style="color:var(--primary)">₹{{ "{:,.0f}".format(cart.total or cart.total_amount or 0) }}</span>
             </div>
 
             <!-- Coupon application -->

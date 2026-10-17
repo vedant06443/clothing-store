@@ -65,11 +65,11 @@
     <!-- Pricing Area -->
     <div class="product-price">
       {% if p.discount_price %}
-        <span class="price-current">₹{{ "{:,.0f}".format(p.discount_price) }}</span>
-        <span class="price-original">₹{{ "{:,.0f}".format(p.price) }}</span>
-        <span class="price-discount-tag">{{ p.discount_percent }}% OFF</span>
+        <span class="price-current">₹{{ "{:,.0f}".format(p.discount_price or 0) }}</span>
+        <span class="price-original">₹{{ "{:,.0f}".format(p.price or 0) }}</span>
+        <span class="price-discount-tag">{{ p.discount_percent or 0 }}% OFF</span>
       {% else %}
-        <span class="price-current">₹{{ "{:,.0f}".format(p.price) }}</span>
+        <span class="price-current">₹{{ "{:,.0f}".format(p.price or 0) }}</span>
       {% endif %}
     </div>
 

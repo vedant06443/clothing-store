@@ -37,6 +37,19 @@ templates = Jinja2Templates(directory="app/templates")
 templates.env.filters["image_url"] = get_image_url
 templates.env.globals["get_image_url"] = get_image_url
 
+def safe_format_currency(value, decimals=0):
+    if value is None:
+        return "0"
+    try:
+        fmt = f"{{:,.{decimals}f}}"
+        return fmt.format(float(value))
+    except (ValueError, TypeError):
+        return "0"
+
+templates.env.filters["format_currency"] = safe_format_currency
+templates.env.filters["currency"] = safe_format_currency
+templates.env.globals["format_currency"] = safe_format_currency
+
 
 def get_template_context(request: Request, db: Session, user=None, extra: dict = None):
     """Build base context for all templates."""

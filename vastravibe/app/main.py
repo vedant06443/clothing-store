@@ -73,6 +73,20 @@ app.websocket("/ws/admin/notifications")(admin_notifications_ws)
 
 templates = Jinja2Templates(directory="app/templates")
 
+def safe_format_currency(value, decimals=0):
+    if value is None:
+        return "0"
+    try:
+        fmt = f"{{:,.{decimals}f}}"
+        return fmt.format(float(value))
+    except (ValueError, TypeError):
+        return "0"
+
+templates.env.filters["format_currency"] = safe_format_currency
+templates.env.filters["currency"] = safe_format_currency
+templates.env.globals["format_currency"] = safe_format_currency
+
+
 
 def _error_context(request: Request):
     return {

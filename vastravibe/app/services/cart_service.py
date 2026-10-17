@@ -33,8 +33,11 @@ def get_cart(db: Session, user_id: int) -> Dict[str, Any]:
         "cart_items": items,
         "subtotal": subtotal,
         "discount": discount,
+        "savings": discount,
         "shipping": shipping,
+        "shipping_charge": shipping,
         "total": total,
+        "total_amount": total,
         "item_count": sum(i.quantity for i in items)
     }
 

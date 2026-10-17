@@ -61,7 +61,7 @@
             </div>
           </div>
           <div style="font-weight:700;font-size:0.95rem">
-            ₹{{ "{:,.0f}".format(item.total_price) }}
+            ₹{{ "{:,.0f}".format(item.total_price or 0) }}
           </div>
         </div>
         {% endfor %}
@@ -70,21 +70,21 @@
       <div style="margin-top:20px;padding-top:16px;border-top:1px dashed var(--border)">
         <div class="summary-row">
           <span>Subtotal</span>
-          <span>₹{{ "{:,.0f}".format(order.subtotal) }}</span>
+          <span>₹{{ "{:,.0f}".format(order.subtotal or 0) }}</span>
         </div>
-        {% if order.discount > 0 %}
+        {% if (order.discount or 0) > 0 %}
         <div class="summary-row" style="color:var(--success)">
-          <span>Discount ({{ order.coupon_code }})</span>
-          <span>-₹{{ "{:,.0f}".format(order.discount) }}</span>
+          <span>Discount ({{ order.coupon_code or '' }})</span>
+          <span>-₹{{ "{:,.0f}".format(order.discount or 0) }}</span>
         </div>
         {% endif %}
         <div class="summary-row">
           <span>Shipping</span>
-          <span>{% if order.shipping_charge == 0 %}FREE{% else %}₹{{ "{:,.0f}".format(order.shipping_charge) }}{% endif %}</span>
+          <span>{% if (order.shipping_charge or 0) == 0 %}FREE{% else %}₹{{ "{:,.0f}".format(order.shipping_charge or 0) }}{% endif %}</span>
         </div>
         <div class="summary-total">
           <span>Total Paid / Payable</span>
-          <span style="color:var(--primary)">₹{{ "{:,.0f}".format(order.total) }}</span>
+          <span style="color:var(--primary)">₹{{ "{:,.0f}".format(order.total or 0) }}</span>
         </div>
       </div>
     </div>

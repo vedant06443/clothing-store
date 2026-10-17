@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}{{ product.name }} — Suyog Collection{% endblock %}
-{% block meta_description %}{{ product.name }} by {{ product.brand }}. {{ product.fabric }} fabric. ₹{{ "{:,.0f}".format(product.discount_price or product.price) }} at Suyog Collection.{% endblock %}
+{% block meta_description %}{{ product.name }} by {{ product.brand or 'Suyog Collection' }}. {{ product.fabric or '' }} fabric. ₹{{ "{:,.0f}".format(product.discount_price or product.price or 0) }} at Suyog Collection.{% endblock %}
 
 {% block content %}
 
@@ -17,8 +17,10 @@
     <div class="breadcrumb">
       <a href="/">Home</a>
       <span class="separator">/</span>
+      {% if product.category %}
       <a href="/{{ product.category.slug }}">{{ product.category.name }}</a>
       <span class="separator">/</span>
+      {% endif %}
       <span class="current">{{ product.name }}</span>
     </div>
 
@@ -75,11 +77,11 @@
         <div class="product-price-box">
           <div class="product-price-row">
             {% if product.discount_price %}
-              <span class="detail-price-current">₹{{ "{:,.0f}".format(product.discount_price) }}</span>
-              <span class="detail-price-original">MRP ₹{{ "{:,.0f}".format(product.price) }}</span>
-              <span class="detail-price-badge">SAVE {{ product.discount_percent }}% OFF</span>
+              <span class="detail-price-current">₹{{ "{:,.0f}".format(product.discount_price or 0) }}</span>
+              <span class="detail-price-original">MRP ₹{{ "{:,.0f}".format(product.price or 0) }}</span>
+              <span class="detail-price-badge">SAVE {{ product.discount_percent or 0 }}% OFF</span>
             {% else %}
-              <span class="detail-price-current">₹{{ "{:,.0f}".format(product.price) }}</span>
+              <span class="detail-price-current">₹{{ "{:,.0f}".format(product.price or 0) }}</span>
             {% endif %}
           </div>
           <div class="product-tax-info">
