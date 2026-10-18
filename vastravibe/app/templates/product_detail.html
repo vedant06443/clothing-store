@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}{{ product.name }} — Suyog Collection{% endblock %}
-{% block meta_description %}{{ product.name }} by {{ product.brand or 'Suyog Collection' }}. {{ product.fabric or '' }} fabric. ₹{{ "{:,.0f}".format(product.discount_price or product.price or 0) }} at Suyog Collection.{% endblock %}
+{% block title %}{{ product.name }} — Suyog Textile{% endblock %}
+{% block meta_description %}{{ product.name }} by {{ product.brand or 'Suyog Textile' }}. {{ product.fabric or '' }} fabric. ₹{{ "{:,.0f}".format(product.discount_price or product.price or 0) }} at Suyog Textile.{% endblock %}
 
 {% block content %}
 
@@ -60,7 +60,7 @@
           {% endif %}
           <span class="detail-tag gold">⚡ Ready to Dispatch</span>
         </div>
-        <div class="product-detail-brand">{{ product.brand or 'SUYOG COLLECTION' }}</div>
+        <div class="product-detail-brand">{{ product.brand or 'SUYOG TEXTILE' }}</div>
         <h1 class="product-detail-title">{{ product.name }}</h1>
 
         <!-- Rating Pill -->

@@ -1,5 +1,5 @@
 /**
- * Suyog Collection - Responsive UI & Mobile Interactions
+ * Suyog Textile - Responsive UI & Mobile Interactions
  * Handles: mobile drawer, mobile search, category scroller, filter drawer, footer accordion
  */
 

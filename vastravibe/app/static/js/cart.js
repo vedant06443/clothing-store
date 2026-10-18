@@ -1,5 +1,5 @@
 /**
- * Suyog Collection - Cart Module
+ * Suyog Textile - Cart Module
  * Dedicated handler for cart operations, quantity adjustments, coupon validation
  */
 

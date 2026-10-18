@@ -1,4 +1,4 @@
-# 🪷 Suyog Collection — Real-Time Indian Clothing E-Commerce Website
+# 🪷 Suyog Textile — Real-Time Indian Clothing E-Commerce Website
 
 An authentic, production-grade Indian ethnic wear e-commerce platform built with **FastAPI**, **SQLAlchemy**, **Jinja2**, and **Razorpay**. Inspired by modern premium Indian fashion shopping experiences with rich multi-filter cataloging, color/size variants, cart, wishlists, dynamic checkout, order tracking, and admin dashboard.
 

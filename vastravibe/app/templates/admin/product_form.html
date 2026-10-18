@@ -1,6 +1,6 @@
 {% extends "admin/base.html" %}
 
-{% block title %}{% if product %}Edit Product — {{ product.name }}{% else %}Add New Product — Suyog Collection Admin{% endif %}{% endblock %}
+{% block title %}{% if product %}Edit Product — {{ product.name }}{% else %}Add New Product — Suyog Textile Admin{% endif %}{% endblock %}
 
 {% block admin_content %}
 <div class="admin-page-header">
@@ -41,8 +41,8 @@
             <div class="form-group">
               <label class="form-label" style="font-weight:700">Brand / Collection</label>
               <input type="text" id="p-brand" class="form-input" 
-                     value="{{ product.brand if product else 'Suyog Collection' }}" 
-                     placeholder="e.g. Suyog Collection">
+                     value="{{ product.brand if product else 'Suyog Textile' }}" 
+                     placeholder="e.g. Suyog Textile">
             </div>
           </div>
 

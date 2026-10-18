@@ -66,7 +66,7 @@ def get_template_context(request: Request, db: Session, user=None, extra: dict =
         "categories": categories,
         "cart_count": cart_count,
         "wishlist_count": wishlist_count,
-        "site_name": "Suyog Collection",
+        "site_name": "Suyog Textile",
         "razorpay_key": settings.RAZORPAY_KEY_ID,
     }
     if extra:

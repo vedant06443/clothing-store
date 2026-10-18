@@ -9,10 +9,10 @@ class Settings(BaseSettings):
     )
 
     # App
-    APP_NAME: str = "Suyog Collection"
+    APP_NAME: str = "Suyog Textile"
     APP_ENV: str = "development"
     DEBUG: bool = True
-    SECRET_KEY: str = "suyog-collection-secret-key-change-in-production-min-32"
+    SECRET_KEY: str = "suyog-textile-secret-key-change-in-production-min-32"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 days
 
@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     CLOUDINARY_API_SECRET: str = ""
 
     # Admin defaults
-    ADMIN_EMAIL: str = "admin@suyogcollection.com"
+    ADMIN_EMAIL: str = "admin@suyogtextile.com"
     ADMIN_PASSWORD: str = "Admin@12345"
 
     # SMTP / Email Notifications

@@ -1,5 +1,5 @@
 /**
- * Suyog Collection - Product Module
+ * Suyog Textile - Product Module
  * Handles: gallery thumbnail switching, size/color variant selection, pincode checking
  */
 

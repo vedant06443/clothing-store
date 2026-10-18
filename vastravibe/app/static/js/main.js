@@ -1,5 +1,5 @@
 /**
- * Suyog Collection - Main JavaScript
+ * Suyog Textile - Main JavaScript
  * Handles: cart, wishlist, search, product gallery, filters, notifications
  */
 
@@ -498,7 +498,7 @@ const Checkout = {
         key: res.razorpay_key,
         amount: Math.round(res.total * 100),
         currency: 'INR',
-        name: 'Suyog Collection',
+        name: 'Suyog Textile',
         description: `Order #${res.order_number}`,
         order_id: res.razorpay_order_id,
         handler: async (payment) => {

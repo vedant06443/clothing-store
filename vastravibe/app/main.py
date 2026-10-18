@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Suyog Collection API",
+    title="Suyog Textile API",
     description="Indian Clothing E-Commerce Platform",
     version="1.0.0",
     lifespan=lifespan,
@@ -91,7 +91,7 @@ templates.env.globals["format_currency"] = safe_format_currency
 def _error_context(request: Request):
     return {
         "request": request,
-        "site_name": "Suyog Collection",
+        "site_name": "Suyog Textile",
         "cart_count": 0,
         "wishlist_count": 0,
         "user": None,

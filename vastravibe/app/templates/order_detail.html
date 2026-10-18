@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Order #{{ order.order_number }} — Suyog Collection{% endblock %}
+{% block title %}Order #{{ order.order_number }} — Suyog Textile{% endblock %}
 
 {% block content %}
 <div class="container py-5" style="max-width:900px">
@@ -174,13 +174,13 @@
           <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto">Just now</span>
         </div>
         <div style="background:#DCF8C6;padding:12px 14px;border-radius:8px;font-size:0.85rem;line-height:1.6;color:#111b21;box-shadow:0 1px 2px rgba(0,0,0,0.1)">
-          🪷 <strong>Suyog Collection Update</strong><br><br>
+          🪷 <strong>Suyog Textile Update</strong><br><br>
           Namaste <strong>{{ order.shipping_address_snapshot.get('full_name', 'Customer') }}</strong>! Your order <strong>#{{ order.order_number }}</strong> status is currently <strong>{{ order.status }}</strong>.<br>
           Total: <strong>₹{{ "{:,.0f}".format(order.total or 0) }}</strong><br>
           {% if order.tracking_number %}
           🚚 Courier: <strong>{{ order.courier_name or 'BlueDart' }}</strong> (AWB: {{ order.tracking_number }})<br>
           {% endif %}
-          Track Live: <a href="/orders/{{ order.id }}" style="color:#075E54;font-weight:600">suyogcollection.com/orders/{{ order.id }}</a>
+          Track Live: <a href="/orders/{{ order.id }}" style="color:#075E54;font-weight:600">suyogtextile.com/orders/{{ order.id }}</a>
         </div>
       </div>
 
@@ -192,7 +192,7 @@
           <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto">To: {{ order.shipping_address_snapshot.get('phone', 'Phone') }}</span>
         </div>
         <div style="background:#FFFFFF;padding:12px 14px;border-radius:8px;font-size:0.82rem;line-height:1.5;color:#2C1A20;border:1px solid var(--border)">
-          Suyog Collection: Order #{{ order.order_number }} status is {{ order.status }}. Total INR {{ "{:,.0f}".format(order.total or 0) }}. Track updates at suyogcollection.com/orders/{{ order.id }}
+          Suyog Textile: Order #{{ order.order_number }} status is {{ order.status }}. Total INR {{ "{:,.0f}".format(order.total or 0) }}. Track updates at suyogtextile.com/orders/{{ order.id }}
         </div>
       </div>
     </div>

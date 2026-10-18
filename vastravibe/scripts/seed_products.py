@@ -1,5 +1,5 @@
 """
-Suyog Collection - Database Seeder
+Suyog Textile - Database Seeder
 Seeds realistic categories, products, images, variants, coupons, and test users.
 """
 
@@ -30,7 +30,7 @@ def seed_database():
             admin = User(
                 email="admin@vastravibe.com",
                 hashed_password=hash_password("admin123"),
-                full_name="Suyog Collection Administrator",
+                full_name="Suyog Textile Administrator",
                 phone="+919876543210",
                 is_active=True,
                 is_admin=True
@@ -728,7 +728,7 @@ def seed_database():
                 db.add(coupon)
 
         db.commit()
-        print("[SUCCESS] Database successfully seeded with Suyog Collection collection data!")
+        print("[SUCCESS] Database successfully seeded with Suyog Textile collection data!")
 
     except Exception as e:
         db.rollback()

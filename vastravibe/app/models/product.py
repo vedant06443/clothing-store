@@ -11,7 +11,7 @@ class Product(Base):
     name = Column(String(200), nullable=False)
     slug = Column(String(220), nullable=False, unique=True, index=True)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
-    brand = Column(String(100), default="Suyog Collection")
+    brand = Column(String(100), default="Suyog Textile")
     sku = Column(String(100), nullable=True)
     description = Column(Text, nullable=True)
     specifications = Column(Text, nullable=True)

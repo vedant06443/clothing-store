@@ -71,7 +71,7 @@ class ProductDetailOut(BaseModel):
 class ProductCreate(BaseModel):
     name: str
     category_id: int
-    brand: str = "Suyog Collection"
+    brand: str = "Suyog Textile"
     description: Optional[str]
     specifications: Optional[str]
     price: float

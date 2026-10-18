@@ -95,7 +95,7 @@ async def create_product(
         data = await request.json()
         name = data.get("name")
         category_id = data.get("category_id")
-        brand = data.get("brand") or "Suyog Collection"
+        brand = data.get("brand") or "Suyog Textile"
         description = data.get("description")
         specifications = data.get("specifications")
         price = data.get("price")
@@ -114,7 +114,7 @@ async def create_product(
         form = await request.form()
         name = form.get("name")
         category_id = form.get("category_id")
-        brand = form.get("brand") or "Suyog Collection"
+        brand = form.get("brand") or "Suyog Textile"
         description = form.get("description")
         specifications = form.get("specifications")
         price = form.get("price")
