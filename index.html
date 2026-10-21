@@ -1,298 +1,542 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suyog Textile — Real-Time Indian Clothing & Authentic Ethnic Wear</title>
-  <meta name="description" content="Shop authentic handwoven Banarasi sarees, Kanjivaram silks, designer bridal lehengas, Chikankari kurtis, and royal gents wear at Suyog Textile.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Suyog Textile — Elegance That Defines You | Indian Fashion</title>
+  <meta name="description" content="Suyog Textile — Versatile clothing store offering a wide variety of readymade garments and fabrics for all ages. Shop handpicked sarees, kurtis, lehengas, and fabrics with Pan-India delivery.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="assets/images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Marcellus&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- AOS + Swiper + Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Original Theme Stylesheets -->
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 
-  <!-- Top Announcement Bar -->
-  <div class="announcement-bar">
-    ✨ FESTIVE SPECIAL: Use code <strong>WELCOME10</strong> for 10% OFF | Free Express Shipping across India over ₹1,499
+  <!-- ─── Announcement Bar ─── -->
+  <div class="announcement-bar" role="banner">
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499 &nbsp;|&nbsp; Use code <a href="shop.html" style="color:var(--gold-light);text-decoration:underline;">WELCOME10</a> for 10% OFF!
   </div>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container nav-wrapper">
-      <a href="index.html" class="logo-area">
-        <span class="brand-symbol">🪷</span>
-        <div class="brand-names">
-          <span class="brand-main">SUYOG TEXTILE</span>
-          <span class="brand-tag">Heirloom Ethnic Wear</span>
-        </div>
-      </a>
-
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="index.html" class="nav-link active">Home</a></li>
-          <li><a href="shop.html" class="nav-link">All Collections</a></li>
-          <li><a href="shop.html?cat=sarees" class="nav-link">Sarees</a></li>
-          <li><a href="shop.html?cat=lehengas" class="nav-link">Lehengas</a></li>
-          <li><a href="shop.html?cat=kurtis" class="nav-link">Kurtis</a></li>
-          <li><a href="shop.html?cat=mens-wear" class="nav-link">Gents Wear</a></li>
-          <li><a href="about.html" class="nav-link">Our Heritage</a></li>
-          <li><a href="contact.html" class="nav-link">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="nav-actions">
-        <a href="shop.html" class="action-btn" title="Search catalog">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </a>
-
-        <a href="cart.html" class="action-btn" title="Wishlist">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          <span class="badge-count wishlist-count-badge" style="display:none;">0</span>
-        </a>
-
-        <button class="action-btn" onclick="Store.openCartDrawer()" title="Shopping Bag">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 01-8 0"></path></svg>
-          <span class="badge-count cart-count-badge" style="display:none;">0</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero-section">
+  <!-- ─── DESKTOP HEADER (>= 992px) ─── -->
+  <header class="desktop-header" id="desktop-header">
     <div class="container">
-      <div class="hero-content">
-        <div class="hero-badge">The Royal Festive Collection 2026</div>
-        <h1 class="hero-title">Timeless Grace & <br><em>Authentic Weaves</em></h1>
-        <p class="hero-desc">Discover master-crafted Banarasi silks, Kanjivaram heirlooms, bridal lehengas, and regal attire hand-selected from India's most celebrated artisan weavers.</p>
-        <div class="hero-cta">
-          <a href="shop.html" class="btn btn-gold">Explore Collections &rarr;</a>
-          <button onclick="Store.orderViaWhatsApp()" class="btn btn-whatsapp">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Order on WhatsApp
+      <div class="desktop-nav-inner">
+        <!-- Logo -->
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile Logo" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;max-height:46px;max-width:52px;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav aria-label="Desktop Primary Navigation">
+          <ul class="desktop-nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
+            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
+            <li><a href="shop.html?cat=dresses">Gown</a></li>
+            <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
+            <li><a href="shop.html">All Collections</a></li>
+            <li><a href="about.html">Our Heritage</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- Right Icons -->
+        <div class="desktop-nav-right">
+          <div class="desktop-search-box">
+            <input type="text" class="desktop-search-input" id="search-input" placeholder="Search ethnic wear..." onkeydown="if(event.key==='Enter') window.location.href='shop.html?q='+encodeURIComponent(this.value)">
+            <button class="desktop-search-btn" aria-label="Search" onclick="window.location.href='shop.html?q='+encodeURIComponent(document.getElementById('search-input').value)">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+
+          <a href="cart.html" class="nav-icon-btn" title="Wishlist" aria-label="View Wishlist">
+            <i class="bi bi-heart"></i>
+            <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
+          </a>
+
+          <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Shopping Bag" aria-label="Shopping Bag" style="background:transparent;border:none;">
+            <i class="bi bi-bag"></i>
+            <span class="nav-badge cart-count-badge" style="display:none">0</span>
           </button>
         </div>
       </div>
     </div>
-  </section>
+  </header>
 
-  <!-- Trust Features Bar -->
-  <section class="trust-bar">
-    <div class="container trust-grid">
-      <div class="trust-item">
-        <span class="trust-icon">🪡</span>
-        <div class="trust-text">
-          <h4>100% Authentic Handloom</h4>
-          <p>Certified pure silks & handcrafted textiles</p>
-        </div>
+  <!-- ─── MOBILE HEADER (< 992px) ─── -->
+  <header class="mobile-header" id="mobile-header">
+    <div class="mobile-header-top">
+      <div class="mobile-header-left">
+        <button class="hamburger mobile-hamburger-btn" id="hamburger-btn" aria-label="Open Navigation Menu" onclick="toggleMobileDrawer()">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <div class="trust-item">
-        <span class="trust-icon">🚚</span>
-        <div class="trust-text">
-          <h4>Free Express Shipping</h4>
-          <p>Pan-India fast dispatch within 24 hours</p>
-        </div>
+
+      <div class="mobile-header-center">
+        <a href="index.html" class="navbar-logo">
+          <img src="assets/images/logo.png" alt="Suyog Textile Logo" class="brand-logo-img brand-logo-mobile" height="38" width="38" style="height:38px;width:auto;max-height:38px;max-width:44px;object-fit:contain">
+          <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+        </a>
       </div>
-      <div class="trust-item">
-        <span class="trust-icon">💵</span>
-        <div class="trust-text">
-          <h4>Cash on Delivery Available</h4>
-          <p>Pay at your doorstep with confidence</p>
-        </div>
+
+      <div class="mobile-header-right">
+        <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Cart" aria-label="Cart" style="background:transparent;border:none;">
+          <i class="bi bi-bag"></i>
+          <span class="nav-badge cart-count-badge" style="display:none">0</span>
+        </button>
       </div>
-      <div class="trust-item">
-        <span class="trust-icon">💬</span>
-        <div class="trust-text">
-          <h4>Personal Video Shopping</h4>
-          <p>Live WhatsApp assistance & video calls</p>
+    </div>
+
+    <div class="mobile-search-row">
+      <div class="mobile-search-input-wrap">
+        <i class="bi bi-search mobile-search-icon-left"></i>
+        <input type="text" class="mobile-search-input" id="mobile-search-input" placeholder="Search sarees, kurtis, lehengas..." onkeydown="if(event.key==='Enter') window.location.href='shop.html?q='+encodeURIComponent(this.value)">
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── MOBILE DRAWER OFFCANVAS ─── -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay" onclick="toggleMobileDrawer()"></div>
+  <aside class="mobile-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
+    <div class="mobile-drawer-header">
+      <a href="index.html" class="navbar-logo" style="font-size:1.15rem">
+        <img src="assets/images/logo.png" alt="Suyog Textile Logo" class="brand-logo-img" height="36" width="36" style="height:36px;width:auto;object-fit:contain">
+        <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+      </a>
+      <button class="mobile-drawer-close" onclick="toggleMobileDrawer()" aria-label="Close Navigation Menu">✕</button>
+    </div>
+    <div class="mobile-drawer-body">
+      <div class="drawer-section-title">Navigation</div>
+      <div class="drawer-links-group">
+        <a href="index.html" class="drawer-link"><span>🏠 Home</span></a>
+        <a href="shop.html" class="drawer-link"><span>🛍️ All Collections</span></a>
+        <a href="shop.html?cat=sarees" class="drawer-link"><span>🥻 Sarees</span></a>
+        <a href="shop.html?cat=lehengas" class="drawer-link"><span>💃 Lehenga Choli</span></a>
+        <a href="shop.html?cat=kurtis" class="drawer-link"><span>👗 Kurtis</span></a>
+        <a href="shop.html?cat=salwar-suits" class="drawer-link"><span>👘 Salwar Suits</span></a>
+        <a href="shop.html?cat=dresses" class="drawer-link"><span>🌸 Gowns & Dresses</span></a>
+        <a href="shop.html?cat=mens-wear" class="drawer-link"><span>👳 Mens Wear</span></a>
+        <a href="about.html" class="drawer-link"><span>📖 Our Heritage</span></a>
+        <a href="contact.html" class="drawer-link"><span>📍 Contact Showroom</span></a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── HERO SECTION ─── -->
+  <section class="landing-hero">
+    <div class="container">
+      <div class="row align-items-center g-4 g-lg-5">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="hero-kicker" style="letter-spacing:2px;font-size:0.8rem;text-transform:uppercase;font-weight:700;margin-bottom:8px">Versatile Clothing Store • All Ages & Occasions</div>
+          <h1 class="landing-hero-title">Readymade Garments <span>& Handpicked Fabrics</span></h1>
+          <p class="landing-hero-copy">
+            Versatile clothing store offering a wide variety of readymade garments and fabrics for all ages. Discover pure silk sarees, salwar suits, bridal lehengas, daily wear kurtis, and royal menswear.
+          </p>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <a href="shop.html?cat=sarees" class="btn btn-gold btn-lg" style="min-height:48px;padding:12px 28px;font-weight:700">SHOP SAREES</a>
+            <a href="shop.html" class="btn btn-outline-light btn-lg" style="min-height:48px;padding:12px 24px">VIEW CATALOG</a>
+          </div>
+
+          <div class="hero-stat-grid mt-4 mt-lg-5">
+            <div class="hero-stat-box">
+              <strong>10K+</strong>
+              <span>Happy Shoppers</span>
+            </div>
+            <div class="hero-stat-box">
+              <strong>4.9 ★</strong>
+              <span>Customer Rating</span>
+            </div>
+            <div class="hero-stat-box">
+              <strong>100%</strong>
+              <span>Pure Handloom</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6" data-aos="fade-left">
+          <div class="hero-visual-card" style="position:relative;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.3)">
+            <div class="hero-visual-image" style="height:520px;">
+              <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1000&q=80" 
+                   alt="Indian Couture Traditional Saree" 
+                   loading="eager"
+                   style="object-fit:cover;object-position:center 15%;width:100%;height:100%">
+            </div>
+            <div class="floating-badge badge-top" style="position:absolute;top:20px;left:20px;background:rgba(255,255,255,0.95);backdrop-filter:blur(6px);color:#9A3412;padding:8px 16px;border-radius:20px;font-size:0.8rem;font-weight:700;border:1px solid rgba(217,119,6,0.35);box-shadow:0 4px 12px rgba(0,0,0,0.1)">
+              ✨ New Festive Edit
+            </div>
+            <div class="floating-badge badge-bottom" style="position:absolute;bottom:20px;right:20px;background:linear-gradient(135deg, #C2410C, #9A3412);color:#fff;padding:10px 20px;border-radius:20px;font-size:0.85rem;font-weight:700;box-shadow:0 6px 16px rgba(0,0,0,0.3)">
+              Up to 50% OFF
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Categories Grid -->
-  <section class="categories-section">
+  <!-- ─── BRAND STRIP ─── -->
+  <div class="brand-strip" style="background:#FFFDF7;border-bottom:1px solid var(--border);padding:14px 0">
     <div class="container">
-      <div class="section-header">
-        <span class="section-subtitle">Curated For You</span>
-        <h2 class="section-title">Shop by Category</h2>
-        <div class="section-divider"><span>🪷</span></div>
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 gap-lg-5 text-uppercase small text-muted" style="letter-spacing:1px;font-size:0.75rem;font-weight:600">
+        <span>Banarasi Silk</span>
+        <span>•</span>
+        <span>Kanjivaram</span>
+        <span>•</span>
+        <span>Chanderi</span>
+        <span>•</span>
+        <span>Pure Georgette</span>
+        <span>•</span>
+        <span>Handcrafted Embroidery</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SHOP BY CATEGORY ─── -->
+  <section class="categories-section" style="padding:50px 0 35px">
+    <div class="container">
+      <div class="section-header text-center mb-4" data-aos="fade-up">
+        <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;margin-bottom:6px">Collections</div>
+        <h2 class="section-title" style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3.5vw, 2.4rem)">Shop By Category</h2>
+        <p class="section-subtitle" style="color:var(--text-muted);max-width:560px;margin:0 auto;font-size:clamp(0.85rem, 1.6vw, 0.95rem)">
+          Explore authentic Indian ethnic silhouettes crafted for every timeless celebration.
+        </p>
       </div>
 
-      <div class="category-grid" id="categoryGrid">
-        <!-- Injected via JavaScript -->
+      <div class="categories-grid" id="homeCategoriesList">
+        <!-- Rendered by JS -->
       </div>
     </div>
   </section>
 
-  <!-- Featured Products Section -->
-  <section class="products-section">
+  <!-- ─── FESTIVE PROMO BANNER ─── -->
+  <section class="promo-banner-wrap" style="padding:10px 0 45px">
     <div class="container">
-      <div class="section-header">
-        <span class="section-subtitle">Royal Picks</span>
-        <h2 class="section-title">Trending Bestsellers</h2>
-        <div class="section-divider"><span>🪷</span></div>
-      </div>
-
-      <div class="product-grid" id="featuredProductGrid">
-        <!-- Injected via JavaScript -->
-      </div>
-
-      <div class="text-center" style="margin-top: 48px;">
-        <a href="shop.html" class="btn btn-outline">View All Collections &rarr;</a>
+      <div class="promo-banner" data-aos="fade-up" style="background:linear-gradient(135deg, #4A0E2A 0%, var(--primary) 60%, #9B1C52 100%);border-radius:20px;padding:clamp(24px, 4vw, 40px);color:#fff;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 12px 36px rgba(74, 14, 42, 0.25)">
+        <div>
+          <span class="promo-eyebrow" style="color:var(--gold-light);letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;font-weight:700">Special Festive Drop</span>
+          <h3 style="font-family:var(--font-brand);font-size:clamp(1.35rem, 3vw, 2rem);margin:6px 0 4px">Luxury Festive Wear Starting at Just ₹999</h3>
+          <p style="font-size:0.9rem;color:rgba(255,255,255,0.85);margin:0">Free express delivery across India on all prepaid orders.</p>
+        </div>
+        <div class="promo-actions" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span class="promo-code" style="background:rgba(255,255,255,0.15);padding:10px 16px;border-radius:8px;font-weight:700;letter-spacing:1px;font-size:0.9rem;border:1px dashed var(--gold-light)">USE: WELCOME10</span>
+          <a href="shop.html" class="btn btn-gold" style="padding:10px 24px;font-weight:700;font-size:0.9rem">EXPLORE OFFERS</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Banner Promo -->
-  <section class="banner-promo">
+  <!-- ─── SHOP BY OCCASION ─── -->
+  <section class="section section-occasions" style="padding:50px 0 60px;background:#FFFDF9">
     <div class="container">
-      <span class="hero-badge" style="background: rgba(255,255,255,0.15); color: #FFF; border-color: rgba(255,255,255,0.3);">Grand Wedding Season</span>
-      <h2>Handcrafted Bridal & Festive Opulence</h2>
-      <p>From the holy ghats of Varanasi to the temple town of Kanchipuram, bring home sarees and lehengas woven with generational heritage.</p>
-      <a href="shop.html?cat=lehengas" class="btn btn-gold">Explore Bridal Wear</a>
+      <div class="section-header text-center mb-4" data-aos="fade-up">
+        <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;margin-bottom:6px">Curated For Celebrations</div>
+        <h2 class="section-title" style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3.5vw, 2.3rem)">Shop By Occasion</h2>
+        <p class="section-subtitle" style="color:var(--text-muted);font-size:0.9rem;max-width:540px;margin:0 auto">
+          Find the perfect ensemble tailored for life's most unforgettable milestones.
+        </p>
+      </div>
+
+      <div class="occasions-grid">
+        <a href="shop.html?cat=lehengas" class="occasion-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="occasion-img-wrap">
+            <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=80" alt="Wedding & Bridal Ethnic Wear" loading="lazy">
+          </div>
+          <div class="occasion-overlay"></div>
+          <div class="occasion-content">
+            <span class="occasion-tag">Grand Milestones</span>
+            <h3 class="occasion-title">Wedding & Bridal</h3>
+            <span class="occasion-cta">Shop Collection <span>→</span></span>
+          </div>
+        </a>
+
+        <a href="shop.html?cat=sarees" class="occasion-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="occasion-img-wrap">
+            <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=80" alt="Festive Celebrations Sarees & Kurtis" loading="lazy">
+          </div>
+          <div class="occasion-overlay"></div>
+          <div class="occasion-content">
+            <span class="occasion-tag">Navratri & Diwali</span>
+            <h3 class="occasion-title">Festive Celebrations</h3>
+            <span class="occasion-cta">Shop Collection <span>→</span></span>
+          </div>
+        </a>
+
+        <a href="shop.html?cat=dresses" class="occasion-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="occasion-img-wrap">
+            <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=700&q=80" alt="Engagement & Sangeet Gowns" loading="lazy">
+          </div>
+          <div class="occasion-overlay"></div>
+          <div class="occasion-content">
+            <span class="occasion-tag">Cocktail & Sangeet</span>
+            <h3 class="occasion-title">Engagement & Sangeet</h3>
+            <span class="occasion-cta">Shop Collection <span>→</span></span>
+          </div>
+        </a>
+
+        <a href="shop.html?cat=salwar-suits" class="occasion-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="occasion-img-wrap">
+            <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=700&q=80" alt="Reception & Party Wear Suits" loading="lazy">
+          </div>
+          <div class="occasion-overlay"></div>
+          <div class="occasion-content">
+            <span class="occasion-tag">Evening Glamour</span>
+            <h3 class="occasion-title">Party & Reception</h3>
+            <span class="occasion-cta">Shop Collection <span>→</span></span>
+          </div>
+        </a>
+      </div>
     </div>
   </section>
 
-  <!-- New Arrivals Section -->
-  <section class="products-section" style="background: var(--color-bg);">
+  <!-- ─── BESTSELLERS GRID ─── -->
+  <section class="section section-cream" style="padding:50px 0 70px;background:var(--cream)">
     <div class="container">
-      <div class="section-header">
-        <span class="section-subtitle">Fresh from the Looms</span>
-        <h2 class="section-title">New Arrivals</h2>
-        <div class="section-divider"><span>🪷</span></div>
+      <div class="section-header text-center mb-4" data-aos="fade-up">
+        <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;margin-bottom:6px">Customer Favorites</div>
+        <h2 class="section-title" style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3.5vw, 2.3rem)">Your favorites, Our Best-Sellers!</h2>
+        <p class="section-subtitle" style="color:var(--text-muted);font-size:0.9rem;max-width:540px;margin:0 auto">
+          Adored by our patrons for unmatched fabric quality, timeless prints, and celebratory allure.
+        </p>
       </div>
 
-      <div class="product-grid" id="newArrivalsGrid">
-        <!-- Injected via JavaScript -->
+      <div class="products-grid" id="homeBestsellersList">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="text-center mt-5">
+        <a href="shop.html" class="btn btn-outline" style="border-radius:30px;padding:12px 36px;font-weight:700">EXPLORE FULL CATALOG &rarr;</a>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="site-footer">
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer" id="main-footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>🪷 SUYOG TEXTILE</h3>
-          <p>Celebrating the glorious heritage of Indian handlooms and royal ethnic fashion. We bring authentic handcrafted weaves directly from master artisans to your home.</p>
-          <a href="https://wa.me/918669396037" class="btn btn-whatsapp btn-sm" target="_blank">
-            💬 WhatsApp: +91 86693 96037
-          </a>
+      <div class="footer-grid-layout">
+        <!-- Col 1 -->
+        <div>
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <img src="assets/images/logo.png" alt="Suyog Textile Logo" class="brand-logo-img" height="48" width="48" style="height:48px;width:auto;object-fit:contain">
+              <span>Suyog <span class="brand-highlight">Textile</span></span>
+            </div>
+            <p class="footer-desc">Versatile clothing store offering a wide variety of readymade garments and fabrics for all ages. Celebrating the art of Indian textiles with timeless elegance.</p>
+          </div>
+          <div class="social-links" style="margin-top:16px">
+            <a href="https://wa.me/918669396037" class="social-link" title="WhatsApp" aria-label="WhatsApp">💬</a>
+            <a href="#" class="social-link" title="Instagram" aria-label="Instagram">📸</a>
+            <a href="#" class="social-link" title="Facebook" aria-label="Facebook">📘</a>
+          </div>
         </div>
 
-        <div class="footer-col">
-          <h4>Collections</h4>
+        <!-- Col 2 -->
+        <div class="footer-accordion-item">
+          <div class="footer-title">Quick Links</div>
           <ul class="footer-links">
-            <li><a href="shop.html?cat=sarees">Banarasi & Kanjivaram</a></li>
-            <li><a href="shop.html?cat=lehengas">Bridal Lehengas</a></li>
-            <li><a href="shop.html?cat=kurtis">Lucknowi Chikankari</a></li>
-            <li><a href="shop.html?cat=salwar-suits">Anarkali & Sharara</a></li>
-            <li><a href="shop.html?cat=mens-wear">Royal Gents Wear</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=kurtis">Kurtis</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehengas</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
+            <li><a href="shop.html">Special Offers</a></li>
           </ul>
         </div>
 
-        <div class="footer-col">
-          <h4>Customer Care</h4>
+        <!-- Col 3 -->
+        <div class="footer-accordion-item">
+          <div class="footer-title">Customer Care</div>
           <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
             <li><a href="cart.html">Shopping Bag</a></li>
-            <li><a href="about.html">About Suyog Textile</a></li>
-            <li><a href="contact.html">Store Location</a></li>
             <li><a href="contact.html">Track Order</a></li>
             <li><a href="contact.html">Returns & Exchange</a></li>
           </ul>
         </div>
 
-        <div class="footer-col">
-          <h4>Showroom & Support</h4>
-          <p style="font-size: 0.9rem; color: #B5A89E; margin-bottom: 12px;">
-            📍 Suyog Textile, Market Yard, Maharashtra, India<br>
-            📞 Phone: +91 86693 96037<br>
-            ✉️ Email: contact@suyogtextile.in<br>
-            🕒 Mon – Sun: 10:00 AM – 9:00 PM
-          </p>
+        <!-- Col 4: Store Location & Contact -->
+        <div>
+          <div class="footer-title">Visit Our Store</div>
+          <div style="font-size:.85rem;line-height:1.7;color:rgba(255,255,255,0.75)">
+            <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px">
+              <span style="font-size:1.15rem;color:var(--gold-light);line-height:1">📍</span>
+              <div>
+                <strong style="color:#fff">Suyog Textile</strong><br>
+                Lahoti Mala, 484, Jadhav Sankul road,<br>
+                Ashoknagar, Satpur Colony,<br>
+                Nashik, Maharashtra 422007
+                <div style="margin-top:4px">
+                  <a href="https://maps.google.com/?q=Lahoti+Mala,+484,+Jadhav+Sankul+road,+Ashoknagar,+Satpur+Colony,+Nashik,+Maharashtra+422007" 
+                     target="_blank" rel="noopener noreferrer" 
+                     style="color:var(--gold-light);font-size:0.78rem;text-decoration:underline">
+                    View on Google Maps →
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
+              <span>📧</span>
+              <a href="mailto:hello@suyogtextile.com" style="color:rgba(255,255,255,0.8);text-decoration:none">hello@suyogtextile.com</a>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
+              <span>📞</span>
+              <span>
+                <a href="tel:02534515460" style="color:rgba(255,255,255,0.9);text-decoration:none">0253 4515460</a>
+                <span style="color:rgba(255,255,255,0.4);margin:0 4px">•</span>
+                <a href="tel:+918669396037" style="color:rgba(255,255,255,0.8);text-decoration:none">+91 86693 96037</a>
+              </span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <span>🕘</span>
+              <span>Mon–Sun: 10:00 AM – 8:30 PM IST</span>
+            </div>
+          </div>
+          <div style="margin-top:14px;font-size:0.8rem;color:var(--gold-light)">
+            🚚 Pan India Express Delivery
+          </div>
         </div>
       </div>
 
+      <!-- Newsletter -->
+      <div style="padding: 28px 0; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); text-align:center; margin: 28px 0 20px;">
+        <p style="color:rgba(255,255,255,0.6); font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px">Join the Vibe</p>
+        <h3 style="color:var(--white); font-family:var(--font-heading); font-size:clamp(1.1rem, 3vw, 1.4rem); margin-bottom:18px">Get exclusive festive offers & style drops</h3>
+        <form onsubmit="event.preventDefault(); Store.showToast('Subscribed successfully!');" style="display:flex;max-width:440px;margin:0 auto;border-radius:var(--radius-full);overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2)">
+          <input type="email" placeholder="Your email address" required style="flex:1;padding:12px 18px;border:none;font-size:.85rem;background:rgba(255,255,255,0.1);color:var(--white);outline:none">
+          <button type="submit" style="padding:12px 22px;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-size:.85rem;">Subscribe</button>
+        </form>
+      </div>
+
+      <!-- Bottom Bar -->
       <div class="footer-bottom">
-        <div>&copy; 2026 Suyog Textile. All Rights Reserved.</div>
-        <div>Crafted with 🪷 for Indian Handloom Lovers</div>
+        <p>© 2026 Suyog Textile. All rights reserved. Made with ❤️ in India.</p>
+        <p style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <span>🔒 100% Secure Payments</span>
+          <span>•</span>
+          <span>💳 Razorpay / UPI</span>
+          <span>•</span>
+          <span>📦 Fast Dispatch</span>
+        </p>
       </div>
     </div>
   </footer>
 
-  <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/918669396037?text=Namaste%20Suyog%20Textile,%20I%20have%20an%20enquiry%20regarding%20your%20collection." class="floating-wa-btn" target="_blank" title="Chat on WhatsApp">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <!-- Floating WhatsApp Support -->
+  <a href="https://wa.me/918669396037?text=Hi%20Suyog%20Textile%2C%20I%20have%20an%20inquiry%20about%20your%20collection." 
+     target="_blank" 
+     class="wa-floating-btn" 
+     id="wa-shopping-btn" 
+     title="Chat on WhatsApp" 
+     aria-label="Chat with us on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span class="wa-floating-tooltip">💬 Chat on WhatsApp</span>
   </a>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="assets/js/products.js"></script>
   <script src="assets/js/store.js"></script>
   <script>
+    function toggleMobileDrawer() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      const overlay = document.getElementById('mobile-drawer-overlay');
+      if (drawer && overlay) {
+        drawer.classList.toggle('active');
+        overlay.classList.toggle('active');
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Render Categories
-      const catContainer = document.getElementById('categoryGrid');
+      if (typeof AOS !== 'undefined') {
+        AOS.init({ duration: 700, once: true });
+      }
+
+      // Render Categories
+      const catList = [
+        { name: 'Sarees', slug: 'sarees', icon: '🥻', url: 'shop.html?cat=sarees' },
+        { name: 'Kurtis', slug: 'kurtis', icon: '👗', url: 'shop.html?cat=kurtis' },
+        { name: 'Lehengas', slug: 'lehengas', icon: '💃', url: 'shop.html?cat=lehengas' },
+        { name: 'Salwar Suits', slug: 'salwar-suits', icon: '👘', url: 'shop.html?cat=salwar-suits' },
+        { name: 'Dresses & Gowns', slug: 'dresses', icon: '🌸', url: 'shop.html?cat=dresses' },
+        { name: 'Mens Wear', slug: 'mens-wear', icon: '👳', url: 'shop.html?cat=mens-wear' }
+      ];
+
+      const catContainer = document.getElementById('homeCategoriesList');
       if (catContainer) {
-        catContainer.innerHTML = CATEGORIES_DATA.filter(c => c.slug !== 'all').map(cat => `
-          <a href="shop.html?cat=${cat.slug}" class="category-card">
-            <img src="${cat.image}" alt="${cat.name}" loading="lazy">
-            <div class="category-overlay">
-              <span class="category-tag">${cat.tag || 'Explore Collection'}</span>
-              <h3>${cat.name}</h3>
-              <span class="category-link-btn">Shop Now &rarr;</span>
-            </div>
+        catContainer.innerHTML = catList.map(cat => `
+          <a href="${cat.url}" class="category-card" aria-label="Shop ${cat.name}">
+            <div class="category-icon">${cat.icon}</div>
+            <div class="category-name">${cat.name}</div>
           </a>
         `).join('');
       }
 
-      // 2. Render Featured Bestsellers
-      function createProductCard(p) {
-        const isFav = Store.isWishlisted(p.id);
-        const discountPct = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+      // Render Bestsellers
+      const bestsellersContainer = document.getElementById('homeBestsellersList');
+      if (bestsellersContainer) {
+        bestsellersContainer.innerHTML = PRODUCTS_DATA.slice(0, 8).map(p => {
+          const isFav = Store.isWishlisted(p.id);
+          const discountPct = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
 
-        return `
-          <div class="product-card">
-            <div class="product-image-box">
-              <span class="product-badge">${p.badge || 'Popular'}</span>
-              <button class="product-wishlist-btn ${isFav ? 'active' : ''}" data-wishlist-id="${p.id}" onclick="Store.toggleWishlist(${p.id})" title="Save to wishlist">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-              </button>
-              <a href="product.html?id=${p.id}">
-                <img src="${p.primaryImage}" alt="${p.name}" loading="lazy">
-              </a>
-            </div>
-
-            <div class="product-info">
-              <div class="product-category-meta">${p.categoryName} • ${p.fabric}</div>
-              <h3 class="product-name"><a href="product.html?id=${p.id}">${p.name}</a></h3>
-              <div class="product-rating">
-                <span class="stars">★★★★★</span>
-                <span class="rating-count">${p.rating} (${p.reviews})</span>
-              </div>
-              <div class="product-price-row">
-                <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
-                <span class="product-original-price">₹${p.originalPrice.toLocaleString('en-IN')}</span>
-                <span class="product-discount-pill">${discountPct}% OFF</span>
-              </div>
-              <div class="product-card-actions">
-                <button class="quick-add-btn" onclick="Store.addToCart(${p.id})">Add to Bag</button>
-                <button class="quick-wa-btn" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          return `
+            <div class="product-card" data-aos="fade-up">
+              <div class="product-card-image">
+                <span class="badge-tag badge-tag-best">${p.badge || 'BESTSELLER'}</span>
+                <button class="wishlist-btn ${isFav ? 'active' : ''}" onclick="Store.toggleWishlist(${p.id})" title="Save to Wishlist">
+                  <i class="bi bi-heart${isFav ? '-fill text-danger' : ''}"></i>
                 </button>
+                <a href="product.html?id=${p.id}">
+                  <img src="${p.primaryImage}" alt="${p.name}" loading="lazy">
+                </a>
+              </div>
+              <div class="product-card-body">
+                <div class="product-card-cat">${p.categoryName} • ${p.fabric}</div>
+                <h3 class="product-card-title"><a href="product.html?id=${p.id}">${p.name}</a></h3>
+                <div class="product-rating">
+                  <span class="stars">★★★★★</span>
+                  <span class="rating-val">${p.rating} (${p.reviews})</span>
+                </div>
+                <div class="product-price-row">
+                  <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
+                  <span class="product-original-price">₹${p.originalPrice.toLocaleString('en-IN')}</span>
+                  <span class="product-discount-pill">${discountPct}% OFF</span>
+                </div>
+                <div class="d-flex gap-2 mt-2">
+                  <button class="btn btn-sm btn-primary flex-grow-1" onclick="Store.addToCart(${p.id})">Add to Bag</button>
+                  <button class="btn btn-sm btn-whatsapp" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        `;
-      }
-
-      const featuredGrid = document.getElementById('featuredProductGrid');
-      if (featuredGrid) {
-        featuredGrid.innerHTML = PRODUCTS_DATA.slice(0, 4).map(createProductCard).join('');
-      }
-
-      const newArrivalsGrid = document.getElementById('newArrivalsGrid');
-      if (newArrivalsGrid) {
-        newArrivalsGrid.innerHTML = PRODUCTS_DATA.slice(4, 8).map(createProductCard).join('');
+          `;
+        }).join('');
       }
     });
   </script>

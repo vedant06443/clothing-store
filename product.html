@@ -1,331 +1,204 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title id="pageTitle">Product Details — Suyog Textile</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
-    .product-detail-section {
-      padding: 60px 0 100px;
-    }
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: var(--color-text-muted);
-      margin-bottom: 32px;
-    }
-    .breadcrumb a:hover {
-      color: var(--color-primary);
-    }
-    .detail-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-    }
-    .gallery-container {
-      display: flex;
-      gap: 16px;
-    }
-    .gallery-thumbs {
+    .gallery-thumbs-col {
       display: flex;
       flex-direction: column;
       gap: 12px;
       width: 80px;
     }
-    .thumb-btn {
+    .thumb-btn-img {
       width: 80px;
       height: 100px;
       border: 2px solid transparent;
-      border-radius: var(--radius-sm);
+      border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
-      background: #eee;
       padding: 0;
-      transition: var(--transition);
+      background: #eee;
     }
-    .thumb-btn.active, .thumb-btn:hover {
-      border-color: var(--color-gold);
+    .thumb-btn-img.active, .thumb-btn-img:hover {
+      border-color: var(--gold);
     }
-    .thumb-btn img {
+    .main-detail-img {
       width: 100%;
-      height: 100%;
+      height: 540px;
       object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
     }
-    .main-image-box {
-      flex-grow: 1;
-      aspect-ratio: 3/4;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      background-color: #eee;
-      position: relative;
-    }
-    .main-image-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .product-detail-info {
+    .spec-table-row {
       display: flex;
-      flex-direction: column;
-    }
-    .badge-chip {
-      display: inline-block;
-      align-self: flex-start;
-      background: var(--color-gold-subtle);
-      color: var(--color-gold);
-      border: 1px solid var(--color-gold);
-      padding: 4px 12px;
-      border-radius: var(--radius-full);
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-    .detail-title {
-      font-size: 2.2rem;
-      margin-bottom: 12px;
-      line-height: 1.25;
-    }
-    .detail-meta-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 20px;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
       font-size: 0.9rem;
     }
-    .stock-badge {
-      color: var(--color-success);
-      font-weight: 600;
-    }
-    .price-box {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      padding: 16px 0;
-      border-top: 1px solid var(--color-border);
-      border-bottom: 1px solid var(--color-border);
-      margin-bottom: 24px;
-    }
-    .detail-price {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--color-primary);
-    }
-    .detail-mrp {
-      font-size: 1.1rem;
-      text-decoration: line-through;
-      color: var(--color-text-light);
-    }
-    .detail-save {
-      background: #FFEBEE;
-      color: var(--color-discount);
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: var(--radius-sm);
-    }
-    .selector-block {
-      margin-bottom: 24px;
-    }
-    .selector-label {
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      display: block;
-    }
-    .option-pills {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .option-pill {
-      border: 1px solid var(--color-border);
-      padding: 8px 16px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-size: 0.9rem;
+    .spec-table-row span:first-child {
+      color: var(--text-muted);
       font-weight: 500;
-      background: var(--color-surface);
-      transition: var(--transition);
-    }
-    .option-pill.active, .option-pill:hover {
-      border-color: var(--color-primary);
-      background: var(--color-gold-subtle);
-      color: var(--color-primary);
-    }
-    .purchase-actions {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 16px;
-      margin: 28px 0;
-    }
-    .spec-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 24px;
-    }
-    .spec-table td {
-      padding: 12px 14px;
-      font-size: 0.9rem;
-      border-bottom: 1px solid var(--color-border-subtle);
-    }
-    .spec-table td:first-child {
-      font-weight: 600;
-      color: var(--color-text-muted);
-      width: 35%;
-    }
-    @media (max-width: 860px) {
-      .detail-grid {
-        grid-template-columns: 1fr;
-      }
-      .gallery-container {
-        flex-direction: column-reverse;
-      }
-      .gallery-thumbs {
-        flex-direction: row;
-        width: 100%;
-      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Announcement Bar -->
+  <!-- Announcement Bar -->
   <div class="announcement-bar">
-    ✨ FESTIVE SPECIAL: Use code <strong>WELCOME10</strong> for 10% OFF | Free Express Shipping across India over ₹1,499
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499 &nbsp;|&nbsp; Use code WELCOME10 for 10% OFF!
   </div>
 
   <!-- Header -->
-  <header class="site-header">
-    <div class="container nav-wrapper">
-      <a href="index.html" class="logo-area">
-        <span class="brand-symbol">🪷</span>
-        <div class="brand-names">
-          <span class="brand-main">SUYOG TEXTILE</span>
-          <span class="brand-tag">Heirloom Ethnic Wear</span>
+  <header class="desktop-header">
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
         </div>
-      </a>
+        <nav>
+          <ul class="desktop-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
+            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
+            <li><a href="shop.html?cat=dresses">Gown</a></li>
+            <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
+            <li><a href="shop.html">All Collections</a></li>
+          </ul>
+        </nav>
+        <div class="desktop-nav-right">
+          <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Cart" style="background:transparent;border:none;">
+            <i class="bi bi-bag"></i>
+            <span class="nav-badge cart-count-badge" style="display:none">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="index.html" class="nav-link">Home</a></li>
-          <li><a href="shop.html" class="nav-link">All Collections</a></li>
-          <li><a href="shop.html?cat=sarees" class="nav-link">Sarees</a></li>
-          <li><a href="shop.html?cat=lehengas" class="nav-link">Lehengas</a></li>
-          <li><a href="shop.html?cat=kurtis" class="nav-link">Kurtis</a></li>
-          <li><a href="shop.html?cat=mens-wear" class="nav-link">Gents Wear</a></li>
-          <li><a href="about.html" class="nav-link">Our Heritage</a></li>
-          <li><a href="contact.html" class="nav-link">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="nav-actions">
-        <button class="action-btn" onclick="Store.openCartDrawer()" title="Shopping Bag">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 01-8 0"></path></svg>
-          <span class="badge-count cart-count-badge" style="display:none;">0</span>
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <div class="mobile-header-top">
+      <div class="mobile-header-left">
+        <a href="shop.html" style="font-size:1.2rem;color:var(--primary);"><i class="bi bi-arrow-left"></i></a>
+      </div>
+      <div class="mobile-header-center">
+        <span class="brand-name" style="font-size:1.15rem;">Suyog <span class="brand-highlight">Textile</span></span>
+      </div>
+      <div class="mobile-header-right">
+        <button class="nav-icon-btn" onclick="Store.openCartDrawer()" style="background:transparent;border:none;">
+          <i class="bi bi-bag"></i>
+          <span class="nav-badge cart-count-badge" style="display:none">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Product Detail Section -->
-  <main class="product-detail-section">
-    <div class="container">
-      <div class="breadcrumb">
-        <a href="index.html">Home</a> &rsaquo;
-        <a href="shop.html">Collections</a> &rsaquo;
-        <span id="bcCategory">Sarees</span> &rsaquo;
-        <span id="bcName" style="color: var(--color-text);">Product</span>
-      </div>
-
-      <div class="detail-grid">
-        <!-- Gallery -->
-        <div class="gallery-container">
-          <div class="gallery-thumbs" id="galleryThumbs">
-            <!-- Thumbnails -->
+  <!-- Detail Container -->
+  <main class="container my-5">
+    <div class="row g-4 g-lg-5">
+      <!-- Gallery Column -->
+      <div class="col-lg-6">
+        <div class="d-flex gap-3">
+          <div class="gallery-thumbs-col" id="galleryThumbs">
+            <!-- Thumbs -->
           </div>
-          <div class="main-image-box">
-            <img id="mainImage" src="" alt="Product view">
+          <div class="flex-grow-1">
+            <img id="mainImage" src="" alt="Product View" class="main-detail-img">
           </div>
         </div>
+      </div>
 
-        <!-- Info & Actions -->
-        <div class="product-detail-info">
-          <span class="badge-chip" id="productBadge">Heirloom Handloom</span>
-          <h1 class="detail-title" id="productName">Product Name</h1>
+      <!-- Info Column -->
+      <div class="col-lg-6">
+        <div class="badge-tag badge-tag-new mb-2" id="productBadge" style="display:inline-block;">Handloom Verified</div>
+        <h1 id="productName" style="font-family:var(--font-brand);font-size:clamp(1.6rem, 3vw, 2.3rem);line-height:1.25;margin-bottom:12px;">Product Title</h1>
+        
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span style="color:var(--gold);">★★★★★</span>
+          <span id="ratingVal" style="font-weight:600;font-size:0.9rem;">4.9 (28 reviews)</span>
+          <span class="text-muted">•</span>
+          <span class="text-success fw-bold small">✓ Ready for Express Dispatch</span>
+        </div>
 
-          <div class="detail-meta-row">
-            <div class="stars" style="color: var(--color-gold);">★★★★★ <span id="ratingVal" style="color:var(--color-text); font-weight:600;">5.0</span></div>
-            <span>•</span>
-            <span class="stock-badge">✓ In Stock & Ready to Dispatch</span>
+        <div class="d-flex align-items-baseline gap-3 py-3 border-top border-bottom mb-4">
+          <span id="productPrice" style="font-size:2rem;font-weight:700;color:var(--primary);">₹0</span>
+          <span id="productMrp" style="font-size:1.1rem;text-decoration:line-through;color:var(--text-muted);">₹0</span>
+          <span id="productDiscount" class="badge-tag badge-tag-best">50% OFF</span>
+        </div>
+
+        <p id="productDesc" style="color:var(--text-muted);font-size:0.95rem;line-height:1.7;margin-bottom:24px;">
+          Product description
+        </p>
+
+        <!-- Variants -->
+        <div class="mb-3">
+          <label class="fw-bold small mb-2 d-block">Color:</label>
+          <div class="d-flex gap-2" id="colorPills"></div>
+        </div>
+
+        <div class="mb-4">
+          <label class="fw-bold small mb-2 d-block">Size / Cut:</label>
+          <div class="d-flex gap-2" id="sizePills"></div>
+        </div>
+
+        <!-- Purchase Buttons -->
+        <div class="d-flex gap-3 mb-4">
+          <button class="btn btn-primary btn-lg flex-grow-1" onclick="handleAddBag()" style="padding:14px;font-weight:700;">
+            <i class="bi bi-bag me-2"></i> Add to Shopping Bag
+          </button>
+          <button class="btn btn-whatsapp btn-lg" onclick="handleWhatsAppInquire()" style="padding:14px 20px;">
+            <i class="fa-brands fa-whatsapp"></i> Inquire
+          </button>
+        </div>
+
+        <!-- Specifications -->
+        <div class="card p-3" style="background:#FFFDF9;border-color:var(--border);">
+          <div class="spec-table-row">
+            <span>Fabric</span>
+            <strong id="specFabric">Pure Silk</strong>
           </div>
-
-          <div class="price-box">
-            <span class="detail-price" id="productPrice">₹0</span>
-            <span class="detail-mrp" id="productMrp">₹0</span>
-            <span class="detail-save" id="productDiscount">50% OFF</span>
+          <div class="spec-table-row">
+            <span>Occasion</span>
+            <strong id="specOccasion">Wedding / Festive</strong>
           </div>
-
-          <p id="productDesc" style="color: var(--color-text-muted); margin-bottom: 24px; font-size: 1rem; line-height: 1.6;">
-            Product description
-          </p>
-
-          <!-- Color Selector -->
-          <div class="selector-block" id="colorBlock">
-            <label class="selector-label">Available Colors:</label>
-            <div class="option-pills" id="colorPills"></div>
+          <div class="spec-table-row">
+            <span>Care Instructions</span>
+            <span id="specCare">Dry clean only</span>
           </div>
-
-          <!-- Size Selector -->
-          <div class="selector-block" id="sizeBlock">
-            <label class="selector-label">Size / Drape:</label>
-            <div class="option-pills" id="sizePills"></div>
+          <div class="spec-table-row" style="border:none;">
+            <span>Delivery</span>
+            <span>Free Express Delivery Above ₹1,499</span>
           </div>
-
-          <!-- Actions -->
-          <div class="purchase-actions">
-            <button class="btn btn-primary" onclick="handleAddBag()">Add to Shopping Bag</button>
-            <button class="btn btn-whatsapp" onclick="handleWhatsAppInquire()">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              WhatsApp
-            </button>
-          </div>
-
-          <!-- Specifications Table -->
-          <h3 style="font-size: 1.15rem; margin-top: 16px;">Authenticity & Fabric Details</h3>
-          <table class="spec-table">
-            <tr>
-              <td>Fabric Composition</td>
-              <td id="specFabric">Pure Silk</td>
-            </tr>
-            <tr>
-              <td>Occasion</td>
-              <td id="specOccasion">Wedding / Festive</td>
-            </tr>
-            <tr>
-              <td>Care Instructions</td>
-              <td id="specCare">Dry clean only</td>
-            </tr>
-            <tr>
-              <td>Shipping Time</td>
-              <td>Dispatched in 24 hours | 2–5 days delivery</td>
-            </tr>
-          </table>
         </div>
       </div>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container footer-bottom" style="border:none; padding-top:0;">
-      <div>&copy; 2026 Suyog Textile. Real-Time Indian Clothing.</div>
-      <div><a href="shop.html" style="color:var(--color-gold);">Back to Collections &rarr;</a></div>
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <p>© 2026 Suyog Textile. All rights reserved.</p>
+      <a href="shop.html" style="color:var(--gold-light);">Back to Collections &rarr;</a>
     </div>
   </footer>
 
@@ -342,11 +215,8 @@
       const prodId = Number(urlParams.get('id')) || 1;
       currentProduct = PRODUCTS_DATA.find(p => p.id === prodId) || PRODUCTS_DATA[0];
 
-      // Populate elements
       document.getElementById('pageTitle').textContent = `${currentProduct.name} — Suyog Textile`;
-      document.getElementById('bcCategory').textContent = currentProduct.categoryName;
-      document.getElementById('bcName').textContent = currentProduct.name;
-      document.getElementById('productBadge').textContent = currentProduct.badge || 'Artisan Weave';
+      document.getElementById('productBadge').textContent = currentProduct.badge || 'Handloom Verified';
       document.getElementById('productName').textContent = currentProduct.name;
       document.getElementById('ratingVal').textContent = `${currentProduct.rating} (${currentProduct.reviews} reviews)`;
       document.getElementById('productPrice').textContent = `₹${currentProduct.price.toLocaleString('en-IN')}`;
@@ -360,57 +230,50 @@
       document.getElementById('specOccasion').textContent = currentProduct.occasion;
       document.getElementById('specCare').textContent = currentProduct.care;
 
-      // Gallery
       const mainImg = document.getElementById('mainImage');
       mainImg.src = currentProduct.primaryImage;
 
       const thumbs = document.getElementById('galleryThumbs');
       thumbs.innerHTML = currentProduct.images.map((img, i) => `
-        <button class="thumb-btn ${i === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
-          <img src="${img}" alt="Angle ${i + 1}">
+        <button class="thumb-btn-img ${i === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+          <img src="${img}" style="width:100%;height:100%;object-fit:cover;">
         </button>
       `).join('');
 
-      // Colors
       selectedColor = currentProduct.colors[0];
-      const colorBox = document.getElementById('colorPills');
-      colorBox.innerHTML = currentProduct.colors.map((c, i) => `
-        <button class="option-pill ${i === 0 ? 'active' : ''}" onclick="selectColor('${c}', this)">${c}</button>
+      document.getElementById('colorPills').innerHTML = currentProduct.colors.map((c, i) => `
+        <button class="btn btn-sm ${i === 0 ? 'btn-primary' : 'btn-outline'}" onclick="selectColor('${c}', this)" style="border-radius:20px;">${c}</button>
       `).join('');
 
-      // Sizes
       selectedSize = currentProduct.sizes[0];
-      const sizeBox = document.getElementById('sizePills');
-      sizeBox.innerHTML = currentProduct.sizes.map((s, i) => `
-        <button class="option-pill ${i === 0 ? 'active' : ''}" onclick="selectSize('${s}', this)">${s}</button>
+      document.getElementById('sizePills').innerHTML = currentProduct.sizes.map((s, i) => `
+        <button class="btn btn-sm ${i === 0 ? 'btn-primary' : 'btn-outline'}" onclick="selectSize('${s}', this)" style="border-radius:20px;">${s}</button>
       `).join('');
     });
 
     function changeMainImage(url, btn) {
       document.getElementById('mainImage').src = url;
-      document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.thumb-btn-img').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
 
     function selectColor(color, btn) {
       selectedColor = color;
-      document.querySelectorAll('#colorPills .option-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      document.querySelectorAll('#colorPills button').forEach(b => { b.className = 'btn btn-sm btn-outline'; });
+      btn.className = 'btn btn-sm btn-primary';
     }
 
     function selectSize(size, btn) {
       selectedSize = size;
-      document.querySelectorAll('#sizePills .option-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      document.querySelectorAll('#sizePills button').forEach(b => { b.className = 'btn btn-sm btn-outline'; });
+      btn.className = 'btn btn-sm btn-primary';
     }
 
     function handleAddBag() {
-      if (!currentProduct) return;
       Store.addToCart(currentProduct.id, selectedSize, selectedColor, 1);
     }
 
     function handleWhatsAppInquire() {
-      if (!currentProduct) return;
       Store.inquireProductWhatsApp(currentProduct.id);
     }
   </script>

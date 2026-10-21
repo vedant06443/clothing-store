@@ -1,153 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>All Collections — Suyog Textile</title>
   <meta name="description" content="Explore sarees, lehengas, kurtis, salwar suits, and gents wear at Suyog Textile. Filter by category, occasion, and fabric.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
-    .shop-header {
-      background: linear-gradient(135deg, rgba(88, 8, 32, 0.92), rgba(28, 4, 12, 0.85)), url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1600&q=80') center/cover;
-      color: #FFF;
-      padding: 60px 0;
+    .catalog-hero-strip {
+      background: linear-gradient(135deg, #4A0E2A 0%, var(--primary) 60%, #9B1C52 100%);
+      color: #fff;
+      padding: 48px 0;
       text-align: center;
     }
-    .shop-header h1 {
-      color: #FFF;
-      font-size: 2.6rem;
-      margin-bottom: 8px;
-    }
-    .shop-header p {
-      color: var(--color-gold-light);
-      font-size: 1.05rem;
-    }
-    .shop-controls {
-      background: var(--color-surface);
-      border-bottom: 1px solid var(--color-border);
-      padding: 18px 0;
+    .catalog-filter-bar {
+      background: #FFFDF9;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
       position: sticky;
       top: 80px;
       z-index: 90;
-      box-shadow: var(--shadow-sm);
-    }
-    .controls-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .filter-tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: none;
-    }
-    .filter-tab {
-      background: var(--color-surface-soft);
-      border: 1px solid var(--color-border);
-      padding: 8px 18px;
-      border-radius: var(--radius-full);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--color-text);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: var(--transition);
-    }
-    .filter-tab.active, .filter-tab:hover {
-      background: var(--color-primary);
-      color: #FFF;
-      border-color: var(--color-primary);
-    }
-    .filter-search-box {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .search-input {
-      padding: 8px 14px;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      min-width: 220px;
-    }
-    .sort-select {
-      padding: 8px 12px;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      background: var(--color-surface);
-      cursor: pointer;
-    }
-    .results-count {
-      margin: 24px 0 16px;
-      font-size: 0.9rem;
-      color: var(--color-text-muted);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Announcement Bar -->
+  <!-- Announcement Bar -->
   <div class="announcement-bar">
-    ✨ FESTIVE SPECIAL: Use code <strong>WELCOME10</strong> for 10% OFF | Free Express Shipping across India over ₹1,499
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499 &nbsp;|&nbsp; Use code WELCOME10 for 10% OFF!
   </div>
 
   <!-- Header -->
-  <header class="site-header">
-    <div class="container nav-wrapper">
-      <a href="index.html" class="logo-area">
-        <span class="brand-symbol">🪷</span>
-        <div class="brand-names">
-          <span class="brand-main">SUYOG TEXTILE</span>
-          <span class="brand-tag">Heirloom Ethnic Wear</span>
+  <header class="desktop-header">
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
         </div>
-      </a>
+        <nav>
+          <ul class="desktop-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
+            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
+            <li><a href="shop.html?cat=dresses">Gown</a></li>
+            <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
+            <li><a href="shop.html" class="active">All Collections</a></li>
+            <li><a href="about.html">Our Heritage</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="desktop-nav-right">
+          <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Shopping Bag" style="background:transparent;border:none;">
+            <i class="bi bi-bag"></i>
+            <span class="nav-badge cart-count-badge" style="display:none">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="index.html" class="nav-link">Home</a></li>
-          <li><a href="shop.html" class="nav-link active">All Collections</a></li>
-          <li><a href="shop.html?cat=sarees" class="nav-link">Sarees</a></li>
-          <li><a href="shop.html?cat=lehengas" class="nav-link">Lehengas</a></li>
-          <li><a href="shop.html?cat=kurtis" class="nav-link">Kurtis</a></li>
-          <li><a href="shop.html?cat=mens-wear" class="nav-link">Gents Wear</a></li>
-          <li><a href="about.html" class="nav-link">Our Heritage</a></li>
-          <li><a href="contact.html" class="nav-link">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="nav-actions">
-        <button class="action-btn" onclick="Store.openCartDrawer()" title="Shopping Bag">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 01-8 0"></path></svg>
-          <span class="badge-count cart-count-badge" style="display:none;">0</span>
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <div class="mobile-header-top">
+      <div class="mobile-header-left">
+        <a href="index.html" style="font-size:1.2rem;color:var(--primary);"><i class="bi bi-arrow-left"></i></a>
+      </div>
+      <div class="mobile-header-center">
+        <span class="brand-name" style="font-size:1.15rem;">Suyog <span class="brand-highlight">Textile</span></span>
+      </div>
+      <div class="mobile-header-right">
+        <button class="nav-icon-btn" onclick="Store.openCartDrawer()" style="background:transparent;border:none;">
+          <i class="bi bi-bag"></i>
+          <span class="nav-badge cart-count-badge" style="display:none">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Shop Header -->
-  <section class="shop-header">
+  <!-- Catalog Hero Strip -->
+  <section class="catalog-hero-strip">
     <div class="container">
-      <h1 id="shopHeaderTitle">Royal Ethnic Catalog</h1>
-      <p id="shopHeaderDesc">Discover handloom weaves, bridal wear, and festive garments from master artisans.</p>
+      <h1 id="shopHeaderTitle" style="font-family:var(--font-brand);font-size:clamp(1.6rem, 3.5vw, 2.4rem);margin-bottom:6px;">Royal Indian Collections</h1>
+      <p style="color:var(--gold-light);font-size:0.95rem;margin:0;">Handpicked Banarasi silks, bridal lehengas, pure cotton chikankari, and regal menswear.</p>
     </div>
   </section>
 
   <!-- Filter & Search Bar -->
-  <div class="shop-controls">
-    <div class="container controls-wrapper">
-      <div class="filter-tabs" id="categoryTabs">
-        <!-- Rendered by JS -->
+  <div class="catalog-filter-bar">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3">
+      <div class="d-flex gap-2 overflow-auto py-1" id="categoryTabs" style="scrollbar-width:none;">
+        <!-- Injected via JS -->
       </div>
 
-      <div class="filter-search-box">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search sarees, silk, lehenga..." oninput="filterCatalog()">
-        <select id="sortSelect" class="sort-select" onchange="filterCatalog()">
+      <div class="d-flex align-items-center gap-2">
+        <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search weaves, fabric..." oninput="filterCatalog()" style="width:200px;">
+        <select id="sortSelect" class="form-select form-select-sm" onchange="filterCatalog()" style="width:170px;">
           <option value="featured">Sort by: Featured</option>
           <option value="price-asc">Price: Low to High</option>
           <option value="price-desc">Price: High to Low</option>
@@ -157,58 +121,48 @@
     </div>
   </div>
 
-  <!-- Catalog Section -->
-  <section class="products-section" style="min-height: 60vh;">
-    <div class="container">
-      <div class="results-count" id="resultsCount">Showing all pieces</div>
-      <div class="product-grid" id="catalogGrid">
-        <!-- Products rendered by JS -->
-      </div>
+  <!-- Product Grid -->
+  <main class="container my-5" style="min-height:55vh;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div id="resultsCount" style="color:var(--text-muted);font-size:0.9rem;">Showing pieces</div>
     </div>
-  </section>
+
+    <div class="products-grid" id="catalogGrid">
+      <!-- Injected via JS -->
+    </div>
+  </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>🪷 SUYOG TEXTILE</h3>
-          <p>Celebrating the glorious heritage of Indian handlooms and royal ethnic fashion.</p>
-          <a href="https://wa.me/918669396037" class="btn btn-whatsapp btn-sm" target="_blank">
-            💬 WhatsApp: +91 86693 96037
-          </a>
+      <div class="footer-grid-layout">
+        <div>
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="48" width="48" style="height:48px;width:auto;object-fit:contain">
+              <span>Suyog <span class="brand-highlight">Textile</span></span>
+            </div>
+            <p class="footer-desc">Versatile clothing store offering a wide variety of readymade garments and fabrics for all ages.</p>
+          </div>
         </div>
-        <div class="footer-col">
-          <h4>Collections</h4>
-          <ul class="footer-links">
-            <li><a href="shop.html?cat=sarees">Banarasi & Kanjivaram</a></li>
-            <li><a href="shop.html?cat=lehengas">Bridal Lehengas</a></li>
-            <li><a href="shop.html?cat=kurtis">Lucknowi Chikankari</a></li>
-            <li><a href="shop.html?cat=salwar-suits">Anarkali & Sharara</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Customer Care</h4>
-          <ul class="footer-links">
-            <li><a href="cart.html">Shopping Bag</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Store Location</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Contact Us</h4>
-          <p style="font-size: 0.9rem; color: #B5A89E;">
-            📍 Suyog Textile, Market Yard, Maharashtra<br>
-            📞 +91 86693 96037<br>
-            ✉️ contact@suyogtextile.in
+        <div>
+          <div class="footer-title">Visit Our Store</div>
+          <p style="font-size:.85rem;color:rgba(255,255,255,0.75);">
+            📍 Lahoti Mala, 484, Jadhav Sankul road, Ashoknagar, Satpur Colony, Nashik, Maharashtra 422007<br>
+            📞 +91 86693 96037 / 0253 4515460
           </p>
         </div>
       </div>
       <div class="footer-bottom">
-        <div>&copy; 2026 Suyog Textile. All Rights Reserved.</div>
+        <p>© 2026 Suyog Textile. All rights reserved. Made with ❤️ in India.</p>
       </div>
     </div>
   </footer>
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/918669396037" target="_blank" class="wa-floating-btn" title="Chat on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
 
   <!-- Scripts -->
   <script src="assets/js/products.js"></script>
@@ -219,12 +173,15 @@
     function initShop() {
       const urlParams = new URLSearchParams(window.location.search);
       const catParam = urlParams.get('cat');
+      const queryParam = urlParams.get('q');
       if (catParam) activeCategory = catParam;
+      if (queryParam) {
+        document.getElementById('searchInput').value = queryParam;
+      }
 
-      // Render category tabs
       const tabsContainer = document.getElementById('categoryTabs');
       tabsContainer.innerHTML = CATEGORIES_DATA.map(c => `
-        <button class="filter-tab ${c.slug === activeCategory ? 'active' : ''}" onclick="selectCategory('${c.slug}')">
+        <button class="btn btn-sm ${c.slug === activeCategory ? 'btn-primary' : 'btn-outline'}" style="border-radius:20px;white-space:nowrap;font-size:0.8rem;" onclick="selectCategory('${c.slug}')">
           ${c.name}
         </button>
       `).join('');
@@ -234,13 +191,9 @@
 
     function selectCategory(slug) {
       activeCategory = slug;
-      document.querySelectorAll('.filter-tab').forEach(t => {
-        t.classList.toggle('active', t.textContent.trim().toLowerCase().includes(slug) || (slug === 'all' && t.textContent.trim() === 'All Collections'));
-      });
-      // Update URL without reload
       const newUrl = slug === 'all' ? 'shop.html' : `shop.html?cat=${slug}`;
       window.history.pushState({}, '', newUrl);
-      filterCatalog();
+      initShop();
     }
 
     function filterCatalog() {
@@ -252,12 +205,10 @@
         const matchesQuery = !query || 
           p.name.toLowerCase().includes(query) || 
           p.fabric.toLowerCase().includes(query) || 
-          p.occasion.toLowerCase().includes(query) ||
-          p.categoryName.toLowerCase().includes(query);
+          p.occasion.toLowerCase().includes(query);
         return matchesCat && matchesQuery;
       });
 
-      // Sort
       if (sort === 'price-asc') items.sort((a, b) => a.price - b.price);
       else if (sort === 'price-desc') items.sort((a, b) => b.price - a.price);
       else if (sort === 'rating') items.sort((a, b) => b.rating - a.rating);
@@ -266,47 +217,41 @@
 
       const grid = document.getElementById('catalogGrid');
       if (items.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-            <span style="font-size: 3rem;">🔍</span>
-            <h3 style="margin: 12px 0;">No matching weaves found</h3>
-            <p style="color: var(--color-text-muted);">Try a different search keyword or category filter.</p>
-            <button class="btn btn-primary btn-sm" style="margin-top: 16px;" onclick="selectCategory('all')">Show All</button>
-          </div>
-        `;
+        grid.innerHTML = `<div class="text-center py-5 w-100" style="grid-column:1/-1;"><h3>No weaves found</h3><p class="text-muted">Try clearing the search query or selecting All Collections.</p></div>`;
         return;
       }
 
       grid.innerHTML = items.map(p => {
         const isFav = Store.isWishlisted(p.id);
         const discountPct = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+
         return `
           <div class="product-card">
-            <div class="product-image-box">
-              <span class="product-badge">${p.badge || p.occasion}</span>
-              <button class="product-wishlist-btn ${isFav ? 'active' : ''}" data-wishlist-id="${p.id}" onclick="Store.toggleWishlist(${p.id})">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <div class="product-card-image">
+              <span class="badge-tag badge-tag-best">${p.badge || p.occasion}</span>
+              <button class="wishlist-btn ${isFav ? 'active' : ''}" onclick="Store.toggleWishlist(${p.id})">
+                <i class="bi bi-heart${isFav ? '-fill text-danger' : ''}"></i>
               </button>
               <a href="product.html?id=${p.id}">
                 <img src="${p.primaryImage}" alt="${p.name}" loading="lazy">
               </a>
             </div>
-            <div class="product-info">
-              <div class="product-category-meta">${p.categoryName} • ${p.fabric}</div>
-              <h3 class="product-name"><a href="product.html?id=${p.id}">${p.name}</a></h3>
+            <div class="product-card-body">
+              <div class="product-card-cat">${p.categoryName} • ${p.fabric}</div>
+              <h3 class="product-card-title"><a href="product.html?id=${p.id}">${p.name}</a></h3>
               <div class="product-rating">
                 <span class="stars">★★★★★</span>
-                <span class="rating-count">${p.rating} (${p.reviews})</span>
+                <span class="rating-val">${p.rating} (${p.reviews})</span>
               </div>
               <div class="product-price-row">
                 <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
                 <span class="product-original-price">₹${p.originalPrice.toLocaleString('en-IN')}</span>
                 <span class="product-discount-pill">${discountPct}% OFF</span>
               </div>
-              <div class="product-card-actions">
-                <button class="quick-add-btn" onclick="Store.addToCart(${p.id})">Add to Bag</button>
-                <button class="quick-wa-btn" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <div class="d-flex gap-2 mt-2">
+                <button class="btn btn-sm btn-primary flex-grow-1" onclick="Store.addToCart(${p.id})">Add to Bag</button>
+                <button class="btn btn-sm btn-whatsapp" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
+                  <i class="fa-brands fa-whatsapp"></i>
                 </button>
               </div>
             </div>

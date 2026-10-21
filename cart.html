@@ -1,195 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Shopping Bag — Suyog Textile</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <link rel="stylesheet" href="assets/css/style.css">
-  <style>
-    .cart-page-section {
-      padding: 60px 0 100px;
-    }
-    .cart-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 36px;
-      margin-top: 32px;
-    }
-    .cart-table-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 24px;
-    }
-    .cart-item-row {
-      display: grid;
-      grid-template-columns: 90px 1fr auto auto auto;
-      gap: 20px;
-      align-items: center;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--color-border-subtle);
-    }
-    .cart-item-row:last-child {
-      border-bottom: none;
-    }
-    .cart-item-thumb {
-      width: 90px;
-      height: 115px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-    }
-    .cart-summary-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 28px;
-      height: fit-content;
-      position: sticky;
-      top: 100px;
-    }
-    .summary-title {
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--color-border);
-    }
-    .summary-line {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: 0.95rem;
-    }
-    .summary-total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 2px solid var(--color-border);
-    }
-    .coupon-box {
-      display: flex;
-      gap: 8px;
-      margin: 20px 0;
-    }
-    .coupon-input {
-      flex-grow: 1;
-      padding: 10px 14px;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-    @media (max-width: 860px) {
-      .cart-grid {
-        grid-template-columns: 1fr;
-      }
-      .cart-item-row {
-        grid-template-columns: 75px 1fr;
-        gap: 12px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 
   <!-- Announcement Bar -->
   <div class="announcement-bar">
-    ✨ FESTIVE SPECIAL: Use code <strong>WELCOME10</strong> for 10% OFF | Free Express Shipping across India over ₹1,499
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499 &nbsp;|&nbsp; Use code WELCOME10 for 10% OFF!
   </div>
 
   <!-- Header -->
-  <header class="site-header">
-    <div class="container nav-wrapper">
-      <a href="index.html" class="logo-area">
-        <span class="brand-symbol">🪷</span>
-        <div class="brand-names">
-          <span class="brand-main">SUYOG TEXTILE</span>
-          <span class="brand-tag">Heirloom Ethnic Wear</span>
+  <header class="desktop-header">
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
         </div>
-      </a>
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="index.html" class="nav-link">Home</a></li>
-          <li><a href="shop.html" class="nav-link">All Collections</a></li>
-          <li><a href="about.html" class="nav-link">Our Heritage</a></li>
-          <li><a href="contact.html" class="nav-link">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="nav-actions">
-        <a href="shop.html" class="btn btn-outline btn-sm">Continue Shopping</a>
+        <nav>
+          <ul class="desktop-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
+            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
+            <li><a href="shop.html">All Collections</a></li>
+          </ul>
+        </nav>
+        <div class="desktop-nav-right">
+          <a href="shop.html" class="btn btn-sm btn-outline">Continue Shopping</a>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- Cart Section -->
-  <main class="cart-page-section">
-    <div class="container">
-      <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Shopping Bag</h1>
-      <p style="color: var(--color-text-muted);">Review your selected weaves before secure checkout.</p>
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <div class="mobile-header-top">
+      <div class="mobile-header-left">
+        <a href="shop.html" style="font-size:1.2rem;color:var(--primary);"><i class="bi bi-arrow-left"></i></a>
+      </div>
+      <div class="mobile-header-center">
+        <span class="brand-name" style="font-size:1.15rem;">Shopping <span class="brand-highlight">Bag</span></span>
+      </div>
+    </div>
+  </header>
 
-      <div class="cart-grid" id="cartGridContainer">
-        <!-- Cart Table -->
-        <div class="cart-table-card">
-          <div id="cartItemsList">
-            <!-- Items injected by JS -->
-          </div>
+  <!-- Main Cart Section -->
+  <main class="container my-5" style="min-height:55vh;">
+    <h1 style="font-family:var(--font-brand);font-size:clamp(1.6rem, 3vw, 2.2rem);margin-bottom:8px;">Your Shopping Bag</h1>
+    <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:28px;">Review your handpicked weaves before proceeding to delivery.</p>
+
+    <div class="row g-4" id="cartGridContainer">
+      <div class="col-lg-8">
+        <div class="card p-4" style="background:#fff;border-color:var(--border);">
+          <div id="cartItemsList"></div>
         </div>
+      </div>
 
-        <!-- Summary -->
-        <div class="cart-summary-card">
-          <h3 class="summary-title">Order Summary</h3>
-          <div class="summary-line">
+      <div class="col-lg-4">
+        <div class="card p-4" style="background:#FFFDF9;border-color:var(--border);position:sticky;top:100px;">
+          <h3 style="font-family:var(--font-brand);font-size:1.3rem;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:10px;">Order Summary</h3>
+          
+          <div class="d-flex justify-content-between mb-2">
             <span>Subtotal</span>
             <strong id="summarySubtotal">₹0</strong>
           </div>
-          <div class="summary-line" id="discountLine" style="display:none; color: var(--color-success);">
+          <div class="d-flex justify-content-between mb-2 text-success" id="discountLine" style="display:none !important;">
             <span>Coupon Discount</span>
             <strong id="summaryDiscount">-₹0</strong>
           </div>
-          <div class="summary-line">
-            <span>Shipping</span>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Express Shipping</span>
             <strong id="summaryShipping">FREE</strong>
           </div>
-          <div class="summary-total">
+          <div class="d-flex justify-content-between pt-3 mt-3 border-top" style="font-size:1.25rem;font-weight:700;color:var(--primary);">
             <span>Total Payable</span>
             <span id="summaryTotal">₹0</span>
           </div>
 
           <!-- Coupon Input -->
-          <div class="coupon-box">
-            <input type="text" id="couponInput" class="coupon-input" placeholder="Coupon Code (e.g. WELCOME10)">
-            <button class="btn btn-gold btn-sm" onclick="applyCouponCode()">Apply</button>
+          <div class="d-flex gap-2 my-3">
+            <input type="text" id="couponInput" class="form-control form-control-sm text-uppercase fw-bold" placeholder="Coupon (e.g. WELCOME10)">
+            <button class="btn btn-sm btn-gold" onclick="applyCouponCode()">Apply</button>
           </div>
-          <div id="appliedCouponTag" style="font-size: 0.8rem; margin-bottom: 16px;"></div>
+          <div id="appliedCouponTag" class="small mb-3"></div>
 
-          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 24px;">
-            <a href="checkout.html" class="btn btn-primary btn-block">Proceed to Checkout &rarr;</a>
-            <button class="btn btn-whatsapp btn-block" onclick="Store.orderViaWhatsApp()">Order via WhatsApp</button>
-          </div>
-
-          <p style="font-size: 0.75rem; color: var(--color-text-muted); text-align: center; margin-top: 16px;">
-            🔒 100% Secure Checkout | Cash on Delivery Available
-          </p>
+          <a href="checkout.html" class="btn btn-primary w-100 py-3 fw-bold mb-2">Proceed to Checkout &rarr;</a>
+          <button class="btn btn-whatsapp w-100 py-2" onclick="Store.orderViaWhatsApp()">
+            <i class="fa-brands fa-whatsapp me-2"></i> Order via WhatsApp
+          </button>
         </div>
       </div>
+    </div>
 
-      <div id="emptyCartView" style="display: none; text-align: center; padding: 80px 20px;">
-        <span style="font-size: 4rem;">🪷</span>
-        <h2 style="margin: 16px 0;">Your shopping bag is empty</h2>
-        <p style="color: var(--color-text-muted); margin-bottom: 24px;">Explore our heirloom Banarasi silks, bridal lehengas, and designer sets.</p>
-        <a href="shop.html" class="btn btn-primary">Start Shopping &rarr;</a>
-      </div>
+    <!-- Empty View -->
+    <div id="emptyCartView" style="display:none;" class="text-center py-5">
+      <span style="font-size:4rem;">🪷</span>
+      <h2 style="font-family:var(--font-brand);margin:16px 0;">Your shopping bag is empty</h2>
+      <p style="color:var(--text-muted);margin-bottom:24px;">Discover pure silk sarees, salwar suits, and bridal lehengas.</p>
+      <a href="shop.html" class="btn btn-primary btn-lg">Explore Catalog &rarr;</a>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container footer-bottom" style="border:none; padding-top:0;">
-      <div>&copy; 2026 Suyog Textile. Authentic Indian Ethnic Wear.</div>
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <p>© 2026 Suyog Textile. Real-Time Indian Clothing.</p>
     </div>
   </footer>
 
@@ -209,34 +143,30 @@
         return;
       }
 
-      if (grid) grid.style.display = 'grid';
+      if (grid) grid.style.display = 'flex';
       if (emptyView) emptyView.style.display = 'none';
 
-      // Items
       const listEl = document.getElementById('cartItemsList');
       listEl.innerHTML = cart.map((item, idx) => `
-        <div class="cart-item-row">
-          <img src="${item.image}" alt="${item.name}" class="cart-item-thumb">
-          <div>
-            <h4 style="font-size: 1.05rem; margin-bottom: 4px;"><a href="product.html?id=${item.id}">${item.name}</a></h4>
-            <div style="font-size: 0.85rem; color: var(--color-text-muted);">Size: ${item.size} | Color: ${item.color}</div>
-            <div style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary); margin-top: 4px;">
-              ₹${item.price.toLocaleString('en-IN')}
-            </div>
+        <div class="d-flex gap-3 align-items-center py-3 border-bottom">
+          <img src="${item.image}" alt="${item.name}" style="width:75px;height:95px;object-fit:cover;border-radius:6px;">
+          <div class="flex-grow-1">
+            <h4 style="font-size:1rem;margin-bottom:4px;"><a href="product.html?id=${item.id}" style="color:var(--dark);">${item.name}</a></h4>
+            <div class="small text-muted mb-1">Size: ${item.size} | Color: ${item.color}</div>
+            <strong style="color:var(--primary);">₹${item.price.toLocaleString('en-IN')}</strong>
           </div>
           <div class="qty-stepper">
             <button onclick="Store.updateQuantity(${idx}, ${item.quantity - 1})">-</button>
             <span>${item.quantity}</span>
             <button onclick="Store.updateQuantity(${idx}, ${item.quantity + 1})">+</button>
           </div>
-          <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);">
+          <div style="font-weight:700;color:var(--primary);min-width:80px;text-align:right;">
             ₹${(item.price * item.quantity).toLocaleString('en-IN')}
           </div>
-          <button style="background:transparent; border:none; cursor:pointer; color:var(--color-discount);" onclick="Store.removeFromCart(${idx})" title="Remove">✕</button>
+          <button style="background:transparent;border:none;cursor:pointer;color:var(--error);font-size:1.1rem;padding:0 6px;" onclick="Store.removeFromCart(${idx})" title="Remove item">✕</button>
         </div>
       `).join('');
 
-      // Summary
       document.getElementById('summarySubtotal').textContent = `₹${totals.subtotal.toLocaleString('en-IN')}`;
       document.getElementById('summaryShipping').textContent = totals.shipping === 0 ? 'FREE' : `₹${totals.shipping}`;
       document.getElementById('summaryTotal').textContent = `₹${totals.total.toLocaleString('en-IN')}`;
@@ -247,8 +177,8 @@
         discLine.style.display = 'flex';
         document.getElementById('summaryDiscount').textContent = `-₹${totals.discount.toLocaleString('en-IN')}`;
         couponTag.innerHTML = `
-          <span style="color:var(--color-success); font-weight:600;">✓ Coupon ${totals.appliedCoupon.code} applied!</span>
-          <a href="javascript:void(0)" onclick="Store.removeCoupon()" style="color:var(--color-discount); margin-left:8px;">[Remove]</a>
+          <span class="text-success fw-bold">✓ Coupon ${totals.appliedCoupon.code} applied!</span>
+          <a href="javascript:void(0)" onclick="Store.removeCoupon()" class="text-danger ms-2">[Remove]</a>
         `;
       } else {
         discLine.style.display = 'none';
