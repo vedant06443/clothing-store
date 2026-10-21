@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Suyog Textile Management</title>
+
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .admin-stat-card {
+      background: #FFF;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .admin-stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 6px 0 2px;
+    }
+    .admin-tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+    .admin-tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+  </style>
+</head>
+<body style="background:#FBF9F6;">
+
+  <!-- Admin Header -->
+  <header style="background:#140409;color:#fff;padding:14px 0;border-bottom:3px solid var(--gold);">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <span style="font-size:1.5rem;">🪷</span>
+        <strong style="font-family:var(--font-brand);font-size:1.25rem;letter-spacing:1px;">SUYOG TEXTILE <span class="badge bg-gold text-dark ms-2" style="font-size:0.68rem;">ADMIN CONTROL</span></strong>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        <a href="index.html" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-up-right me-1"></i> View Live Store</a>
+        <button class="btn btn-sm btn-danger" onclick="location.href='index.html'">Exit</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-4">
+    <!-- Stat Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="admin-stat-card">
+          <span class="text-muted small text-uppercase fw-bold">Total Sales Volume</span>
+          <div class="admin-stat-number" id="statRevenue">₹1,84,950</div>
+          <span class="text-success small fw-bold">↑ 18% this festive season</span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="admin-stat-card">
+          <span class="text-muted small text-uppercase fw-bold">Total Orders</span>
+          <div class="admin-stat-number" id="statOrders">42</div>
+          <span class="text-muted small">Pan-India Dispatches</span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="admin-stat-card">
+          <span class="text-muted small text-uppercase fw-bold">Live Catalog Weaves</span>
+          <div class="admin-stat-number" id="statProducts">12</div>
+          <span class="text-success small">6 Categories Active</span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="admin-stat-card">
+          <span class="text-muted small text-uppercase fw-bold">Patron Inquiries</span>
+          <div class="admin-stat-number" id="statCustomers">38</div>
+          <span class="text-primary small fw-bold">WhatsApp Concierge</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="d-flex border-bottom mb-4 bg-white px-3 pt-2 rounded shadow-sm">
+      <button class="admin-tab-btn active" onclick="switchAdminTab('orders', this)">📦 Orders Dispatch</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('products', this)">👗 Products Catalog</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('coupons', this)">🎟️ Coupons & Discounts</button>
+    </div>
+
+    <!-- Orders Tab -->
+    <div id="tab-orders">
+      <div class="card p-3 shadow-sm border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0 fw-bold">Recent Customer Orders</h5>
+          <span class="badge bg-primary">Live Dispatch Tracker</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items Ordered</th>
+                <th>Total (₹)</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTbody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Tab -->
+    <div id="tab-products" style="display:none;">
+      <div class="card p-3 shadow-sm border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0 fw-bold">Catalog Weaves Management</h5>
+          <button class="btn btn-sm btn-primary" onclick="openAddProductModal()">+ Add New Product</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Fabric</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminProductsTbody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coupons Tab -->
+    <div id="tab-coupons" style="display:none;">
+      <div class="card p-3 shadow-sm border-0">
+        <h5 class="mb-3 fw-bold">Active Promotion Coupons</h5>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="p-3 border rounded bg-light">
+              <span class="badge bg-success mb-2">10% PERCENT</span>
+              <h4 class="fw-bold mb-1">WELCOME10</h4>
+              <p class="small text-muted mb-1">10% discount on orders above ₹999</p>
+              <span class="badge bg-secondary">Active</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 border rounded bg-light">
+              <span class="badge bg-primary mb-2">20% PERCENT</span>
+              <h4 class="fw-bold mb-1">FESTIVE20</h4>
+              <p class="small text-muted mb-1">20% festive discount on orders above ₹2,999</p>
+              <span class="badge bg-secondary">Active</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 border rounded bg-light">
+              <span class="badge bg-danger mb-2">FLAT ₹500</span>
+              <h4 class="fw-bold mb-1">FLAT500</h4>
+              <p class="small text-muted mb-1">Flat ₹500 off on bridal orders above ₹3,999</p>
+              <span class="badge bg-secondary">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script>
+    function switchAdminTab(tabName, btn) {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById('tab-orders').style.display = tabName === 'orders' ? 'block' : 'none';
+      document.getElementById('tab-products').style.display = tabName === 'products' ? 'block' : 'none';
+      document.getElementById('tab-coupons').style.display = tabName === 'coupons' ? 'block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Populate Orders
+      let lastOrder = null;
+      try {
+        lastOrder = JSON.parse(localStorage.getItem('suyog_last_order'));
+      } catch(e) {}
+
+      const sampleOrders = [
+        { id: lastOrder ? lastOrder.orderId : 'SYG-2026-489102', customer: lastOrder ? lastOrder.customer.name : 'Priya Sharma', items: lastOrder ? `${lastOrder.cart.length} items` : '1x Crimson Banarasi Saree', total: lastOrder ? lastOrder.totals.total : 4499, payment: lastOrder ? lastOrder.paymentMethod : 'COD', status: 'Processing' },
+        { id: 'SYG-2026-391823', customer: 'Rahul Deshmukh', items: '1x Royal Silk Sherwani', total: 11999, payment: 'UPI Online', status: 'Shipped' },
+        { id: 'SYG-2026-102948', customer: 'Sneha Kulkarni', items: '2x Lucknowi Chikankari Kurti', total: 4398, payment: 'COD', status: 'Delivered' }
+      ];
+
+      document.getElementById('adminOrdersTbody').innerHTML = sampleOrders.map(o => `
+        <tr>
+          <td><strong>${o.id}</strong></td>
+          <td>${o.customer}</td>
+          <td>${o.items}</td>
+          <td><strong>₹${o.total.toLocaleString('en-IN')}</strong></td>
+          <td><span class="badge bg-light text-dark border">${o.payment}</span></td>
+          <td><span class="badge ${o.status === 'Delivered' ? 'bg-success' : (o.status === 'Shipped' ? 'bg-info' : 'bg-warning text-dark')}">${o.status}</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary" onclick="alert('Tracking status notification sent to customer!')">Update Status</button>
+          </td>
+        </tr>
+      `).join('');
+
+      // 2. Populate Products
+      document.getElementById('statProducts').textContent = PRODUCTS_DATA.length;
+      document.getElementById('adminProductsTbody').innerHTML = PRODUCTS_DATA.map(p => `
+        <tr>
+          <td><img src="${p.primaryImage}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;"></td>
+          <td><strong>${p.name}</strong></td>
+          <td>${p.categoryName}</td>
+          <td>${p.fabric}</td>
+          <td><strong>₹${p.price.toLocaleString('en-IN')}</strong></td>
+          <td><span class="badge bg-success">${p.stock} in stock</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline" onclick="location.href='product.html?id=${p.id}'">View</button>
+          </td>
+        </tr>
+      `).join('');
+    });
+
+    function openAddProductModal() {
+      const name = prompt("Enter new weave/product title:");
+      if (name) {
+        Store.showToast(`Product "${name}" added to catalog queue!`);
+      }
+    }
+  </script>
+</body>
+</html>
