@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Couture Style Studio — Suyog Textile</title>
+
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .studio-hero {
+      background: linear-gradient(135deg, #FFF8DB 0%, #FEF08A 25%, #FDE047 60%, #F59E0B 100%);
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .studio-container {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 36px;
+      margin: 40px auto;
+    }
+    .studio-preview {
+      background: #FFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      position: sticky;
+      top: 100px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    .canvas-preview-img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+    .studio-item-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      background: #FFF;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+    .studio-item-card.selected, .studio-item-card:hover {
+      border-color: var(--primary);
+      background: #FFFDF9;
+      transform: translateX(4px);
+    }
+    .studio-item-card img {
+      width: 70px;
+      height: 85px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    @media (max-width: 991px) {
+      .studio-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    ✨ <strong>Style Studio:</strong> Mix & match any 2 or more pieces and get an instant <strong>15% Bundle Discount!</strong>
+  </div>
+
+  <!-- Header -->
+  <header class="desktop-header">
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
+        </div>
+        <nav>
+          <ul class="desktop-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
+            <li><a href="studio.html" class="active" style="color:var(--gold);font-weight:700;">✨ Style Studio</a></li>
+            <li><a href="shop.html">All Collections</a></li>
+          </ul>
+        </nav>
+        <div class="desktop-nav-right">
+          <button class="nav-icon-btn" onclick="Store.openCartDrawer()" style="background:transparent;border:none;">
+            <i class="bi bi-bag"></i>
+            <span class="nav-badge cart-count-badge" style="display:none">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <div class="mobile-header-top">
+      <div class="mobile-header-left">
+        <a href="index.html" style="font-size:1.2rem;color:var(--primary);"><i class="bi bi-arrow-left"></i></a>
+      </div>
+      <div class="mobile-header-center">
+        <span class="brand-name" style="font-size:1.15rem;">✨ Style <span class="brand-highlight">Studio</span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="studio-hero">
+    <div class="container text-center">
+      <h1 style="font-family:var(--font-brand);font-size:clamp(1.8rem, 4vw, 2.6rem);color:#580820;margin-bottom:8px;">Interactive Ensemble Studio</h1>
+      <p style="color:#78350F;font-size:1rem;max-width:600px;margin:0 auto;">Pair heirlooms with designer coordinates and unlock instant bundle savings.</p>
+    </div>
+  </section>
+
+  <!-- Studio Interactive Workspace -->
+  <main class="container studio-container">
+    <!-- Left: Canvas Preview -->
+    <div class="studio-preview">
+      <h4 style="font-family:var(--font-brand);margin-bottom:12px;">Ensemble Preview</h4>
+      <img id="studioPreviewImg" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&q=80" class="canvas-preview-img">
+      
+      <div class="border-top pt-3">
+        <div class="d-flex justify-content-between mb-2 small text-muted">
+          <span>Individual Total:</span>
+          <span id="studioIndividualPrice">₹0</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2 text-success fw-bold">
+          <span>Studio Bundle Offer (15% OFF):</span>
+          <span id="studioDiscountPrice">-₹0</span>
+        </div>
+        <div class="d-flex justify-content-between pt-2 border-top fw-bold fs-5" style="color:var(--primary);">
+          <span>Bundle Total:</span>
+          <span id="studioTotalPrice">₹0</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary w-100 py-3 mt-3 fw-bold" onclick="addStudioBundleToCart()">
+        <i class="bi bi-bag-check me-2"></i> Add Bespoke Look to Bag
+      </button>
+      <button class="btn btn-whatsapp w-100 py-2 mt-2" onclick="orderStudioWhatsApp()">
+        <i class="fa-brands fa-whatsapp me-2"></i> Consult Stylist on WhatsApp
+      </button>
+    </div>
+
+    <!-- Right: Picker Panels -->
+    <div>
+      <h3 style="font-family:var(--font-brand);font-size:1.4rem;margin-bottom:16px;">1. Select Primary Weave (Saree / Lehenga)</h3>
+      <div id="studioPrimaryList"></div>
+
+      <h3 style="font-family:var(--font-brand);font-size:1.4rem;margin:32px 0 16px;">2. Select Coordinate (Kurti / Coordinate Set)</h3>
+      <div id="studioSecondaryList"></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <p>© 2026 Suyog Textile. Couture Style Studio.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script>
+    let selectedPrimary = PRODUCTS_DATA[0];
+    let selectedSecondary = PRODUCTS_DATA[6];
+
+    function renderStudio() {
+      // Primary list (sarees, lehengas)
+      const primaryItems = PRODUCTS_DATA.filter(p => ['sarees', 'lehengas'].includes(p.category));
+      document.getElementById('studioPrimaryList').innerHTML = primaryItems.map(p => `
+        <div class="studio-item-card ${p.id === selectedPrimary.id ? 'selected' : ''}" onclick="selectPrimary(${p.id})">
+          <img src="${p.primaryImage}" alt="${p.name}">
+          <div class="flex-grow-1">
+            <h5 style="font-size:0.95rem;margin:0 0 4px;">${p.name}</h5>
+            <div class="small text-muted">${p.fabric} • ${p.occasion}</div>
+            <strong style="color:var(--primary);">₹${p.price.toLocaleString('en-IN')}</strong>
+          </div>
+          <div>${p.id === selectedPrimary.id ? '<span class="badge bg-success">Selected</span>' : '<button class="btn btn-sm btn-outline">Choose</button>'}</div>
+        </div>
+      `).join('');
+
+      // Secondary list (kurtis, salwar-suits, dresses)
+      const secondaryItems = PRODUCTS_DATA.filter(p => ['kurtis', 'salwar-suits', 'dresses'].includes(p.category));
+      document.getElementById('studioSecondaryList').innerHTML = secondaryItems.map(p => `
+        <div class="studio-item-card ${p.id === selectedSecondary.id ? 'selected' : ''}" onclick="selectSecondary(${p.id})">
+          <img src="${p.primaryImage}" alt="${p.name}">
+          <div class="flex-grow-1">
+            <h5 style="font-size:0.95rem;margin:0 0 4px;">${p.name}</h5>
+            <div class="small text-muted">${p.fabric} • ${p.occasion}</div>
+            <strong style="color:var(--primary);">₹${p.price.toLocaleString('en-IN')}</strong>
+          </div>
+          <div>${p.id === selectedSecondary.id ? '<span class="badge bg-success">Selected</span>' : '<button class="btn btn-sm btn-outline">Choose</button>'}</div>
+        </div>
+      `).join('');
+
+      // Preview calculations
+      document.getElementById('studioPreviewImg').src = selectedPrimary.primaryImage;
+      const combined = selectedPrimary.price + selectedSecondary.price;
+      const discount = Math.round(combined * 0.15);
+      const total = combined - discount;
+
+      document.getElementById('studioIndividualPrice').textContent = `₹${combined.toLocaleString('en-IN')}`;
+      document.getElementById('studioDiscountPrice').textContent = `-₹${discount.toLocaleString('en-IN')}`;
+      document.getElementById('studioTotalPrice').textContent = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function selectPrimary(id) {
+      selectedPrimary = PRODUCTS_DATA.find(p => p.id === id);
+      renderStudio();
+    }
+
+    function selectSecondary(id) {
+      selectedSecondary = PRODUCTS_DATA.find(p => p.id === id);
+      renderStudio();
+    }
+
+    function addStudioBundleToCart() {
+      Store.addToCart(selectedPrimary.id);
+      Store.addToCart(selectedSecondary.id);
+      Store.applyCoupon('FESTIVE20');
+      Store.showToast("🎉 Style Studio Bundle added with special discount!");
+    }
+
+    function orderStudioWhatsApp() {
+      const combined = selectedPrimary.price + selectedSecondary.price;
+      const total = Math.round(combined * 0.85);
+      const msg = `*Namaste Suyog Textile!* I styled this custom bundle on your Style Studio:\n\n1. *${selectedPrimary.name}* (₹${selectedPrimary.price})\n2. *${selectedSecondary.name}* (₹${selectedSecondary.price})\n\n*Bundle Price (15% OFF): ₹${total}*\n\nPlease confirm availability and dispatch dates!`;
+      window.open(`https://wa.me/918669396037?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderStudio);
+  </script>
+</body>
+</html>

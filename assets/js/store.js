@@ -412,14 +412,78 @@ const Store = {
     }, 3500);
   },
 
+  // ─── SEARCH AUTOCOMPLETE ───
+  initSearchAutocomplete() {
+    ['search-input', 'mobile-search-input'].forEach(id => {
+      const input = document.getElementById(id);
+      if (!input) return;
+
+      let box = document.getElementById(id + '-results');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = id + '-results';
+        box.className = 'search-suggestions-dropdown';
+        box.style.cssText = 'position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:8px;box-shadow:0 10px 25px rgba(0,0,0,0.15);z-index:999;max-height:360px;overflow-y:auto;display:none;';
+        if (input.parentElement) {
+          input.parentElement.style.position = 'relative';
+          input.parentElement.appendChild(box);
+        }
+      }
+
+      input.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length < 2) {
+          box.style.display = 'none';
+          return;
+        }
+
+        const matches = PRODUCTS_DATA.filter(p => 
+          p.name.toLowerCase().includes(query) || 
+          p.fabric.toLowerCase().includes(query) || 
+          p.categoryName.toLowerCase().includes(query)
+        ).slice(0, 5);
+
+        if (matches.length === 0) {
+          box.innerHTML = '<div style="padding:14px;text-align:center;color:#888;font-size:0.85rem;">No matching ethnic wear found</div>';
+          box.style.display = 'block';
+          return;
+        }
+
+        box.innerHTML = matches.map(p => `
+          <a href="product.html?id=${p.id}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #f3f3f3;text-decoration:none;color:#1C1917;">
+            <img src="${p.primaryImage}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;">
+            <div style="flex-grow:1;font-size:0.85rem;">
+              <div style="font-weight:600;line-height:1.2;">${p.name}</div>
+              <div style="font-size:0.75rem;color:#666;">${p.categoryName} • ${p.fabric}</div>
+            </div>
+            <strong style="color:var(--primary);font-size:0.85rem;">₹${p.price.toLocaleString('en-IN')}</strong>
+          </a>
+        `).join('') + `
+          <a href="shop.html?q=${encodeURIComponent(query)}" style="display:block;padding:10px;text-align:center;background:#FAF8F5;color:var(--primary);font-weight:700;font-size:0.8rem;text-decoration:none;">
+            View all results for "${query}" &rarr;
+          </a>
+        `;
+        box.style.display = 'block';
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !box.contains(e.target)) {
+          box.style.display = 'none';
+        }
+      });
+    });
+  },
+
   // ─── INIT ───
   init() {
     this.updateCartBadges();
     this.updateWishlistBadges();
     this.initDrawer();
+    this.initSearchAutocomplete();
   }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
   Store.init();
 });
+
