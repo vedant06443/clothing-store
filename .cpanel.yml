@@ -3,12 +3,8 @@ deployment:
   tasks:
     - export DEPLOYPATH=$HOME/public_html/
     - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -rf index.html $DEPLOYPATH/
-    - /bin/cp -rf shop.html $DEPLOYPATH/
-    - /bin/cp -rf product.html $DEPLOYPATH/
-    - /bin/cp -rf cart.html $DEPLOYPATH/
-    - /bin/cp -rf checkout.html $DEPLOYPATH/
-    - /bin/cp -rf order-success.html $DEPLOYPATH/
-    - /bin/cp -rf about.html $DEPLOYPATH/
-    - /bin/cp -rf contact.html $DEPLOYPATH/
+    - /bin/cp -rf .htaccess $DEPLOYPATH/
+    - /bin/cp -rf *.html $DEPLOYPATH/
     - /bin/cp -rf assets $DEPLOYPATH/
+    - /bin/cp -rf static $DEPLOYPATH/
+    - /bin/cp -rf vastravibe $DEPLOYPATH/
