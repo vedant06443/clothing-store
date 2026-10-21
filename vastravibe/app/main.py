@@ -12,7 +12,7 @@ from app.config import settings
 from app.database import create_tables
 
 # Import all routers
-from app.routers import auth, products, cart, wishlist, addresses, orders, reviews, admin, pages
+from app.routers import auth, products, cart, wishlist, addresses, orders, reviews, admin, pages, payments
 
 
 @asynccontextmanager
@@ -58,6 +58,7 @@ app.include_router(cart.router)
 app.include_router(wishlist.router)
 app.include_router(addresses.router)
 app.include_router(orders.router)
+app.include_router(payments.router)
 app.include_router(reviews.router)
 app.include_router(admin.router)
 

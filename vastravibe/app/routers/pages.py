@@ -306,7 +306,7 @@ async def handle_register(
             email=email,
             password=password,
             confirm_password=password,
-            phone=phone or "9876543210"
+            phone=phone.strip() if phone and phone.strip() else None
         )
         user = register_user(db, data)
         token = create_user_token(user)
@@ -320,9 +320,25 @@ async def handle_register(
             samesite="lax"
         )
         return response
-    except ValueError as e:
+    except (ValueError, HTTPException) as e:
+        if isinstance(e, HTTPException):
+            error_msg = e.detail
+        elif hasattr(e, 'errors') and callable(e.errors):
+            err_list = e.errors()
+            if err_list:
+                first_err = err_list[0]
+                error_msg = first_err.get("msg", str(e))
+                if error_msg.startswith("Value error, "):
+                    error_msg = error_msg[len("Value error, "):]
+            else:
+                error_msg = str(e)
+        else:
+            error_msg = str(e)
+            if "Value error, " in error_msg:
+                error_msg = error_msg.split("Value error, ")[-1].split(" [type=")[0]
+
         ctx = get_template_context(request, db, None, {
-            "error": str(e),
+            "error": error_msg,
             "full_name": full_name,
             "email": email,
             "phone": phone
@@ -345,6 +361,19 @@ async def cart_page(request: Request, db: Session = Depends(get_db)):
     cart = get_cart(db, user.id if user else None)
     ctx = get_template_context(request, db, user, {"cart": cart})
     return templates.TemplateResponse(request=request, name="cart.html", context=ctx)
+
+
+@router.get("/cart/remove/{item_id}")
+@router.post("/cart/remove/{item_id}")
+async def remove_cart_item_page(item_id: int, request: Request, db: Session = Depends(get_db)):
+    user = get_current_user_optional(request, db)
+    if user:
+        try:
+            from app.services.cart_service import remove_from_cart
+            remove_from_cart(db, user.id, item_id)
+        except Exception:
+            pass
+    return RedirectResponse(url="/cart", status_code=302)
 
 
 @router.get("/checkout", response_class=HTMLResponse)

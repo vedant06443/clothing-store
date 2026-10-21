@@ -178,9 +178,9 @@
           <div class="d-flex align-items-center gap-2">
             <span class="variant-title" style="margin:0">QTY:</span>
             <div class="quantity-selector" style="margin:0">
-              <button class="qty-btn" id="qty-minus" aria-label="Decrease quantity">−</button>
+              <button type="button" class="qty-btn" id="qty-minus" onclick="adjustProductQty(-1)" aria-label="Decrease quantity">−</button>
               <input type="number" class="qty-input" id="quantity-input" value="1" min="1" max="{{ product.stock }}" aria-label="Quantity">
-              <button class="qty-btn" id="qty-plus" aria-label="Increase quantity">+</button>
+              <button type="button" class="qty-btn" id="qty-plus" onclick="adjustProductQty(1)" aria-label="Increase quantity">+</button>
             </div>
           </div>
 
@@ -519,6 +519,17 @@ async function checkPincode() {
     }
   } catch (err) {
     resEl.innerHTML = `<span style="color:var(--error)">Unable to check pincode. Please try again.</span>`;
+  }
+}
+
+function adjustProductQty(change) {
+  const qtyInput = document.getElementById('quantity-input');
+  if (!qtyInput) return;
+  const cur = parseInt(qtyInput.value) || 1;
+  const max = parseInt(qtyInput.getAttribute('max')) || 99;
+  const next = cur + change;
+  if (next >= 1 && next <= max) {
+    qtyInput.value = next;
   }
 }
 </script>

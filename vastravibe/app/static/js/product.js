@@ -61,21 +61,16 @@ window.ProductPage = {
   },
 
   initQuantity() {
-    const qtyInput = document.getElementById('quantity-input');
-    const minusBtn = document.getElementById('qty-minus');
-    const plusBtn = document.getElementById('qty-plus');
-
+    const qtyInput = document.getElementById('pdp-quantity-input') || document.getElementById('quantity-input');
     if (!qtyInput) return;
 
-    minusBtn?.addEventListener('click', () => {
-      const cur = parseInt(qtyInput.value) || 1;
-      if (cur > 1) qtyInput.value = cur - 1;
-    });
-
-    plusBtn?.addEventListener('click', () => {
-      const cur = parseInt(qtyInput.value) || 1;
+    // Sanitize manual keyboard input
+    qtyInput.addEventListener('input', () => {
       const max = parseInt(qtyInput.getAttribute('max')) || 99;
-      if (cur < max) qtyInput.value = cur + 1;
+      let val = parseInt(qtyInput.value);
+      if (isNaN(val) || val < 1) val = 1;
+      if (val > max) val = max;
+      qtyInput.value = val;
     });
   },
 
@@ -127,6 +122,17 @@ window.selectColor = function(color, el) {
 
 window.checkPincode = function() {
   window.ProductPage.checkPincode();
+};
+
+window.adjustProductQty = function(change) {
+  const qtyInput = document.getElementById('pdp-quantity-input') || document.getElementById('quantity-input');
+  if (!qtyInput) return;
+  const cur = parseInt(qtyInput.value) || 1;
+  const max = parseInt(qtyInput.getAttribute('max')) || 99;
+  const next = cur + change;
+  if (next >= 1 && next <= max) {
+    qtyInput.value = next;
+  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -124,6 +124,11 @@ async def verify_payment(
     db: Session = Depends(get_db)
 ):
     from app.services.payment_service import confirm_payment
+    from app.models.order import Order
+    order = db.query(Order).filter(Order.id == order_id, Order.user_id == user.id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
     order = confirm_payment(
         db,
         order_id,
@@ -134,5 +139,6 @@ async def verify_payment(
     return {
         "message": "Payment confirmed",
         "order_number": order.order_number,
-        "status": order.status
+        "status": order.status,
+        "payment_status": order.payment_status
     }

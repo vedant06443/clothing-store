@@ -37,17 +37,17 @@
       <form action="/register{% if request.query_params.get('next') %}?next={{ request.query_params.get('next') }}{% endif %}" method="POST">
         <div class="form-group mb-2">
           <label class="form-label" for="full_name" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Full Name *</label>
-          <input type="text" id="full_name" name="full_name" class="form-control" placeholder="e.g. Priya Sharma" required autofocus style="min-height:44px;font-size:0.9rem">
+          <input type="text" id="full_name" name="full_name" class="form-control" value="{{ full_name or '' }}" placeholder="e.g. Priya Sharma" required autofocus style="min-height:44px;font-size:0.9rem">
         </div>
 
         <div class="form-group mb-2">
           <label class="form-label" for="email" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Email Address *</label>
-          <input type="email" id="email" name="email" class="form-control" placeholder="name@example.com" required style="min-height:44px;font-size:0.9rem">
+          <input type="email" id="email" name="email" class="form-control" value="{{ email or '' }}" placeholder="name@example.com" required style="min-height:44px;font-size:0.9rem">
         </div>
 
         <div class="form-group mb-2">
           <label class="form-label" for="phone" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Mobile Phone (Optional)</label>
-          <input type="tel" id="phone" name="phone" class="form-control" placeholder="10-digit mobile number" style="min-height:44px;font-size:0.9rem">
+          <input type="tel" id="phone" name="phone" class="form-control" value="{{ phone or '' }}" placeholder="10-digit mobile number (e.g. 9876543210)" style="min-height:44px;font-size:0.9rem">
         </div>
 
         <div class="form-group mb-3">

@@ -173,9 +173,9 @@ const API = {
 
 // ─── Cart ─────────────────────────────────────────────────────
 const Cart = {
-  async add(productId, quantity = 1, color = null, size = null) {
+  async add(productId, quantity = 1, color = null, size = null, overrideQuantity = false) {
     try {
-      const data = { product_id: productId, quantity, color, size };
+      const data = { product_id: productId, quantity, color, size, override_quantity: overrideQuantity };
       const res = await API.post('/api/cart/add', data);
       Cart.updateCount(res.cart_count);
       Toast.success('Added to cart!');
@@ -328,30 +328,45 @@ const ProductDetail = {
       });
     });
 
-    // Quantity
-    const qtyInput = document.getElementById('quantity-input');
-    document.getElementById('qty-minus')?.addEventListener('click', () => {
-      if (qtyInput && parseInt(qtyInput.value) > 1) qtyInput.value = parseInt(qtyInput.value) - 1;
-    });
-    document.getElementById('qty-plus')?.addEventListener('click', () => {
-      if (qtyInput) qtyInput.value = parseInt(qtyInput.value) + 1;
-    });
-
-    // Add to cart
-    document.getElementById('add-to-cart-detail')?.addEventListener('click', async () => {
+    // Add to cart with double-click guard
+    document.getElementById('add-to-cart-detail')?.addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      if (btn.disabled) return;
       const productId = parseInt(document.getElementById('product-id')?.value);
-      const qty = parseInt(document.getElementById('quantity-input')?.value || 1);
-      if (!productId) return;
-      await Cart.add(productId, qty, this.selectedColor, this.selectedSize);
+      const qtyInput = document.getElementById('pdp-quantity-input') || document.getElementById('quantity-input');
+      const qty = parseInt(qtyInput?.value || 1);
+      if (!productId || qty < 1) return;
+
+      btn.disabled = true;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '⏳ Adding...';
+
+      try {
+        await Cart.add(productId, qty, this.selectedColor, this.selectedSize, true);
+      } finally {
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }, 600);
+      }
     });
 
     // Buy now
-    document.getElementById('buy-now-btn')?.addEventListener('click', async () => {
+    document.getElementById('buy-now-btn')?.addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      if (btn.disabled) return;
       const productId = parseInt(document.getElementById('product-id')?.value);
-      const qty = parseInt(document.getElementById('quantity-input')?.value || 1);
-      if (!productId) return;
-      const success = await Cart.add(productId, qty, this.selectedColor, this.selectedSize);
-      if (success) window.location.href = '/checkout';
+      const qtyInput = document.getElementById('pdp-quantity-input') || document.getElementById('quantity-input');
+      const qty = parseInt(qtyInput?.value || 1);
+      if (!productId || qty < 1) return;
+
+      btn.disabled = true;
+      try {
+        const success = await Cart.add(productId, qty, this.selectedColor, this.selectedSize, true);
+        if (success) window.location.href = '/checkout';
+      } finally {
+        setTimeout(() => { btn.disabled = false; }, 800);
+      }
     });
   }
 };
@@ -361,15 +376,17 @@ const CartPage = {
   init() {
     // Remove buttons
     document.querySelectorAll('.remove-cart-item').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
         const itemId = btn.dataset.itemId;
-        const row = btn.closest('.cart-item');
-        const res = await Cart.remove(itemId);
-        if (res !== undefined) {
-          row?.remove();
-          CartPage.updateTotals(res);
-          if (!document.querySelector('.cart-item')) {
-            location.reload();
+        if (!itemId) return;
+        if (window.CartOps && typeof window.CartOps.removeItem === 'function') {
+          await window.CartOps.removeItem(itemId);
+        } else {
+          const res = await Cart.remove(itemId);
+          if (res !== undefined) {
+            Toast.success('Item removed from shopping bag');
+            window.location.reload();
           }
         }
       });
@@ -465,8 +482,20 @@ const Checkout = {
       return;
     }
 
+    const masterBtn = document.getElementById('master-place-order-btn');
     const btn = document.getElementById(`pay-${paymentMethod === 'Online' ? 'online' : 'cod'}-btn`);
-    if (btn) { btn.disabled = true; btn.textContent = 'Processing...'; }
+    const setButtonsProcessing = (processing) => {
+      if (masterBtn) {
+        masterBtn.disabled = processing;
+        masterBtn.textContent = processing ? 'Processing Payment...' : 'PLACE ORDER';
+      }
+      if (btn) {
+        btn.disabled = processing;
+        btn.textContent = processing ? 'Processing...' : (paymentMethod === 'Online' ? 'Pay Online' : 'Place Order (COD)');
+      }
+    };
+
+    setButtonsProcessing(true);
 
     try {
       const res = await API.post('/api/orders/', {
@@ -476,20 +505,21 @@ const Checkout = {
       });
 
       if (paymentMethod === 'COD') {
-        Toast.success('Order placed successfully!');
+        Toast.success('Order placed successfully! Pay cash upon delivery.');
         setTimeout(() => window.location.href = `/order-confirmation/${res.order_id}`, 1000);
         return;
       }
 
       // Online payment with Razorpay
       if (res.demo_mode || !res.razorpay_key) {
-        // Demo mode — skip Razorpay
-        Toast.success('Demo: Payment confirmed!');
+        // Demo / Mock mode — simulate online payment verification
+        Toast.info('Demo Mode: Simulating secure payment verification...');
         await API.post(`/api/orders/${res.order_id}/payment/verify`, {
-          razorpay_order_id: res.razorpay_order_id || 'demo',
-          razorpay_payment_id: 'pay_demo',
+          razorpay_order_id: res.razorpay_order_id || `order_demo_${res.order_id}`,
+          razorpay_payment_id: `pay_demo_${Date.now()}`,
           razorpay_signature: 'demo_sig'
         });
+        Toast.success('Payment verified! Redirecting to confirmation...');
         setTimeout(() => window.location.href = `/order-confirmation/${res.order_id}`, 1000);
         return;
       }
@@ -503,30 +533,53 @@ const Checkout = {
         order_id: res.razorpay_order_id,
         handler: async (payment) => {
           try {
+            Toast.info('Verifying payment signature with server...');
             await API.post(`/api/orders/${res.order_id}/payment/verify`, {
               razorpay_order_id: payment.razorpay_order_id,
               razorpay_payment_id: payment.razorpay_payment_id,
               razorpay_signature: payment.razorpay_signature
             });
-            Toast.success('Payment successful!');
+            Toast.success('Payment confirmed! Redirecting...');
             window.location.href = `/order-confirmation/${res.order_id}`;
           } catch (err) {
-            Toast.error('Payment verification failed');
+            Toast.error(err.message || 'Payment verification failed. Please contact support.');
+            setButtonsProcessing(false);
           }
         },
         prefill: {
           name: document.getElementById('user-name')?.value || '',
           email: document.getElementById('user-email')?.value || ''
         },
-        theme: { color: '#C2410C' },
-        modal: { ondismiss: () => { if (btn) { btn.disabled = false; btn.textContent = 'Pay Online'; } } }
+        theme: { color: '#8B1A4A' },
+        modal: {
+          ondismiss: () => {
+            setButtonsProcessing(false);
+            Toast.info('Payment was not completed. You can retry anytime.');
+            API.post(`/api/payments/${res.order_id}/failed`, {
+              razorpay_order_id: res.razorpay_order_id,
+              error_description: 'User closed the Razorpay payment modal'
+            }).catch(() => {});
+          }
+        }
       };
 
       const rzp = new Razorpay(options);
+
+      rzp.on('payment.failed', function (response) {
+        setButtonsProcessing(false);
+        const errDesc = response.error?.description || response.error?.reason || 'Transaction declined';
+        Toast.error(`Payment Failed: ${errDesc}`);
+        API.post(`/api/payments/${res.order_id}/failed`, {
+          razorpay_order_id: response.error?.metadata?.order_id || res.razorpay_order_id,
+          razorpay_payment_id: response.error?.metadata?.payment_id,
+          error_description: errDesc
+        }).catch(() => {});
+      });
+
       rzp.open();
     } catch (err) {
-      Toast.error(err.message);
-      if (btn) { btn.disabled = false; btn.textContent = paymentMethod === 'Online' ? 'Pay Online' : 'Place Order (COD)'; }
+      Toast.error(err.message || 'Could not place order');
+      setButtonsProcessing(false);
     }
   }
 };
@@ -625,12 +678,14 @@ function initWishlistButtons() {
 
 // ─── Add to cart buttons on product cards ────────────────────
 function initAddToCartButtons() {
-  document.querySelectorAll('.add-to-cart-btn:not([disabled])').forEach(btn => {
+  document.querySelectorAll('.product-card .add-to-cart-btn:not([disabled])').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
       const productId = parseInt(btn.dataset.productId);
-      Cart.add(productId);
+      if (productId) {
+        Cart.add(productId);
+      }
     });
   });
 }
@@ -743,7 +798,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Page-specific init
   if (document.getElementById('add-to-cart-detail')) ProductDetail.init();
-  if (document.querySelector('.cart-item')) CartPage.init();
+  if (document.querySelector('.cart-item, .cart-item-row, .cart-page')) CartPage.init();
   if (document.getElementById('pay-online-btn') || document.getElementById('pay-cod-btn')) Checkout.init();
   if (document.querySelector('.filter-sidebar')) Filters.init();
   if (document.getElementById('admin-dashboard')) Admin.loadStats();

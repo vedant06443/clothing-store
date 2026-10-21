@@ -31,7 +31,7 @@ def seed_database():
                 email="admin@vastravibe.com",
                 hashed_password=hash_password("admin123"),
                 full_name="Suyog Textile Administrator",
-                phone="+919876543210",
+                phone="+918669396037",
                 is_active=True,
                 is_admin=True
             )

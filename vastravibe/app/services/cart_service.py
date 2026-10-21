@@ -43,7 +43,8 @@ def get_cart(db: Session, user_id: int) -> Dict[str, Any]:
 
 
 def add_to_cart(db: Session, user_id: int, product_id: int,
-                quantity: int = 1, color: str = None, size: str = None) -> CartItem:
+                quantity: int = 1, color: str = None, size: str = None,
+                override_quantity: bool = False) -> CartItem:
     """Add product to cart or update quantity if already exists."""
     product = db.query(Product).filter(Product.id == product_id, Product.is_active == True).first()
     if not product:
@@ -59,13 +60,14 @@ def add_to_cart(db: Session, user_id: int, product_id: int,
     ).first()
 
     if existing:
-        new_qty = existing.quantity + quantity
+        new_qty = quantity if override_quantity else (existing.quantity + quantity)
         if product.stock < new_qty:
             raise HTTPException(status_code=400, detail=f"Only {product.stock} items in stock")
         existing.quantity = new_qty
         db.commit()
         db.refresh(existing)
         return existing
+
 
     item = CartItem(
         user_id=user_id,

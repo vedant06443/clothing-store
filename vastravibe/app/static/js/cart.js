@@ -35,17 +35,26 @@ window.CartOps = {
   },
 
   async removeItem(itemId) {
-    if (window.Cart && typeof window.Cart.remove === 'function') {
-      await window.Cart.remove(itemId);
-    } else {
-      try {
-        const res = await fetch(`/api/cart/item/${itemId}`, { method: 'DELETE' });
-        if (res.ok) {
+    try {
+      if (window.Cart && typeof window.Cart.remove === 'function') {
+        const res = await window.Cart.remove(itemId);
+        if (res !== undefined) {
+          if (window.Toast) window.Toast.success('Item removed from shopping bag');
           window.location.reload();
+          return;
         }
-      } catch (err) {
-        console.error('Failed to remove cart item', err);
       }
+      const res = await fetch(`/api/cart/item/${itemId}`, { method: 'DELETE' });
+      if (res.ok) {
+        if (window.Toast) window.Toast.success('Item removed from shopping bag');
+        window.location.reload();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        if (window.Toast) window.Toast.error(err.detail || 'Could not remove item');
+      }
+    } catch (err) {
+      console.error('Failed to remove cart item', err);
+      if (window.Toast) window.Toast.error('Could not remove item');
     }
   },
 
@@ -70,7 +79,11 @@ window.CartOps = {
   }
 };
 
-// Bind inline helper for cart templates
+// Bind inline helpers for cart templates
 window.updateItemQty = function(itemId, change) {
   window.CartOps.updateQty(itemId, change);
+};
+
+window.removeCartItem = function(itemId) {
+  window.CartOps.removeItem(itemId);
 };

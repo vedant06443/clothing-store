@@ -46,9 +46,13 @@ async def cart_count(user: User = Depends(get_current_user), db: Session = Depen
 
 @router.post("/add")
 async def add_item(data: CartItemAdd, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    add_to_cart(db, user.id, data.product_id, data.quantity, data.color, data.size)
+    add_to_cart(
+        db, user.id, data.product_id, data.quantity, data.color, data.size,
+        override_quantity=bool(data.override_quantity)
+    )
     count = get_cart_count(db, user.id)
     return {"message": "Added to cart", "cart_count": count}
+
 
 
 @router.put("/item/{item_id}")

@@ -7,6 +7,8 @@ class CartItemAdd(BaseModel):
     quantity: int = 1
     color: Optional[str] = None
     size: Optional[str] = None
+    override_quantity: Optional[bool] = False
+
 
 
 class CartItemUpdate(BaseModel):

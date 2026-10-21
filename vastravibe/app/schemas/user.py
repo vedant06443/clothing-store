@@ -3,10 +3,30 @@ from typing import Optional
 import re
 
 
+def normalize_indian_phone(v: Optional[str]) -> Optional[str]:
+    if v is None:
+        return None
+    v = v.strip()
+    if not v:
+        return None
+    # Strip common formatting characters: spaces, hyphens, parentheses, dots, plus
+    cleaned = re.sub(r'[\s\-\(\)\.\+]', '', v)
+    # Handle country code +91 or 91 with 12 digits total
+    if len(cleaned) == 12 and cleaned.startswith('91'):
+        cleaned = cleaned[2:]
+    # Handle leading 0 with 11 digits total (e.g. 09405611628)
+    elif len(cleaned) == 11 and cleaned.startswith('0'):
+        cleaned = cleaned[1:]
+
+    if not re.match(r'^[6-9]\d{9}$', cleaned):
+        raise ValueError("Enter a valid 10-digit Indian mobile number")
+    return cleaned
+
+
 class UserRegister(BaseModel):
     full_name: str
     email: EmailStr
-    phone: str
+    phone: Optional[str] = None
     password: str
     confirm_password: str
 
@@ -27,10 +47,7 @@ class UserRegister(BaseModel):
     @field_validator("phone")
     @classmethod
     def phone_valid(cls, v):
-        v = v.strip()
-        if not re.match(r'^[6-9]\d{9}$', v):
-            raise ValueError("Enter a valid 10-digit Indian mobile number")
-        return v
+        return normalize_indian_phone(v)
 
 
 class UserLogin(BaseModel):
@@ -41,6 +58,11 @@ class UserLogin(BaseModel):
 class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     phone: Optional[str] = None
+
+    @field_validator("phone")
+    @classmethod
+    def phone_valid(cls, v):
+        return normalize_indian_phone(v)
 
 
 class UserResponse(BaseModel):
