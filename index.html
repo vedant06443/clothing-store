@@ -506,30 +506,43 @@
 
           return `
             <div class="product-card" data-aos="fade-up">
-              <div class="product-card-image">
-                <span class="badge-tag badge-tag-best">${p.badge || 'BESTSELLER'}</span>
-                <button class="wishlist-btn ${isFav ? 'active' : ''}" onclick="Store.toggleWishlist(${p.id})" title="Save to Wishlist">
+              <div class="product-image-wrap">
+                <div class="product-badges-group">
+                  <span class="badge-tag badge-tag-best">${p.badge || 'BESTSELLER'}</span>
+                  ${discountPct > 0 ? `<span class="badge-discount-pill">${discountPct}% OFF</span>` : ''}
+                </div>
+                <button class="wishlist-btn ${isFav ? 'active' : ''}" onclick="Store.toggleWishlist(${p.id})" title="${isFav ? 'Remove from Wishlist' : 'Save to Wishlist'}" aria-label="Wishlist">
                   <i class="bi bi-heart${isFav ? '-fill text-danger' : ''}"></i>
                 </button>
-                <a href="product.html?id=${p.id}">
-                  <img src="${p.primaryImage}" alt="${p.name}" loading="lazy">
+                <a href="product.html?id=${p.id}" class="product-image-link" aria-label="View ${p.name}">
+                  <img src="${p.primaryImage}" alt="${p.name}" loading="lazy" class="primary-product-img">
+                  ${p.hoverImage ? `<img src="${p.hoverImage}" alt="${p.name} preview" loading="lazy" class="secondary-product-img">` : ''}
+                </a>
+                <a href="product.html?id=${p.id}" class="product-quick-view" aria-label="Quick View">
+                  <i class="bi bi-eye"></i> Quick View
                 </a>
               </div>
-              <div class="product-card-body">
-                <div class="product-card-cat">${p.categoryName} • ${p.fabric}</div>
-                <h3 class="product-card-title"><a href="product.html?id=${p.id}">${p.name}</a></h3>
-                <div class="product-rating">
-                  <span class="stars">★★★★★</span>
-                  <span class="rating-val">${p.rating} (${p.reviews})</span>
+              <div class="product-info">
+                <div class="product-meta-row">
+                  <span class="product-brand">${p.categoryName} • ${p.fabric}</span>
+                  <span class="product-mini-rating">
+                    <span class="rating-star">★</span>
+                    <span class="rating-val">${p.rating} (${p.reviews})</span>
+                  </span>
                 </div>
-                <div class="product-price-row">
-                  <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
-                  <span class="product-original-price">₹${p.originalPrice.toLocaleString('en-IN')}</span>
-                  <span class="product-discount-pill">${discountPct}% OFF</span>
+                <h3 class="product-name">
+                  <a href="product.html?id=${p.id}">${p.name}</a>
+                </h3>
+                <div class="product-price">
+                  <span class="price-current">₹${p.price.toLocaleString('en-IN')}</span>
+                  <span class="price-original">₹${p.originalPrice.toLocaleString('en-IN')}</span>
+                  <span class="price-discount-tag">${discountPct}% OFF</span>
                 </div>
-                <div class="d-flex gap-2 mt-2">
-                  <button class="btn btn-sm btn-primary flex-grow-1" onclick="Store.addToCart(${p.id})">Add to Bag</button>
-                  <button class="btn btn-sm btn-whatsapp" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
+                <div class="product-card-actions">
+                  <button class="btn-add-bag" onclick="Store.addToCart(${p.id})">
+                    <i class="bi bi-bag-plus"></i> Add to Bag
+                  </button>
+                  <button class="btn-whatsapp" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
                     <i class="fa-brands fa-whatsapp"></i>
                   </button>
                 </div>
