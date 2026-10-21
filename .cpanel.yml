@@ -1,0 +1,12 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=$HOME/public_html/
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -R vastravibe/* $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH/tmp
+    - /bin/touch $DEPLOYPATH/tmp/restart.txt
+    - /bin/mkdir -p $HOME/vastravibe/
+    - /bin/cp -R vastravibe/* $HOME/vastravibe/
+    - /bin/mkdir -p $HOME/vastravibe/tmp
+    - /bin/touch $HOME/vastravibe/tmp/restart.txt
