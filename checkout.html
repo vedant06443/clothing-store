@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Suyog Textile</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .checkout-section {
+      padding: 60px 0 100px;
+    }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 36px;
+      margin-top: 32px;
+    }
+    .form-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 32px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+    .payment-option-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .payment-option-card.selected, .payment-option-card:hover {
+      border-color: var(--color-primary);
+      background: var(--color-gold-subtle);
+    }
+    .order-summary-sidebar {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    🔒 Secure 256-bit SSL Encrypted Indian Ethnic Wear Checkout
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="logo-area">
+        <span class="brand-symbol">🪷</span>
+        <div class="brand-names">
+          <span class="brand-main">SUYOG TEXTILE</span>
+          <span class="brand-tag">Heirloom Ethnic Wear</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a href="cart.html" style="font-size: 0.9rem; color: var(--color-primary); font-weight: 600;">&larr; Back to Bag</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Checkout Section -->
+  <main class="checkout-section">
+    <div class="container">
+      <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Delivery & Payment</h1>
+      <p style="color: var(--color-text-muted);">Please provide your delivery address to complete your order.</p>
+
+      <form id="checkoutForm" onsubmit="handlePlaceOrder(event)" class="checkout-grid">
+        <!-- Billing Form -->
+        <div class="form-card">
+          <h3 style="font-size: 1.3rem; margin-bottom: 20px;">1. Contact & Shipping Address</h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" id="custName" class="form-control" required placeholder="e.g. Priya Sharma">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number *</label>
+              <input type="tel" id="custPhone" class="form-control" required placeholder="e.g. 9812345678">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" id="custEmail" class="form-control" required placeholder="name@example.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Delivery Street Address *</label>
+            <textarea id="custAddress" class="form-control" rows="2" required placeholder="House / Flat No., Society, Landmark, Street"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <input type="text" id="custCity" class="form-control" required placeholder="e.g. Pune">
+            </div>
+            <div class="form-group">
+              <label class="form-label">State *</label>
+              <input type="text" id="custState" class="form-control" required value="Maharashtra">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">PIN Code *</label>
+            <input type="text" id="custPin" class="form-control" required placeholder="e.g. 411037">
+          </div>
+
+          <h3 style="font-size: 1.3rem; margin: 32px 0 16px;">2. Choose Payment Method</h3>
+
+          <label class="payment-option-card selected">
+            <input type="radio" name="paymentMethod" value="COD" checked>
+            <div>
+              <strong>Cash on Delivery (COD)</strong>
+              <div style="font-size: 0.85rem; color: var(--color-text-muted);">Pay cash/UPI at doorstep upon delivery</div>
+            </div>
+          </label>
+
+          <label class="payment-option-card">
+            <input type="radio" name="paymentMethod" value="UPI">
+            <div>
+              <strong>UPI / Net Banking / Card (Online)</strong>
+              <div style="font-size: 0.85rem; color: var(--color-text-muted);">Pay securely via Google Pay, PhonePe, Paytm, or Cards</div>
+            </div>
+          </label>
+
+          <label class="payment-option-card">
+            <input type="radio" name="paymentMethod" value="WHATSAPP">
+            <div>
+              <strong>Instant WhatsApp Order Assistance</strong>
+              <div style="font-size: 0.85rem; color: var(--color-text-muted);">Confirm order directly with our boutique stylist on WhatsApp</div>
+            </div>
+          </label>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 24px; padding: 14px;">
+            Place Order Now &rarr;
+          </button>
+        </div>
+
+        <!-- Sidebar Summary -->
+        <div class="order-summary-sidebar">
+          <h3 style="font-size: 1.25rem; margin-bottom: 16px;">Order Items</h3>
+          <div id="checkoutItemsList" style="max-height: 280px; overflow-y: auto; margin-bottom: 20px;">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div style="border-top: 1px solid var(--color-border); padding-top: 14px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+              <span>Subtotal</span>
+              <span id="coSubtotal">₹0</span>
+            </div>
+            <div id="coDiscountLine" style="display:none; justify-content:space-between; margin-bottom: 8px; color: var(--color-success);">
+              <span>Discount</span>
+              <span id="coDiscount">-₹0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+              <span>Shipping</span>
+              <span id="coShipping">FREE</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size: 1.3rem; font-weight: 700; color: var(--color-primary); padding-top: 12px; border-top: 1px solid var(--color-border);">
+              <span>Total Amount</span>
+              <span id="coTotal">₹0</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom" style="border:none; padding-top:0;">
+      <div>&copy; 2026 Suyog Textile. Real-Time Indian Clothing.</div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script>
+    function renderCheckoutSummary() {
+      const cart = Store.getCart();
+      if (cart.length === 0) {
+        window.location.href = 'shop.html';
+        return;
+      }
+
+      const totals = Store.getCartTotals();
+      const listEl = document.getElementById('checkoutItemsList');
+      listEl.innerHTML = cart.map(item => `
+        <div style="display:flex; gap:12px; margin-bottom:12px; align-items:center;">
+          <img src="${item.image}" style="width:50px; height:65px; object-fit:cover; border-radius:4px;">
+          <div style="flex-grow:1; font-size:0.85rem;">
+            <strong>${item.name}</strong>
+            <div style="color:var(--color-text-muted);">Qty: ${item.quantity} | ${item.size}</div>
+          </div>
+          <div style="font-weight:600;">₹${(item.price * item.quantity).toLocaleString('en-IN')}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('coSubtotal').textContent = `₹${totals.subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('coShipping').textContent = totals.shipping === 0 ? 'FREE' : `₹${totals.shipping}`;
+      document.getElementById('coTotal').textContent = `₹${totals.total.toLocaleString('en-IN')}`;
+
+      if (totals.discount > 0) {
+        document.getElementById('coDiscountLine').style.display = 'flex';
+        document.getElementById('coDiscount').textContent = `-₹${totals.discount.toLocaleString('en-IN')}`;
+      }
+    }
+
+    function handlePlaceOrder(e) {
+      e.preventDefault();
+
+      const orderData = {
+        orderId: 'SYG-' + Math.floor(100000 + Math.random() * 900000),
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        customer: {
+          name: document.getElementById('custName').value,
+          phone: document.getElementById('custPhone').value,
+          email: document.getElementById('custEmail').value,
+          address: document.getElementById('custAddress').value,
+          city: document.getElementById('custCity').value,
+          state: document.getElementById('custState').value,
+          pin: document.getElementById('custPin').value
+        },
+        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+        cart: Store.getCart(),
+        totals: Store.getCartTotals()
+      };
+
+      // Save last order
+      localStorage.setItem('suyog_last_order', JSON.stringify(orderData));
+
+      if (orderData.paymentMethod === 'WHATSAPP') {
+        Store.orderViaWhatsApp();
+      }
+
+      Store.clearCart();
+      window.location.href = 'order-success.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCheckoutSummary);
+  </script>
+</body>
+</html>

@@ -3,10 +3,12 @@ deployment:
   tasks:
     - export DEPLOYPATH=$HOME/public_html/
     - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -R vastravibe/* $DEPLOYPATH
-    - /bin/mkdir -p $DEPLOYPATH/tmp
-    - /bin/touch $DEPLOYPATH/tmp/restart.txt
-    - /bin/mkdir -p $HOME/vastravibe/
-    - /bin/cp -R vastravibe/* $HOME/vastravibe/
-    - /bin/mkdir -p $HOME/vastravibe/tmp
-    - /bin/touch $HOME/vastravibe/tmp/restart.txt
+    - /bin/cp -rf index.html $DEPLOYPATH/
+    - /bin/cp -rf shop.html $DEPLOYPATH/
+    - /bin/cp -rf product.html $DEPLOYPATH/
+    - /bin/cp -rf cart.html $DEPLOYPATH/
+    - /bin/cp -rf checkout.html $DEPLOYPATH/
+    - /bin/cp -rf order-success.html $DEPLOYPATH/
+    - /bin/cp -rf about.html $DEPLOYPATH/
+    - /bin/cp -rf contact.html $DEPLOYPATH/
+    - /bin/cp -rf assets $DEPLOYPATH/
