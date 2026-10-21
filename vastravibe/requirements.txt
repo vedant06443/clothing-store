@@ -21,3 +21,5 @@ itsdangerous==2.2.0
 starlette==0.37.2
 email-validator==2.1.1
 a2wsgi>=1.10.0
+pymysql==1.1.1
+cryptography>=42.0.0
