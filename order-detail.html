@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title id="pageTitle">Order Tracking — Suyog Textile</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .tracking-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      margin-left: 20px;
+      padding-left: 24px;
+      border-left: 3px solid var(--border);
+    }
+    .tracking-step {
+      position: relative;
+    }
+    .tracking-dot {
+      position: absolute;
+      left: -37px;
+      top: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #E5E7EB;
+      color: #9CA3AF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px #E5E7EB;
+    }
+    .tracking-step.done .tracking-dot {
+      background: var(--success);
+      color: #fff;
+      box-shadow: 0 0 0 2px var(--success);
+    }
+    .tracking-step.current .tracking-dot {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 0 3px rgba(194,65,12,0.3);
+      animation: pulse 2s infinite;
+    }
+    .tracking-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .tracking-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹999 &nbsp;|&nbsp; Use code <a href="offers.html" style="color:var(--gold-light);text-decoration:underline;">WELCOME10</a> for 10% OFF!
+  </div>
+
+  <!-- Header -->
+  <header class="desktop-header">
+    <div class="container d-flex justify-content-between align-items-center py-3">
+      <a href="index.html" class="navbar-logo">
+        <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+        <span class="brand-text-wrap">
+          <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+          <small class="navbar-tagline">Traditional Indian Wear</small>
+        </span>
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="orders.html" class="btn btn-sm btn-outline">&larr; Back to Orders</a>
+        <a href="javascript:void(0)" onclick="openInvoice()" class="btn btn-sm btn-gold">🖨 View Tax Invoice</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Tracking Details -->
+  <main class="container py-5" style="max-width:880px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb" style="font-size:0.85rem;">
+        <li class="breadcrumb-item"><a href="index.html" style="color:var(--text-muted);text-decoration:none;">Home</a></li>
+        <li class="breadcrumb-item"><a href="orders.html" style="color:var(--text-muted);text-decoration:none;">Orders</a></li>
+        <li class="breadcrumb-item active" aria-current="page" id="breadcrumbOrderNum" style="color:var(--primary);font-weight:600;">Tracking</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+      <div>
+        <h1 id="orderTitle" style="font-family:var(--font-brand);font-size:1.8rem;margin:0 0 4px;">Order #SYG-2026-1042</h1>
+        <p id="orderSubtitle" style="color:var(--text-muted);font-size:0.85rem;margin:0;">Placed on 21 October 2026 • Verified Prepaid</p>
+      </div>
+      <span class="badge-tag badge-tag-best" id="orderStatusBadge" style="font-size:0.85rem;padding:6px 16px;">SHIPPED IN TRANSIT</span>
+    </div>
+
+    <!-- Timeline Card -->
+    <div class="card mb-4" style="border-radius:16px;border:1px solid var(--border);box-shadow:0 6px 20px rgba(0,0,0,0.03);">
+      <div class="card-header bg-white py-3 border-bottom">
+        <h2 style="font-size:1.05rem;font-weight:700;margin:0;">🚚 Live Delivery Milestones</h2>
+      </div>
+      <div class="card-body p-4">
+        <div class="tracking-timeline">
+          <div class="tracking-step done">
+            <div class="tracking-dot">✓</div>
+            <div class="tracking-content">
+              <div class="tracking-title">Order Placed & Confirmed</div>
+              <div class="tracking-desc">Order details received and verified by our boutique fulfillment desk.</div>
+            </div>
+          </div>
+          <div class="tracking-step done">
+            <div class="tracking-dot">✓</div>
+            <div class="tracking-content">
+              <div class="tracking-title">Artisan Quality Inspection & Packaging</div>
+              <div class="tracking-desc">Handloom weaves carefully inspected, fall-piko done, and packaged in luxury moisture-barrier box.</div>
+            </div>
+          </div>
+          <div class="tracking-step current">
+            <div class="tracking-dot">●</div>
+            <div class="tracking-content">
+              <div class="tracking-title">Dispatched & In Transit with Courier Partner</div>
+              <div class="tracking-desc">Handed over to BlueDart Express. Package scanned at Central Maharashtra sorting hub.</div>
+            </div>
+          </div>
+          <div class="tracking-step">
+            <div class="tracking-dot">4</div>
+            <div class="tracking-content">
+              <div class="tracking-title">Out for Doorstep Delivery</div>
+              <div class="tracking-desc">Local delivery executive assigned with contactless verification.</div>
+            </div>
+          </div>
+          <div class="tracking-step">
+            <div class="tracking-dot">5</div>
+            <div class="tracking-content">
+              <div class="tracking-title">Delivered</div>
+              <div class="tracking-desc">Package handed to customer.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 p-3 rounded" style="background:#FFFDF7;border:1px solid #FDE68A;font-size:0.85rem;">
+          📦 Courier Partner: <strong id="courierName">BlueDart Express</strong> | AWB Number: <strong id="awbNumber">BLD884920149IN</strong> | Estimated Arrival: <strong style="color:var(--primary);">24 Oct 2026</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items & Address Grid -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-7">
+        <div class="card h-100" style="border-radius:16px;border:1px solid var(--border);">
+          <div class="card-header bg-white py-3 border-bottom">
+            <h3 style="font-size:1rem;font-weight:700;margin:0;">Ordered Items</h3>
+          </div>
+          <div class="card-body p-3" id="orderItemsContainer">
+            <!-- Items injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div class="card h-100" style="border-radius:16px;border:1px solid var(--border);">
+          <div class="card-header bg-white py-3 border-bottom">
+            <h3 style="font-size:1rem;font-weight:700;margin:0;">Shipping Address</h3>
+          </div>
+          <div class="card-body p-3">
+            <strong style="color:var(--text);">Priya Sharma</strong>
+            <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin:6px 0 14px;">
+              Flat 402, Royal Palms Heights,<br>
+              Near Gangapur Road, Anandwalli,<br>
+              Nashik, Maharashtra — 422013<br>
+              Phone: +91 86693 96037
+            </p>
+
+            <h4 style="font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:700;margin-bottom:6px;">Need Assistance?</h4>
+            <a href="https://wa.me/918669396037?text=Hi%20Suyog%20Textile%2C%20I%20have%20a%20query%20about%20Order%20SYG-2026-1042." target="_blank" class="btn btn-sm btn-whatsapp w-100" style="padding:10px;">
+              <i class="fa-brands fa-whatsapp me-1"></i> WhatsApp Order Support
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <p>© 2026 Suyog Textile. All rights reserved. Made with ❤️ in India.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script>
+    let orderId = 1042;
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      orderId = Number(urlParams.get('id')) || 1042;
+      
+      const orders = [
+        {
+          id: 1042,
+          order_number: "SYG-2026-1042",
+          date: "21 October 2026",
+          status: "SHIPPED",
+          courier: "BlueDart Express",
+          awb: "BLD884920149IN",
+          items: [
+            {
+              id: 1,
+              name: "Crimson Red Royal Banarasi Katan Silk Saree",
+              price: 8999,
+              quantity: 1,
+              color: "Crimson Red",
+              size: "Free Size",
+              image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&q=80"
+            }
+          ]
+        },
+        {
+          id: 1028,
+          order_number: "SYG-2026-1028",
+          date: "14 October 2026",
+          status: "DELIVERED",
+          courier: "Delhivery Surface",
+          awb: "DEL773920114IN",
+          items: [
+            {
+              id: 2,
+              name: "Peacock Blue Handloom Kanjivaram Silk Saree",
+              price: 9999,
+              quantity: 1,
+              color: "Peacock Blue",
+              size: "Free Size",
+              image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=800&q=80"
+            }
+          ]
+        }
+      ];
+
+      const current = orders.find(o => o.id === orderId) || orders[0];
+      document.getElementById('pageTitle').textContent = `Order #${current.order_number} — Suyog Textile`;
+      document.getElementById('orderTitle').textContent = `Order #${current.order_number}`;
+      document.getElementById('breadcrumbOrderNum').textContent = `#${current.order_number}`;
+      document.getElementById('orderSubtitle').textContent = `Placed on ${current.date} • Verified Prepaid`;
+      document.getElementById('orderStatusBadge').textContent = current.status;
+      document.getElementById('courierName').textContent = current.courier;
+      document.getElementById('awbNumber').textContent = current.awb;
+
+      document.getElementById('orderItemsContainer').innerHTML = current.items.map(item => `
+        <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+          <div class="d-flex align-items-center gap-3">
+            <img src="${item.image}" alt="${item.name}" style="width:50px;height:65px;object-fit:cover;border-radius:4px;">
+            <div>
+              <div style="font-weight:600;font-size:0.9rem;">${item.name}</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Qty: ${item.quantity} | ${item.color}</div>
+            </div>
+          </div>
+          <div style="font-weight:700;color:var(--primary);">₹${(item.price * item.quantity).toLocaleString('en-IN')}</div>
+        </div>
+      `).join('');
+    });
+
+    function openInvoice() {
+      window.location.href = `invoice.html?id=${orderId}`;
+    }
+  </script>
+</body>
+</html>

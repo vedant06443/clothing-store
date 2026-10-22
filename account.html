@@ -46,10 +46,11 @@
 
           <hr>
           <div class="d-flex flex-column gap-2">
+            <a href="orders.html" class="btn btn-sm btn-outline text-start"><i class="bi bi-box-seam me-2"></i> My Orders & Live Tracking</a>
             <a href="wishlist.html" class="btn btn-sm btn-outline text-start"><i class="bi bi-heart me-2"></i> My Wishlist</a>
             <a href="cart.html" class="btn btn-sm btn-outline text-start"><i class="bi bi-bag me-2"></i> Current Shopping Bag</a>
-            <div id="adminPortalLink" style="display:none;">
-              <a href="admin.html" class="btn btn-sm btn-primary text-start w-100"><i class="bi bi-speedometer2 me-2"></i> Open Admin Dashboard</a>
+            <div id="adminPortalLink">
+              <a href="admin/index.html" class="btn btn-sm btn-primary text-start w-100"><i class="bi bi-speedometer2 me-2"></i> Admin Management Portal</a>
             </div>
           </div>
         </div>
@@ -129,18 +130,34 @@
             <div class="small mb-2">
               ${lastOrder.cart.map(c => `<div>• ${c.quantity}x ${c.name} (${c.size})</div>`).join('')}
             </div>
-            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top flex-wrap gap-2">
               <strong>Total: ₹${lastOrder.totals.total.toLocaleString('en-IN')}</strong>
-              <a href="order-success.html" class="btn btn-sm btn-outline">View Receipt &rarr;</a>
+              <div class="d-flex gap-2">
+                <a href="order-detail.html?id=${lastOrder.orderId}" class="btn btn-sm btn-outline">Track Delivery</a>
+                <a href="invoice.html?id=${lastOrder.orderId}" class="btn btn-sm btn-gold">Tax Invoice</a>
+              </div>
             </div>
           </div>
         `;
       } else {
         ordersEl.innerHTML = `
-          <div class="text-center py-4 text-muted">
-            <span style="font-size:2rem;">📦</span>
-            <p class="mt-2 mb-3">No active orders found.</p>
-            <a href="shop.html" class="btn btn-sm btn-primary">Start Shopping &rarr;</a>
+          <div class="border rounded p-3 mb-2" style="background:#FFFDF9;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <strong>Order #SYG-2026-1042</strong>
+              <span class="badge bg-primary">Shipped in Transit</span>
+            </div>
+            <div class="small text-muted mb-2">Placed on: 21 Oct 2026 | Courier: BlueDart Express (AWB: BLD884920149IN)</div>
+            <div class="small mb-2">
+              <div>• 1x Crimson Red Royal Banarasi Katan Silk Saree (Free Size)</div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top flex-wrap gap-2">
+              <strong>Total: ₹8,999</strong>
+              <div class="d-flex gap-2">
+                <a href="order-detail.html?id=1042" class="btn btn-sm btn-outline">Track Delivery</a>
+                <a href="invoice.html?id=1042" class="btn btn-sm btn-gold">Tax Invoice</a>
+                <a href="orders.html" class="btn btn-sm btn-primary">All Orders &rarr;</a>
+              </div>
+            </div>
           </div>
         `;
       }

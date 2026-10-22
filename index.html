@@ -32,7 +32,7 @@
 
   <!-- ─── Announcement Bar ─── -->
   <div class="announcement-bar" role="banner">
-    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499 &nbsp;|&nbsp; Use code <a href="shop.html" style="color:var(--gold-light);text-decoration:underline;">WELCOME10</a> for 10% OFF!
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹999 &nbsp;|&nbsp; Use code <a href="offers.html" style="color:var(--gold-light);text-decoration:underline;">WELCOME10</a> for 10% OFF!
   </div>
 
   <!-- ─── DESKTOP HEADER (>= 992px) ─── -->
@@ -60,14 +60,15 @@
             <li><a href="shop.html?cat=kurtis">Kurti</a></li>
             <li><a href="shop.html?cat=dresses">Gown</a></li>
             <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
-            <li><a href="shop.html">All Collections</a></li>
-            <li><a href="about.html">Our Heritage</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="shop.html?filter=new">New Arrivals</a></li>
+            <li><a href="studio.html" style="color:var(--gold);font-weight:600">✨ Style Studio</a></li>
+            <li><a href="offers.html" style="color:#DC2626;font-weight:600">Sale %</a></li>
           </ul>
         </nav>
 
         <!-- Right Icons -->
         <div class="desktop-nav-right">
+          <!-- Search Box -->
           <div class="desktop-search-box">
             <input type="text" class="desktop-search-input" id="search-input" placeholder="Search ethnic wear..." onkeydown="if(event.key==='Enter') window.location.href='shop.html?q='+encodeURIComponent(this.value)">
             <button class="desktop-search-btn" aria-label="Search" onclick="window.location.href='shop.html?q='+encodeURIComponent(document.getElementById('search-input').value)">
@@ -75,11 +76,18 @@
             </button>
           </div>
 
-          <a href="cart.html" class="nav-icon-btn" title="Wishlist" aria-label="View Wishlist">
+          <!-- Wishlist Link -->
+          <a href="wishlist.html" class="nav-icon-btn" title="My Wishlist" aria-label="View Wishlist">
             <i class="bi bi-heart"></i>
             <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
           </a>
 
+          <!-- Account Link -->
+          <a href="account.html" class="nav-icon-btn" title="My Account / Sign In" aria-label="My Account">
+            <i class="bi bi-person"></i>
+          </a>
+
+          <!-- Cart Button -->
           <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Shopping Bag" aria-label="Shopping Bag" style="background:transparent;border:none;">
             <i class="bi bi-bag"></i>
             <span class="nav-badge cart-count-badge" style="display:none">0</span>
@@ -106,6 +114,11 @@
       </div>
 
       <div class="mobile-header-right">
+        <a href="wishlist.html" class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">
+          <i class="bi bi-heart"></i>
+          <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
+        </a>
+
         <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Cart" aria-label="Cart" style="background:transparent;border:none;">
           <i class="bi bi-bag"></i>
           <span class="nav-badge cart-count-badge" style="display:none">0</span>
@@ -132,19 +145,49 @@
       <button class="mobile-drawer-close" onclick="toggleMobileDrawer()" aria-label="Close Navigation Menu">✕</button>
     </div>
     <div class="mobile-drawer-body">
-      <div class="drawer-section-title">Navigation</div>
-      <div class="drawer-links-group">
-        <a href="index.html" class="drawer-link"><span>🏠 Home</span></a>
-        <a href="shop.html" class="drawer-link"><span>🛍️ All Collections</span></a>
-        <a href="shop.html?cat=sarees" class="drawer-link"><span>🥻 Sarees</span></a>
-        <a href="shop.html?cat=lehengas" class="drawer-link"><span>💃 Lehenga Choli</span></a>
-        <a href="shop.html?cat=kurtis" class="drawer-link"><span>👗 Kurtis</span></a>
-        <a href="shop.html?cat=salwar-suits" class="drawer-link"><span>👘 Salwar Suits</span></a>
-        <a href="shop.html?cat=dresses" class="drawer-link"><span>🌸 Gowns & Dresses</span></a>
-        <a href="shop.html?cat=mens-wear" class="drawer-link"><span>👳 Mens Wear</span></a>
-        <a href="about.html" class="drawer-link"><span>📖 Our Heritage</span></a>
-        <a href="contact.html" class="drawer-link"><span>📍 Contact Showroom</span></a>
+      <div>
+        <div class="drawer-section-title">Navigation</div>
+        <div class="drawer-links-group">
+          <a href="index.html" class="drawer-link"><span>🏠 Home</span></a>
+          <a href="shop.html?filter=new" class="drawer-link">
+            <span>✨ New Arrivals</span>
+            <span class="badge-tag badge-tag-new">FRESH</span>
+          </a>
+          <a href="offers.html" class="drawer-link">
+            <span>🔥 Special Offers</span>
+            <span class="badge-tag badge-tag-best">SALE</span>
+          </a>
+          <a href="studio.html" class="drawer-link"><span>🎨 Style Studio</span></a>
+        </div>
       </div>
+
+      <div>
+        <div class="drawer-section-title">Categories</div>
+        <div class="drawer-links-group">
+          <a href="shop.html?cat=sarees" class="drawer-link"><span>🥻 Sarees</span></a>
+          <a href="shop.html?cat=kurtis" class="drawer-link"><span>👗 Kurtis</span></a>
+          <a href="shop.html?cat=lehengas" class="drawer-link"><span>💃 Lehenga Choli</span></a>
+          <a href="shop.html?cat=salwar-suits" class="drawer-link"><span>👘 Salwar Suits</span></a>
+          <a href="shop.html?cat=dresses" class="drawer-link"><span>🌸 Gowns & Dresses</span></a>
+          <a href="shop.html?cat=mens-wear" class="drawer-link"><span>👳 Mens Wear</span></a>
+          <a href="shop.html" class="drawer-link"><span>🛍️ All Collections</span></a>
+        </div>
+      </div>
+
+      <div>
+        <div class="drawer-section-title">My Account & Services</div>
+        <div class="drawer-links-group">
+          <a href="wishlist.html" class="drawer-link"><span>♡ My Wishlist</span></a>
+          <a href="account.html" class="drawer-link"><span>👤 My Profile & Orders</span></a>
+          <a href="javascript:void(0)" onclick="openSizeGuide(); toggleMobileDrawer();" class="drawer-link"><span>📏 Size Guide & Fit Finder</span></a>
+          <a href="admin.html" class="drawer-link"><span>⚙️ Admin Portal</span></a>
+          <a href="about.html" class="drawer-link"><span>📖 Our Heritage</span></a>
+          <a href="contact.html" class="drawer-link"><span>📍 Contact Showroom</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <a href="login.html" class="btn btn-primary w-100">Login / Register</a>
     </div>
   </aside>
 
@@ -244,8 +287,31 @@
         </div>
         <div class="promo-actions" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
           <span class="promo-code" style="background:rgba(255,255,255,0.15);padding:10px 16px;border-radius:8px;font-weight:700;letter-spacing:1px;font-size:0.9rem;border:1px dashed var(--gold-light)">USE: WELCOME10</span>
-          <a href="shop.html" class="btn btn-gold" style="padding:10px 24px;font-weight:700;font-size:0.9rem">EXPLORE OFFERS</a>
+          <a href="offers.html" class="btn btn-gold" style="padding:10px 24px;font-weight:700;font-size:0.9rem">EXPLORE OFFERS</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FRESH PICKS, JUST ARRIVED! (Swiper Showcase) ─── -->
+  <section class="section section-light" style="padding:45px 0 55px;background:#FCFAFB;border-top:1px solid #F3E8EE;border-bottom:1px solid #F3E8EE;">
+    <div class="container">
+      <div class="section-header d-flex justify-content-between align-items-end mb-4" data-aos="fade-up">
+        <div>
+          <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase">Just In</div>
+          <h2 class="section-title" style="font-family:var(--font-brand);font-size:clamp(1.4rem, 3.2vw, 2.2rem);margin:0">Fresh Picks, Just Arrived!</h2>
+        </div>
+        <a href="shop.html?filter=new" class="btn btn-sm btn-outline" style="font-size:0.82rem;padding:8px 18px;border-radius:20px;font-weight:600">View All Fresh Drops →</a>
+      </div>
+
+      <!-- Swiper Slider Container -->
+      <div class="swiper new-arrivals-swiper" style="padding-bottom:38px;">
+        <div class="swiper-wrapper" id="homeNewArrivalsList">
+          <!-- Injected via JS -->
+        </div>
+        <div class="swiper-button-prev" aria-label="Previous Slide"></div>
+        <div class="swiper-button-next" aria-label="Next Slide"></div>
+        <div class="swiper-pagination"></div>
       </div>
     </div>
   </section>
@@ -334,6 +400,212 @@
     </div>
   </section>
 
+  <!-- ─── WHY SUYOG TEXTILE (Trust Pillars) ─── -->
+  <section class="why-us" style="padding:55px 0;background:#fff">
+    <div class="container">
+      <div class="section-header text-center mb-4" data-aos="fade-up">
+        <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;margin-bottom:6px">The Suyog Textile Promise</div>
+        <h2 class="section-title" style="font-family:var(--font-brand);font-size:clamp(1.4rem, 3vw, 2.1rem)">Why Shoppers Choose Us</h2>
+      </div>
+      <div class="row g-3 g-md-4">
+        <!-- 1. Artisan Crafted -->
+        <div class="col-6 col-lg-3" data-aos="fade-up">
+          <div class="why-card" style="text-align:center;padding:26px 16px;background:var(--cream);border-radius:16px;height:100%;border:1px solid var(--border)">
+            <div class="why-icon" style="font-size:1.8rem;color:var(--primary);margin-bottom:10px">
+              <i class="fa-solid fa-ribbon"></i>
+            </div>
+            <div class="why-title" style="font-weight:700;font-size:0.95rem;margin-bottom:6px">Artisan Crafted</div>
+            <p class="why-desc" style="font-size:0.78rem;color:var(--text-muted);margin:0">Handpicked traditional weaves sourced directly from master weavers across India.</p>
+          </div>
+        </div>
+
+        <!-- 2. Fast Delivery -->
+        <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+          <div class="why-card" style="text-align:center;padding:26px 16px;background:var(--cream);border-radius:16px;height:100%;border:1px solid var(--border)">
+            <div class="why-icon" style="font-size:1.8rem;color:var(--primary);margin-bottom:10px">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <div class="why-title" style="font-weight:700;font-size:0.95rem;margin-bottom:6px">Pan-India Express</div>
+            <p class="why-desc" style="font-size:0.78rem;color:var(--text-muted);margin:0">Free express delivery across India with tamper-proof luxury packaging.</p>
+          </div>
+        </div>
+
+        <!-- 3. Pure Handloom -->
+        <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+          <div class="why-card" style="text-align:center;padding:26px 16px;background:var(--cream);border-radius:16px;height:100%;border:1px solid var(--border)">
+            <div class="why-icon" style="font-size:1.8rem;color:var(--primary);margin-bottom:10px">
+              <i class="fa-solid fa-gem"></i>
+            </div>
+            <div class="why-title" style="font-weight:700;font-size:0.95rem;margin-bottom:6px">100% Pure Handloom</div>
+            <p class="why-desc" style="font-size:0.78rem;color:var(--text-muted);margin:0">Authentic artisan weaves with certified silk purity and fine embroidery.</p>
+          </div>
+        </div>
+
+        <!-- 4. Easy Returns -->
+        <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+          <div class="why-card" style="text-align:center;padding:26px 16px;background:var(--cream);border-radius:16px;height:100%;border:1px solid var(--border)">
+            <div class="why-icon" style="font-size:1.8rem;color:var(--primary);margin-bottom:10px">
+              <i class="fa-solid fa-rotate-left"></i>
+            </div>
+            <div class="why-title" style="font-weight:700;font-size:0.95rem;margin-bottom:6px">7-Day Easy Exchange</div>
+            <p class="why-desc" style="font-size:0.78rem;color:var(--text-muted);margin:0">Hassle-free size and style exchanges with friendly doorstep pickup.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── REVIEWS / TESTIMONIALS (4.9 Star Rating) ─── -->
+  <section class="reviews-section" style="padding:45px 0 65px;background:#FAF6F8">
+    <div class="container">
+      <div class="section-header text-center mb-4" data-aos="fade-up">
+        <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;margin-bottom:6px">Verified Customer Love</div>
+        <h2 class="section-title" style="font-family:var(--font-brand);font-size:clamp(1.4rem, 3vw, 2.1rem)">Loved by 1,200+ Verified Buyers</h2>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(217,119,6,0.12);padding:6px 16px;border-radius:20px;margin-top:10px;border:1px solid rgba(217,119,6,0.3)">
+          <span style="color:#D97706;font-size:1.1rem;font-weight:800">4.9 ★★★★★</span>
+          <span style="color:#78350F;font-size:0.82rem;font-weight:600">Rated across Google & Online Store</span>
+        </div>
+      </div>
+
+      <div class="row g-3 g-md-4">
+        <div class="col-md-4" data-aos="fade-up">
+          <div class="testimonial-card" style="background:#fff;padding:24px;border-radius:16px;border:1px solid var(--border);height:100%;box-shadow:0 4px 16px rgba(0,0,0,0.03)">
+            <div class="stars" style="color:#F59E0B;font-size:1.1rem;margin-bottom:8px">★★★★★</div>
+            <p style="font-size:0.88rem;line-height:1.6;color:var(--text)">“The Banarasi saree I ordered exceeded expectations! The fabric has a royal sheen and arrived in beautiful luxury packaging.”</p>
+            <div class="testimonial-meta" style="margin-top:14px;font-size:0.82rem"><strong>Meera S.</strong>, <span style="color:var(--text-muted)">Verified Buyer</span></div>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="testimonial-card" style="background:#fff;padding:24px;border-radius:16px;border:1px solid var(--border);height:100%;box-shadow:0 4px 16px rgba(0,0,0,0.03)">
+            <div class="stars" style="color:#F59E0B;font-size:1.1rem;margin-bottom:8px">★★★★★</div>
+            <p style="font-size:0.88rem;line-height:1.6;color:var(--text)">“The lehenga and fabric quality are exceptional! The zari work is even more stunning in person than on the website.”</p>
+            <div class="testimonial-meta" style="margin-top:14px;font-size:0.82rem"><strong>Ritika A.</strong>, <span style="color:var(--text-muted)">Verified Buyer</span></div>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="testimonial-card" style="background:#fff;padding:24px;border-radius:16px;border:1px solid var(--border);height:100%;box-shadow:0 4px 16px rgba(0,0,0,0.03)">
+            <div class="stars" style="color:#F59E0B;font-size:1.1rem;margin-bottom:8px">★★★★★</div>
+            <p style="font-size:0.88rem;line-height:1.6;color:var(--text)">“Fast delivery to Pune, easy payment via UPI, and customer care was helpful with my size query. Five stars!”</p>
+            <div class="testimonial-meta" style="margin-top:14px;font-size:0.82rem"><strong>Pooja K.</strong>, <span style="color:var(--text-muted)">Verified Buyer</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── VISIT OUR STORE / BOUTIQUE ADDRESS SECTION ─── -->
+  <section class="store-address-section" style="padding:60px 0;background:linear-gradient(135deg, #FFFDF7 0%, #FFF8EE 100%);border-top:1px solid #FDE68A;border-bottom:1px solid #FDE68A;">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;margin-bottom:8px">Experience In Store</div>
+          <h2 style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3.5vw, 2.3rem);color:var(--text);margin-bottom:14px;line-height:1.25">
+            Visit Our Flagship Store in Nashik
+          </h2>
+          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.7;margin-bottom:22px">
+            A versatile clothing store offering a wide variety of readymade garments and fabrics for all ages. Step into our boutique to experience pure silks, bridal wear, everyday festive fashion, and custom tailoring in person.
+          </p>
+
+          <!-- Address Card -->
+          <div style="background:#fff;border-radius:18px;padding:24px;border:1px solid rgba(194,65,12,0.18);box-shadow:0 8px 30px rgba(194,65,12,0.06);margin-bottom:22px">
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <div style="width:46px;height:46px;border-radius:12px;background:rgba(194,65,12,0.1);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:1.3rem;flex-shrink:0">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <div style="font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:4px">Suyog Textile</div>
+                <div style="font-size:0.92rem;color:var(--text);line-height:1.6;font-weight:500">
+                  Lahoti Mala, 484, Jadhav Sankul road,<br>
+                  Ashoknagar, Satpur Colony,<br>
+                  Nashik, Maharashtra 422007
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:14px;margin-top:18px;padding-top:18px;border-top:1px dashed var(--border)">
+              <div style="display:flex;gap:10px;align-items:center">
+                <i class="fa-regular fa-clock" style="color:var(--primary);font-size:1rem"></i>
+                <div style="font-size:0.82rem">
+                  <span style="color:var(--text-muted);display:block">Store Timings</span>
+                  <strong>10:00 AM – 8:30 PM (All Days)</strong>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center">
+                <i class="fa-solid fa-phone" style="color:var(--primary);font-size:1rem"></i>
+                <div style="font-size:0.82rem">
+                  <span style="color:var(--text-muted);display:block">Store Assistance</span>
+                  <a href="tel:02534515460" style="color:var(--text);text-decoration:none;font-weight:700">0253 4515460</a>
+                  <span style="color:var(--text-muted);margin:0 4px">/</span>
+                  <a href="tel:+918669396037" style="color:var(--text);text-decoration:none;font-weight:700">+91 86693 96037</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action CTAs -->
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a href="https://maps.google.com/?q=Lahoti+Mala,+484,+Jadhav+Sankul+road,+Ashoknagar,+Satpur+Colony,+Nashik,+Maharashtra+422007" 
+               target="_blank" rel="noopener noreferrer" 
+               class="btn btn-primary" 
+               style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:30px;font-weight:600">
+              <i class="fa-solid fa-diamond-turn-right"></i>
+              Get Directions on Maps
+            </a>
+            <a href="https://wa.me/918669396037?text=Hello%20Suyog%20Textile%2C%20I%20would%20like%20to%20visit%20your%20Nashik%20store." 
+               target="_blank" rel="noopener noreferrer" 
+               class="btn btn-outline" 
+               style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:30px;font-weight:600;border-color:var(--primary);color:var(--primary)">
+              <i class="fa-brands fa-whatsapp"></i>
+              WhatsApp Store Inquiry
+            </a>
+          </div>
+        </div>
+
+        <!-- Store Highlights / Visual Card -->
+        <div class="col-lg-6" data-aos="fade-left">
+          <div style="background:#fff;border-radius:22px;padding:32px 28px;border:1px solid var(--border);box-shadow:0 12px 40px rgba(0,0,0,0.06);position:relative;overflow:hidden">
+            <div style="display:inline-block;padding:6px 14px;background:rgba(217,119,6,0.12);color:#92400E;font-size:0.75rem;font-weight:700;border-radius:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">
+              ✨ In-Store Experience
+            </div>
+            <h3 style="font-family:var(--font-brand);font-size:1.35rem;margin-bottom:14px;color:var(--text)">
+              Why Visit Our Nashik Boutique?
+            </h3>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-top:18px">
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <span style="width:32px;height:32px;border-radius:50%;background:#FEF3C7;color:#D97706;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0">✓</span>
+                <div>
+                  <strong style="display:block;font-size:0.92rem;color:var(--text)">1,000+ Exclusive Handpicked Weaves</strong>
+                  <span style="font-size:0.82rem;color:var(--text-muted)">Banarasi, Paithani, Kanjeevaram, and designer bridal trousseau.</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <span style="width:32px;height:32px;border-radius:50%;background:#FEF3C7;color:#D97706;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0">✓</span>
+                <div>
+                  <strong style="display:block;font-size:0.92rem;color:var(--text)">Personal Bridal & Festive Styling Session</strong>
+                  <span style="font-size:0.82rem;color:var(--text-muted)">Complimentary in-person drape consultation with master stylists.</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <span style="width:32px;height:32px;border-radius:50%;background:#FEF3C7;color:#D97706;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0">✓</span>
+                <div>
+                  <strong style="display:block;font-size:0.92rem;color:var(--text)">Custom Blouse Stitching & Fall Piko</strong>
+                  <span style="font-size:0.82rem;color:var(--text-muted)">Quick in-house tailoring services for ready-to-wear perfection.</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <span style="width:32px;height:32px;border-radius:50%;background:#FEF3C7;color:#D97706;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0">✓</span>
+                <div>
+                  <strong style="display:block;font-size:0.92rem;color:var(--text)">Prime Satpur Location with Easy Parking</strong>
+                  <span style="font-size:0.82rem;color:var(--text-muted)">Conveniently accessible near Jadhav Sankul road, Ashoknagar.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── FOOTER ─── -->
   <footer class="footer" id="main-footer">
     <div class="container">
@@ -351,6 +623,7 @@
             <a href="https://wa.me/918669396037" class="social-link" title="WhatsApp" aria-label="WhatsApp">💬</a>
             <a href="#" class="social-link" title="Instagram" aria-label="Instagram">📸</a>
             <a href="#" class="social-link" title="Facebook" aria-label="Facebook">📘</a>
+            <a href="#" class="social-link" title="YouTube" aria-label="YouTube">▶</a>
           </div>
         </div>
 
@@ -363,7 +636,9 @@
             <li><a href="shop.html?cat=lehengas">Lehengas</a></li>
             <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
             <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
-            <li><a href="shop.html">Special Offers</a></li>
+            <li><a href="shop.html?filter=new">New Arrivals</a></li>
+            <li><a href="offers.html">Special Offers</a></li>
+            <li><a href="studio.html">Couture Style Studio</a></li>
           </ul>
         </div>
 
@@ -372,10 +647,12 @@
           <div class="footer-title">Customer Care</div>
           <ul class="footer-links">
             <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="contact.html">Contact Showroom</a></li>
             <li><a href="cart.html">Shopping Bag</a></li>
-            <li><a href="contact.html">Track Order</a></li>
-            <li><a href="contact.html">Returns & Exchange</a></li>
+            <li><a href="wishlist.html">Saved Wishlist</a></li>
+            <li><a href="orders.html">Track Orders</a></li>
+            <li><a href="javascript:void(0)" onclick="openSizeGuide()">Size Guide & Fit Finder</a></li>
+            <li><a href="admin/index.html" style="color:var(--gold-light);font-weight:600;">Staff / Admin Portal</a></li>
           </ul>
         </div>
 
@@ -446,6 +723,115 @@
     </div>
   </footer>
 
+  <!-- ─── FLOATING INDIAN FASHION STYLIST ASSISTANT ─── -->
+  <div id="stylist-widget" style="position:fixed;bottom:24px;right:24px;z-index:999;font-family:var(--font-sans)">
+    <!-- Floating Action Button -->
+    <button id="stylist-toggle-btn" onclick="toggleStylistChat()" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg, var(--primary), var(--velvet));color:#fff;border:2px solid var(--gold);box-shadow:0 6px 24px rgba(139,26,74,0.35);cursor:pointer;font-size:1.6rem;display:flex;align-items:center;justify-content:center;transition:transform 0.2s" title="Ask Stylist Assistant" aria-label="Ask Stylist Assistant">
+      🥻
+    </button>
+
+    <!-- Chat Drawer / Window -->
+    <div id="stylist-chat-box" style="display:none;position:absolute;bottom:70px;right:0;width:340px;height:450px;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.2);border:1px solid var(--border);flex-direction:column;overflow:hidden">
+      <!-- Header -->
+      <div style="background:var(--primary);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🪷</div>
+          <div>
+            <div style="font-weight:700;font-size:0.9rem">Suyog Textile Stylist</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:4px">
+              <span style="width:6px;height:6px;background:#25D366;border-radius:50%"></span> Online
+            </div>
+          </div>
+        </div>
+        <button onclick="toggleStylistChat()" style="background:transparent;border:none;color:#fff;font-size:1.2rem;cursor:pointer" aria-label="Close Stylist Chat">✕</button>
+      </div>
+
+      <!-- Messages Body -->
+      <div id="stylist-messages" style="flex:1;padding:14px;overflow-y:auto;background:var(--cream);font-size:0.85rem;line-height:1.5;display:flex;flex-direction:column;gap:10px">
+        <!-- Bot Intro -->
+        <div style="background:#fff;padding:10px 12px;border-radius:12px 12px 12px 2px;box-shadow:0 1px 3px rgba(0,0,0,0.05);max-width:85%">
+          Namaste! 🙏 I am your personal Indian ethnic stylist. How can I help you sparkle today?
+        </div>
+
+        <!-- Quick prompts -->
+        <div id="stylist-prompts" style="display:flex;flex-direction:column;gap:6px">
+          <button onclick="sendStylistPrompt('What saree should I wear to a wedding reception?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+            ✨ What saree for a Wedding Reception?
+          </button>
+          <button onclick="sendStylistPrompt('How do I choose the right blouse color for a red saree?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+            🎨 Blouse pairing for Crimson Sarees
+          </button>
+          <button onclick="sendStylistPrompt('What is the difference between Banarasi and Kanjivaram?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+            📖 Banarasi vs Kanjivaram Guide
+          </button>
+        </div>
+      </div>
+
+      <!-- Input footer -->
+      <div style="padding:10px;background:#fff;border-top:1px solid var(--border);display:flex;gap:6px">
+        <input type="text" id="stylist-input" placeholder="Ask a styling question..." style="flex:1;border:1px solid var(--border);border-radius:20px;padding:8px 12px;font-size:0.82rem;outline:none" onkeydown="if(event.key==='Enter')handleStylistSubmit()">
+        <button onclick="handleStylistSubmit()" style="background:var(--primary);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Send message">➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SIZE GUIDE & FIT FINDER MODAL ─── -->
+  <div class="modal-overlay" id="size-guide-modal" onclick="if(event.target === this) closeSizeGuide()">
+    <div class="modal" style="max-width:680px">
+      <div class="modal-header">
+        <h3 class="modal-title">📏 Indian Ethnic Wear Size Guide & Fit Finder</h3>
+        <button class="modal-close" onclick="closeSizeGuide()" aria-label="Close Size Guide">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Interactive Fit Calculator -->
+        <div style="background:var(--cream);padding:16px;border-radius:var(--radius-md);margin-bottom:24px;border:1px solid var(--border)">
+          <h4 style="margin:0 0 10px;font-size:0.95rem;color:var(--primary);font-weight:600">🎯 Interactive Fit Finder</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end">
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;text-transform:uppercase;color:var(--text-muted)">Bust / Chest (Inches)</label>
+              <input type="number" id="calc-bust" class="form-input" placeholder="e.g. 36" min="28" max="52" style="margin-top:4px;width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px">
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;text-transform:uppercase;color:var(--text-muted)">Waist (Inches)</label>
+              <input type="number" id="calc-waist" class="form-input" placeholder="e.g. 30" min="22" max="48" style="margin-top:4px;width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="calculateRecommendedSize()" style="height:42px;padding:0 18px">Find My Size</button>
+          </div>
+          <div id="size-calc-result" style="margin-top:12px;font-size:0.88rem;display:none;padding:10px;background:#fff;border-radius:6px;border-left:4px solid var(--primary)"></div>
+        </div>
+
+        <!-- Size Conversion Table -->
+        <h4 style="margin:0 0 10px;font-size:0.95rem;font-weight:600">Standard Garment Measurements (Inches)</h4>
+        <div style="overflow-x:auto">
+          <table class="table table-bordered table-striped" style="font-size:0.85rem;margin:0">
+            <thead style="background:var(--cream)">
+              <tr>
+                <th>Size</th>
+                <th>India / UK</th>
+                <th>Bust (in)</th>
+                <th>Waist (in)</th>
+                <th>Hip (in)</th>
+                <th>Saree Blouse</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>XS</strong></td><td>34</td><td>32" - 33"</td><td>26" - 27"</td><td>35" - 36"</td><td>32</td></tr>
+              <tr><td><strong>S</strong></td><td>36</td><td>34" - 35"</td><td>28" - 29"</td><td>37" - 38"</td><td>34</td></tr>
+              <tr><td><strong>M</strong></td><td>38</td><td>36" - 37"</td><td>30" - 31"</td><td>39" - 40"</td><td>36</td></tr>
+              <tr><td><strong>L</strong></td><td>40</td><td>38" - 39"</td><td>32" - 33"</td><td>41" - 42"</td><td>38</td></tr>
+              <tr><td><strong>XL</strong></td><td>42</td><td>40" - 41"</td><td>34" - 35"</td><td>43" - 44"</td><td>40</td></tr>
+              <tr><td><strong>XXL</strong></td><td>44</td><td>42" - 43"</td><td>36" - 37"</td><td>45" - 46"</td><td>42</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:16px;font-size:0.78rem;color:var(--text-muted);line-height:1.5">
+          💡 <strong>Saree Note:</strong> All sarees come in a standard length of 5.5 meters with an unstitched 0.8 meter matching blouse piece unless specified as ready-to-wear.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Floating WhatsApp Support -->
   <a href="https://wa.me/918669396037?text=Hi%20Suyog%20Textile%2C%20I%20have%20an%20inquiry%20about%20your%20collection." 
      target="_blank" 
@@ -459,6 +845,7 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="assets/js/products.js"></script>
   <script src="assets/js/store.js"></script>
@@ -472,6 +859,89 @@
       }
     }
 
+    // Stylist Chat Widget Functions
+    function toggleStylistChat() {
+      const box = document.getElementById('stylist-chat-box');
+      if (!box) return;
+      const isHidden = box.style.display === 'none' || !box.style.display;
+      box.style.display = isHidden ? 'flex' : 'none';
+    }
+
+    function sendStylistPrompt(text) {
+      appendUserMessage(text);
+      const promptEl = document.getElementById('stylist-prompts');
+      if (promptEl) promptEl.style.display = 'none';
+
+      let reply = "That's a wonderful style choice! For traditional festivities, pure silk weaves with antique gold zari work create the most timeless royal silhouette.";
+      if (text.includes('Wedding Reception') || text.includes('reception')) {
+        reply = "🌟 For a grand reception, we recommend our **Crimson Red Royal Banarasi Katan Silk Saree** or a **Handcrafted Velvet Lehenga** paired with emerald jewelry!";
+      } else if (text.includes('Blouse') || text.includes('blouse')) {
+        reply = "🎨 For a classic Crimson or Maroon saree, contrasting with **Antique Gold Brocade**, **Emerald Green raw silk**, or a **Royal Navy embroidered blouse** looks magnificent!";
+      } else if (text.includes('Banarasi') || text.includes('Kanjivaram')) {
+        reply = "💡 **Banarasi Silk** is renowned for Mughal-inspired floral/foliage zari motifs and lighter drape, while **Kanjivaram Silk** features thick pure mulberry silk with temple borders and contrast pallu.";
+      }
+
+      setTimeout(() => appendBotMessage(reply), 600);
+    }
+
+    function handleStylistSubmit() {
+      const input = document.getElementById('stylist-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      sendStylistPrompt(text);
+    }
+
+    function appendUserMessage(text) {
+      const container = document.getElementById('stylist-messages');
+      const el = document.createElement('div');
+      el.style.cssText = 'background:var(--primary);color:#fff;padding:8px 12px;border-radius:12px 12px 2px 12px;margin-left:auto;max-width:85%;word-break:break-word';
+      el.textContent = text;
+      container.appendChild(el);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendBotMessage(html) {
+      const container = document.getElementById('stylist-messages');
+      const el = document.createElement('div');
+      el.style.cssText = 'background:#fff;padding:10px 12px;border-radius:12px 12px 12px 2px;box-shadow:0 1px 3px rgba(0,0,0,0.05);max-width:85%;line-height:1.4';
+      el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      container.appendChild(el);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Size Guide Modal Functions
+    function openSizeGuide() {
+      document.getElementById('size-guide-modal')?.classList.add('open');
+    }
+
+    function closeSizeGuide() {
+      document.getElementById('size-guide-modal')?.classList.remove('open');
+    }
+
+    function calculateRecommendedSize() {
+      const bust = parseFloat(document.getElementById('calc-bust').value);
+      const resEl = document.getElementById('size-calc-result');
+      if (!bust || isNaN(bust)) {
+        resEl.style.display = 'block';
+        resEl.innerHTML = '<span style="color:var(--error)">Please enter your bust measurement.</span>';
+        return;
+      }
+
+      let size = 'M';
+      let indiaSize = '38';
+      if (bust <= 33) { size = 'XS'; indiaSize = '34'; }
+      else if (bust <= 35) { size = 'S'; indiaSize = '36'; }
+      else if (bust <= 37) { size = 'M'; indiaSize = '38'; }
+      else if (bust <= 39) { size = 'L'; indiaSize = '40'; }
+      else if (bust <= 41) { size = 'XL'; indiaSize = '42'; }
+      else { size = 'XXL'; indiaSize = '44'; }
+
+      resEl.style.display = 'block';
+      resEl.innerHTML = `✨ Recommended Size: <strong style="color:var(--primary);font-size:1rem">${size} (India ${indiaSize})</strong>. Perfect tailored fit for Kurtis, Blouses & Lehengas!`;
+    }
+
+    // Initialize Page Content
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof AOS !== 'undefined') {
         AOS.init({ duration: 700, once: true });
@@ -497,59 +967,99 @@
         `).join('');
       }
 
-      // Render Bestsellers
-      const bestsellersContainer = document.getElementById('homeBestsellersList');
-      if (bestsellersContainer) {
-        bestsellersContainer.innerHTML = PRODUCTS_DATA.slice(0, 8).map(p => {
-          const isFav = Store.isWishlisted(p.id);
-          const discountPct = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+      // Helper function to build Product Card HTML
+      function renderProductCard(p, badgeDefault = 'NEW') {
+        const isFav = Store.isWishlisted(p.id);
+        const discountPct = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
 
-          return `
-            <div class="product-card" data-aos="fade-up">
-              <div class="product-image-wrap">
-                <div class="product-badges-group">
-                  <span class="badge-tag badge-tag-best">${p.badge || 'BESTSELLER'}</span>
-                  ${discountPct > 0 ? `<span class="badge-discount-pill">${discountPct}% OFF</span>` : ''}
-                </div>
-                <button class="wishlist-btn ${isFav ? 'active' : ''}" onclick="Store.toggleWishlist(${p.id})" title="${isFav ? 'Remove from Wishlist' : 'Save to Wishlist'}" aria-label="Wishlist">
-                  <i class="bi bi-heart${isFav ? '-fill text-danger' : ''}"></i>
-                </button>
-                <a href="product.html?id=${p.id}" class="product-image-link" aria-label="View ${p.name}">
-                  <img src="${p.primaryImage}" alt="${p.name}" loading="lazy" class="primary-product-img">
-                  ${p.hoverImage ? `<img src="${p.hoverImage}" alt="${p.name} preview" loading="lazy" class="secondary-product-img">` : ''}
-                </a>
-                <a href="product.html?id=${p.id}" class="product-quick-view" aria-label="Quick View">
-                  <i class="bi bi-eye"></i> Quick View
-                </a>
+        return `
+          <div class="product-card">
+            <div class="product-image-wrap">
+              <div class="product-badges-group">
+                <span class="badge-tag badge-tag-new">${p.badge || badgeDefault}</span>
+                ${discountPct > 0 ? `<span class="badge-discount-pill">${discountPct}% OFF</span>` : ''}
               </div>
-              <div class="product-info">
-                <div class="product-meta-row">
-                  <span class="product-brand">${p.categoryName} • ${p.fabric}</span>
-                  <span class="product-mini-rating">
-                    <span class="rating-star">★</span>
-                    <span class="rating-val">${p.rating} (${p.reviews})</span>
-                  </span>
-                </div>
-                <h3 class="product-name">
-                  <a href="product.html?id=${p.id}">${p.name}</a>
-                </h3>
-                <div class="product-price">
-                  <span class="price-current">₹${p.price.toLocaleString('en-IN')}</span>
-                  <span class="price-original">₹${p.originalPrice.toLocaleString('en-IN')}</span>
-                  <span class="price-discount-tag">${discountPct}% OFF</span>
-                </div>
-                <div class="product-card-actions">
-                  <button class="btn-add-bag" onclick="Store.addToCart(${p.id})">
-                    <i class="bi bi-bag-plus"></i> Add to Bag
-                  </button>
-                  <button class="btn-whatsapp" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
-                    <i class="fa-brands fa-whatsapp"></i>
-                  </button>
-                </div>
+              <button class="wishlist-btn ${isFav ? 'active' : ''}" onclick="Store.toggleWishlist(${p.id})" title="${isFav ? 'Remove from Wishlist' : 'Save to Wishlist'}" aria-label="Wishlist">
+                <i class="bi bi-heart${isFav ? '-fill text-danger' : ''}"></i>
+              </button>
+              <a href="product.html?id=${p.id}" class="product-image-link" aria-label="View ${p.name}">
+                <img src="${p.primaryImage}" alt="${p.name}" loading="lazy" class="primary-product-img">
+                ${p.hoverImage ? `<img src="${p.hoverImage}" alt="${p.name} preview" loading="lazy" class="secondary-product-img">` : ''}
+              </a>
+              <a href="product.html?id=${p.id}" class="product-quick-view" aria-label="Quick View">
+                <i class="bi bi-eye"></i> Quick View
+              </a>
+            </div>
+            <div class="product-info">
+              <div class="product-meta-row">
+                <span class="product-brand">${p.categoryName} • ${p.fabric}</span>
+                <span class="product-mini-rating">
+                  <span class="rating-star">★</span>
+                  <span class="rating-val">${p.rating} (${p.reviews})</span>
+                </span>
+              </div>
+              <h3 class="product-name">
+                <a href="product.html?id=${p.id}">${p.name}</a>
+              </h3>
+              <div class="product-price">
+                <span class="price-current">₹${p.price.toLocaleString('en-IN')}</span>
+                <span class="price-original">₹${p.originalPrice.toLocaleString('en-IN')}</span>
+                <span class="price-discount-tag">${discountPct}% OFF</span>
+              </div>
+              <div class="product-card-actions">
+                <button class="btn-add-bag" onclick="Store.addToCart(${p.id})">
+                  <i class="bi bi-bag-plus"></i> Add to Bag
+                </button>
+                <button class="btn-whatsapp" onclick="Store.inquireProductWhatsApp(${p.id})" title="Ask on WhatsApp">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </button>
               </div>
             </div>
-          `;
-        }).join('');
+          </div>
+        `;
+      }
+
+      // Render Fresh Picks Swiper
+      const arrivalsContainer = document.getElementById('homeNewArrivalsList');
+      if (arrivalsContainer && typeof PRODUCTS_DATA !== 'undefined') {
+        const freshProducts = PRODUCTS_DATA.slice(0, 8);
+        arrivalsContainer.innerHTML = freshProducts.map(p => `
+          <div class="swiper-slide">
+            ${renderProductCard(p, 'FRESH DROP')}
+          </div>
+        `).join('');
+
+        // Initialize Swiper
+        if (typeof Swiper !== 'undefined') {
+          new Swiper('.new-arrivals-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 18,
+            loop: true,
+            autoplay: {
+              delay: 3500,
+              disableOnInteraction: false
+            },
+            pagination: {
+              el: '.new-arrivals-swiper .swiper-pagination',
+              clickable: true
+            },
+            navigation: {
+              nextEl: '.new-arrivals-swiper .swiper-button-next',
+              prevEl: '.new-arrivals-swiper .swiper-button-prev'
+            },
+            breakpoints: {
+              576: { slidesPerView: 2, spaceBetween: 16 },
+              992: { slidesPerView: 3, spaceBetween: 20 },
+              1200: { slidesPerView: 4, spaceBetween: 24 }
+            }
+          });
+        }
+      }
+
+      // Render Bestsellers Grid
+      const bestsellersContainer = document.getElementById('homeBestsellersList');
+      if (bestsellersContainer && typeof PRODUCTS_DATA !== 'undefined') {
+        bestsellersContainer.innerHTML = PRODUCTS_DATA.slice(0, 8).map(p => renderProductCard(p, 'BESTSELLER')).join('');
       }
     });
   </script>

@@ -62,11 +62,18 @@
             <li><a href="shop.html?cat=dresses">Gown</a></li>
             <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
             <li><a href="shop.html" class="active">All Collections</a></li>
-            <li><a href="about.html">Our Heritage</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="studio.html" style="color:var(--gold);font-weight:600">✨ Style Studio</a></li>
+            <li><a href="offers.html" style="color:#DC2626;font-weight:600">Sale %</a></li>
           </ul>
         </nav>
         <div class="desktop-nav-right">
+          <a href="wishlist.html" class="nav-icon-btn" title="My Wishlist" aria-label="Wishlist">
+            <i class="bi bi-heart"></i>
+            <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
+          </a>
+          <a href="account.html" class="nav-icon-btn" title="Account" aria-label="Account">
+            <i class="bi bi-person"></i>
+          </a>
           <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Shopping Bag" style="background:transparent;border:none;">
             <i class="bi bi-bag"></i>
             <span class="nav-badge cart-count-badge" style="display:none">0</span>
@@ -86,6 +93,10 @@
         <span class="brand-name" style="font-size:1.15rem;">Suyog <span class="brand-highlight">Textile</span></span>
       </div>
       <div class="mobile-header-right">
+        <a href="wishlist.html" class="nav-icon-btn" title="Wishlist">
+          <i class="bi bi-heart"></i>
+          <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
+        </a>
         <button class="nav-icon-btn" onclick="Store.openCartDrawer()" style="background:transparent;border:none;">
           <i class="bi bi-bag"></i>
           <span class="nav-badge cart-count-badge" style="display:none">0</span>
@@ -273,7 +284,102 @@
       }).join('');
     }
 
+    // Stylist Chat Functions
+    function toggleStylistChat() {
+      const box = document.getElementById('stylist-chat-box');
+      if (!box) return;
+      box.style.display = (box.style.display === 'none' || !box.style.display) ? 'flex' : 'none';
+    }
+
+    function sendStylistPrompt(text) {
+      appendUserMessage(text);
+      const pr = document.getElementById('stylist-prompts');
+      if (pr) pr.style.display = 'none';
+      let reply = "For weddings and festive seasons, we recommend pure Banarasi katan silk or Paithani with antique zari!";
+      if (text.includes('saree')) {
+        reply = "🥻 You can filter our catalog by **Sarees** at the top tabs to explore pure Katan silk and handloom Banarasi!";
+      } else if (text.includes('Lehenga')) {
+        reply = "💃 Check our **Lehengas** tab for designer velvet and raw silk bridal couture!";
+      }
+      setTimeout(() => appendBotMessage(reply), 600);
+    }
+
+    function handleStylistSubmit() {
+      const input = document.getElementById('stylist-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      sendStylistPrompt(text);
+    }
+
+    function appendUserMessage(text) {
+      const c = document.getElementById('stylist-messages');
+      const el = document.createElement('div');
+      el.style.cssText = 'background:var(--primary);color:#fff;padding:8px 12px;border-radius:12px 12px 2px 12px;margin-left:auto;max-width:85%;';
+      el.textContent = text;
+      c.appendChild(el);
+      c.scrollTop = c.scrollHeight;
+    }
+
+    function appendBotMessage(html) {
+      const c = document.getElementById('stylist-messages');
+      const el = document.createElement('div');
+      el.style.cssText = 'background:#fff;padding:10px 12px;border-radius:12px 12px 12px 2px;box-shadow:0 1px 3px rgba(0,0,0,0.05);max-width:85%;';
+      el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      c.appendChild(el);
+      c.scrollTop = c.scrollHeight;
+    }
+
     document.addEventListener('DOMContentLoaded', initShop);
   </script>
+
+  <!-- Stylist Widget -->
+  <div id="stylist-widget" style="position:fixed;bottom:24px;right:24px;z-index:999;font-family:var(--font-sans)">
+    <button id="stylist-toggle-btn" onclick="toggleStylistChat()" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg, var(--primary), var(--velvet));color:#fff;border:2px solid var(--gold);box-shadow:0 6px 24px rgba(139,26,74,0.35);cursor:pointer;font-size:1.6rem;display:flex;align-items:center;justify-content:center;transition:transform 0.2s" title="Ask Stylist Assistant" aria-label="Ask Stylist Assistant">
+      🥻
+    </button>
+    <div id="stylist-chat-box" style="display:none;position:absolute;bottom:70px;right:0;width:340px;height:450px;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.2);border:1px solid var(--border);flex-direction:column;overflow:hidden">
+      <div style="background:var(--primary);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🪷</div>
+          <div>
+            <div style="font-weight:700;font-size:0.9rem">Suyog Textile Stylist</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:4px">
+              <span style="width:6px;height:6px;background:#25D366;border-radius:50%"></span> Online
+            </div>
+          </div>
+        </div>
+        <button onclick="toggleStylistChat()" style="background:transparent;border:none;color:#fff;font-size:1.2rem;cursor:pointer">✕</button>
+      </div>
+      <div id="stylist-messages" style="flex:1;padding:14px;overflow-y:auto;background:var(--cream);font-size:0.85rem;line-height:1.5;display:flex;flex-direction:column;gap:10px">
+        <div style="background:#fff;padding:10px 12px;border-radius:12px 12px 12px 2px;box-shadow:0 1px 3px rgba(0,0,0,0.05);max-width:85%">
+          Namaste! Looking for a specific weave, fabric, or occasion ensemble? Ask me!
+        </div>
+        <div id="stylist-prompts" style="display:flex;flex-direction:column;gap:6px">
+          <button onclick="sendStylistPrompt('What saree should I wear to a wedding reception?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+            ✨ What saree for a Wedding Reception?
+          </button>
+          <button onclick="sendStylistPrompt('Which lehengas are best for bridal sangeet?')" style="text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.78rem;cursor:pointer;color:var(--primary)">
+            💃 Bridal Sangeet Lehengas
+          </button>
+        </div>
+      </div>
+      <div style="padding:10px;background:#fff;border-top:1px solid var(--border);display:flex;gap:6px">
+        <input type="text" id="stylist-input" placeholder="Ask a styling question..." style="flex:1;border:1px solid var(--border);border-radius:20px;padding:8px 12px;font-size:0.82rem;outline:none" onkeydown="if(event.key==='Enter')handleStylistSubmit()">
+        <button onclick="handleStylistSubmit()" style="background:var(--primary);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center">➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/918669396037?text=Hi%20Suyog%20Textile%2C%20I%20have%20an%20inquiry%20about%20your%20collection." 
+     target="_blank" 
+     class="wa-floating-btn" 
+     id="wa-shopping-btn" 
+     title="Chat on WhatsApp" 
+     aria-label="Chat with us on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span class="wa-floating-tooltip">💬 Chat on WhatsApp</span>
+  </a>
 </body>
 </html>

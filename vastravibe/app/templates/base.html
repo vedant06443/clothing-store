@@ -285,12 +285,12 @@
         </div>
         <div class="footer-accordion-body">
           <ul class="footer-links">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Shipping Policy</a></li>
-            <li><a href="#">Return Policy</a></li>
-            <li><a href="#">Size Guide</a></li>
-            <li><a href="#">FAQs</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+            <li><a href="/shipping-policy">Shipping Policy</a></li>
+            <li><a href="/returns">Return Policy</a></li>
+            <li><a href="javascript:void(0)" onclick="openSizeGuide()">Size Guide & Fit Finder</a></li>
+            <li><a href="/faq">FAQs</a></li>
           </ul>
         </div>
       </div>
@@ -368,6 +368,9 @@
 
 <!-- Stylist Assistant Widget -->
 {% include "partials/chat_widget.html" %}
+
+<!-- Size Guide & Fit Finder Modal -->
+{% include "partials/size_guide_modal.html" %}
 
 <!-- Floating WhatsApp Support -->
 <a href="https://wa.me/918669396037?text=Hi%20Suyog%20Textile%2C%20I%20have%20an%20inquiry%20about%20your%20collection." 

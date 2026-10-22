@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>My Orders — Suyog Textile</title>
+  <meta name="description" content="View your past orders, delivery tracking milestones, and download invoices at Suyog Textile.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="assets/images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Theme Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .order-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+    .order-header {
+      background: var(--cream);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .order-body {
+      padding: 20px;
+    }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .order-item-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-confirmed, .status-processing {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    .status-shipped {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+    .status-delivered {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹999 &nbsp;|&nbsp; Use code <a href="offers.html" style="color:var(--gold-light);text-decoration:underline;">WELCOME10</a> for 10% OFF!
+  </div>
+
+  <!-- Header -->
+  <header class="desktop-header">
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
+        </div>
+        <nav>
+          <ul class="desktop-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
+            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
+            <li><a href="shop.html?cat=dresses">Gown</a></li>
+            <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
+            <li><a href="shop.html?filter=new">New Arrivals</a></li>
+            <li><a href="studio.html" style="color:var(--gold);font-weight:600">✨ Style Studio</a></li>
+            <li><a href="offers.html" style="color:#DC2626;font-weight:600">Sale %</a></li>
+          </ul>
+        </nav>
+        <div class="desktop-nav-right">
+          <a href="wishlist.html" class="nav-icon-btn" title="My Wishlist">
+            <i class="bi bi-heart"></i>
+            <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
+          </a>
+          <a href="account.html" class="nav-icon-btn active" title="My Account">
+            <i class="bi bi-person"></i>
+          </a>
+          <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Cart" style="background:transparent;border:none;">
+            <i class="bi bi-bag"></i>
+            <span class="nav-badge cart-count-badge" style="display:none">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <div class="mobile-header-top">
+      <div class="mobile-header-left">
+        <a href="account.html" style="font-size:1.2rem;color:var(--primary);"><i class="bi bi-arrow-left"></i></a>
+      </div>
+      <div class="mobile-header-center">
+        <span class="brand-name" style="font-size:1.15rem;">My <span class="brand-highlight">Orders</span></span>
+      </div>
+      <div class="mobile-header-right">
+        <button class="nav-icon-btn" onclick="Store.openCartDrawer()" style="background:transparent;border:none;">
+          <i class="bi bi-bag"></i>
+          <span class="nav-badge cart-count-badge" style="display:none">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container py-5" style="max-width:960px;min-height:60vh;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb" style="font-size:0.85rem;">
+        <li class="breadcrumb-item"><a href="index.html" style="color:var(--text-muted);text-decoration:none;">Home</a></li>
+        <li class="breadcrumb-item"><a href="account.html" style="color:var(--text-muted);text-decoration:none;">Account</a></li>
+        <li class="breadcrumb-item active" aria-current="page" style="color:var(--primary);font-weight:600;">Orders</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 style="font-family:var(--font-brand);font-size:clamp(1.6rem, 3vw, 2.2rem);margin:0 0 6px;">My Orders</h1>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">Track current package dispatches and review your past purchases.</p>
+      </div>
+      <a href="shop.html" class="btn btn-sm btn-outline" style="border-radius:20px;padding:8px 18px;">Continue Shopping</a>
+    </div>
+
+    <!-- Orders Container -->
+    <div id="ordersListContainer">
+      <!-- Rendered via JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <p>© 2026 Suyog Textile. All rights reserved. Made with ❤️ in India.</p>
+      <a href="shop.html" style="color:var(--gold-light);">&larr; Back to Collections</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderOrdersPage();
+    });
+
+    function getOrders() {
+      try {
+        const stored = JSON.parse(localStorage.getItem('suyog_orders'));
+        if (stored && Array.isArray(stored) && stored.length > 0) {
+          return stored;
+        }
+      } catch (e) {}
+
+      // Default demo orders if none in storage
+      return [
+        {
+          id: 1042,
+          order_number: "SYG-2026-1042",
+          date: "21 Oct 2026",
+          status: "SHIPPED",
+          courier: "BlueDart Express",
+          awb: "BLD884920149IN",
+          payment_method: "Prepaid UPI",
+          total: 8999,
+          items: [
+            {
+              id: 1,
+              name: "Crimson Red Royal Banarasi Katan Silk Saree",
+              price: 8999,
+              quantity: 1,
+              color: "Crimson Red",
+              size: "Free Size (5.5m + 0.8m Blouse)",
+              image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&q=80"
+            }
+          ]
+        },
+        {
+          id: 1028,
+          order_number: "SYG-2026-1028",
+          date: "14 Oct 2026",
+          status: "DELIVERED",
+          courier: "Delhivery Surface",
+          awb: "DEL773920114IN",
+          payment_method: "Razorpay NetBanking",
+          total: 12798,
+          items: [
+            {
+              id: 2,
+              name: "Peacock Blue Handloom Kanjivaram Silk Saree",
+              price: 9999,
+              quantity: 1,
+              color: "Peacock Blue",
+              size: "Free Size",
+              image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=800&q=80"
+            },
+            {
+              id: 3,
+              name: "Pastel Pink Organza Floral Saree",
+              price: 2799,
+              quantity: 1,
+              color: "Pastel Pink",
+              size: "Free Size",
+              image: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=800&q=80"
+            }
+          ]
+        }
+      ];
+    }
+
+    function renderOrdersPage() {
+      const orders = getOrders();
+      const container = document.getElementById('ordersListContainer');
+
+      if (!orders || orders.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5 card" style="border-radius:16px;">
+            <div style="font-size:3rem;margin-bottom:12px;">📦</div>
+            <h3 style="font-family:var(--font-brand);">No orders found</h3>
+            <p style="color:var(--text-muted);max-width:400px;margin:0 auto 20px;">You haven't placed any orders yet. Discover our latest handpicked weaves!</p>
+            <a href="shop.html" class="btn btn-primary" style="margin:0 auto;display:inline-block;padding:10px 24px;">Explore Collections</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(order => `
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Order #</span>
+              <strong style="color:var(--text);">${order.order_number}</strong>
+              <span style="font-size:0.8rem;color:var(--text-muted);margin-left:8px;">Placed on ${order.date}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span>
+              <a href="order-detail.html?id=${order.id}" class="btn btn-sm btn-outline">Track & View</a>
+              <a href="invoice.html?id=${order.id}" class="btn btn-sm btn-gold">Tax Invoice</a>
+            </div>
+          </div>
+          <div class="order-body">
+            ${order.items.map(item => `
+              <div class="order-item-row">
+                <div class="d-flex align-items-center gap-3">
+                  <img src="${item.image}" alt="${item.name}" style="width:60px;height:75px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" onerror="this.src='assets/images/placeholder.jpg'">
+                  <div>
+                    <h4 style="font-size:0.95rem;margin:0 0 4px;font-weight:600;"><a href="product.html?id=${item.id}" style="color:var(--text);text-decoration:none;">${item.name}</a></h4>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">
+                      Qty: <strong>${item.quantity}</strong> ${item.color ? `• Color: ${item.color}` : ''} ${item.size ? `• Size: ${item.size}` : ''}
+                    </div>
+                  </div>
+                </div>
+                <div style="font-weight:700;font-size:1rem;color:var(--primary);">
+                  ₹${(item.price * item.quantity).toLocaleString('en-IN')}
+                </div>
+              </div>
+            `).join('')}
+
+            <div class="d-flex justify-content-between align-items-center pt-3 mt-3 border-top flex-wrap gap-2">
+              <div style="font-size:0.85rem;color:var(--text-muted);">
+                Payment: <strong style="color:var(--text);">${order.payment_method}</strong>
+                ${order.courier ? ` | Courier: <strong style="color:var(--text);">${order.courier}</strong> (AWB: ${order.awb})` : ''}
+              </div>
+              <div style="font-size:1rem;">
+                Total Paid: <strong style="color:var(--primary);font-size:1.15rem;">₹${order.total.toLocaleString('en-IN')}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

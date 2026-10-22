@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews Moderation — Suyog Textile Admin</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+
+  <style>
+    :root {
+      --admin-sidebar-w: 260px;
+    }
+    body {
+      background: #F8F5F2;
+      color: #1F2937;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .admin-layout {
+      display: grid;
+      grid-template-columns: var(--admin-sidebar-w) 1fr;
+      min-height: 100vh;
+    }
+    /* ── Sidebar ── */
+    .admin-sidebar {
+      background: linear-gradient(180deg, #181316 0%, #110D0F 100%);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid rgba(217, 119, 6, 0.16);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    .admin-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .admin-logo img {
+      height: 40px;
+      width: 40px;
+      object-fit: contain;
+      background: #fff;
+      padding: 3px;
+      border-radius: 8px;
+    }
+    .admin-logo-text {
+      font-family: var(--font-brand, 'Cinzel');
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .admin-logo-text span {
+      color: #FBBF24;
+    }
+    .admin-nav {
+      list-style: none;
+      padding: 14px 12px;
+      margin: 0;
+      flex: 1;
+    }
+    .admin-nav-item {
+      margin-bottom: 4px;
+    }
+    .admin-nav-item a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .admin-nav-item a:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      transform: translateX(3px);
+    }
+    .admin-nav-item a.active {
+      background: rgba(217, 119, 6, 0.22);
+      color: #FBBF24;
+      font-weight: 600;
+      border: 1px solid rgba(217, 119, 6, 0.35);
+    }
+    .admin-nav-pill {
+      background: rgba(217, 119, 6, 0.25);
+      color: #FBBF24;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .admin-nav-pill.danger {
+      background: rgba(220, 38, 38, 0.25);
+      color: #F87171;
+    }
+    .admin-nav-section {
+      font-size: 0.68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      padding: 16px 14px 6px;
+      font-weight: 700;
+    }
+    /* ── Main Area ── */
+    .admin-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .admin-topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border, #E5DCD0);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+    }
+    .admin-content-area {
+      padding: 28px;
+      flex: 1;
+    }
+    .admin-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .admin-title-h1 {
+      font-family: var(--font-brand, 'Cinzel');
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #110D0F;
+      margin: 0;
+    }
+    .admin-subtitle {
+      font-size: 0.85rem;
+      color: #6B7280;
+      margin-top: 4px;
+    }
+    .admin-card {
+      background: #ffffff;
+      border: 1px solid var(--border, #E5DCD0);
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .admin-table th {
+      background: #FAF7F2;
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #6B7280;
+      border-bottom: 1px solid var(--border, #E5DCD0);
+    }
+    .admin-table td {
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      vertical-align: middle;
+    }
+    .admin-table tbody tr:hover {
+      background: #FAF8F5;
+    }
+    .badge-in {
+      background: #DCFCE7;
+      color: #166534;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+    .badge-sale {
+      background: #FEF3C7;
+      color: #92400E;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 991px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+      .admin-sidebar {
+        position: fixed;
+        left: -260px;
+        transition: left 0.3s ease;
+      }
+      .admin-sidebar.open {
+        left: 0;
+      }
+      .admin-content-area {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- ─── Admin Sidebar ─── -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-logo">
+      <img src="../assets/images/logo.png" alt="Suyog Textile" onerror="this.onerror=null;this.src='../assets/images/favicon.png'">
+      <div>
+        <div class="admin-logo-text">Suyog <span>Textile</span></div>
+        <div style="font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:#FBBF24;font-weight:700;">Admin Console</div>
+      </div>
+    </div>
+
+    <ul class="admin-nav">
+      <li class="admin-nav-item">
+        <a href="index.html">
+          <span>📊 Dashboard</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="orders.html">
+          <span>📦 Orders</span>
+          <span class="admin-nav-pill danger">4 New</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="products.html">
+          <span>👗 Products Catalog</span>
+          <span class="admin-nav-pill">19</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="product-form.html">
+          <span>➕ Add New Product</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="categories.html">
+          <span>🗂️ Categories</span>
+          <span class="admin-nav-pill">6</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="coupons.html">
+          <span>🎟️ Coupons & Offers</span>
+          <span class="admin-nav-pill">3 Active</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="reviews.html" class="active">
+          <span>⭐ Reviews Moderation</span>
+          <span class="admin-nav-pill">4.9 ★</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="customers.html">
+          <span>👥 Patron Directory</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="notifications.html">
+          <span>🔔 Live Alerts</span>
+          <span class="admin-nav-pill danger">2 New</span>
+        </a>
+      </li>
+
+      <div class="admin-nav-section">Storefront Quick Access</div>
+      <li class="admin-nav-item">
+        <a href="../index.html#reviews" target="_blank" style="color:#FBBF24;">
+          <span>⭐ Verified Buyer Reviews</span>
+          <span>↗</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="../index.html" target="_blank">
+          <span>🌐 View Live Store</span>
+          <span>↗</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="../login.html" style="color:#F87171;" onclick="localStorage.removeItem('suyog_auth_user')">
+          <span>🚪 Sign Out</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- ─── Main Content ─── -->
+  <div class="admin-main">
+    <!-- Topbar -->
+    <header class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button type="button" class="btn btn-sm btn-outline d-lg-none" onclick="document.getElementById('adminSidebar').classList.toggle('open')">☰ Menu</button>
+        <span style="font-size:0.88rem;color:#6B7280;font-weight:600;">Suyog Textile Management System</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="background:rgba(217,119,6,0.15);color:#D97706;font-size:0.82rem;font-weight:700;padding:4px 12px;border-radius:20px;">
+          Overall Rating: 4.9 ★ (342 Verified Reviews)
+        </span>
+        <div style="display:flex;align-items:center;gap:8px;padding-left:10px;border-left:1px solid #E5DCD0">
+          <div style="width:34px;height:34px;border-radius:50%;background:#9B1C52;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.82rem">A</div>
+          <span style="font-size:0.82rem;font-weight:600">Administrator</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="admin-content-area">
+      <div class="admin-page-header">
+        <div>
+          <h1 class="admin-title-h1">Customer Reviews Moderation</h1>
+          <div class="admin-subtitle">Review, approve, or hide customer testimonials displayed on homepage & product pages</div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Verified Patron</th>
+                <th>Purchased Handloom</th>
+                <th>Rating</th>
+                <th>Feedback Testimonial</th>
+                <th>Date</th>
+                <th>Moderation Status</th>
+                <th style="text-align:right">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Meera Sengupta</strong><br>
+                  <span style="font-size:0.75rem;color:#6B7280;">meera.s@example.com • Pune</span>
+                </td>
+                <td><strong style="color:#110D0F;font-size:0.88rem;">Crimson Banarasi Katan Silk</strong></td>
+                <td><span style="color:#D97706;font-weight:700;font-size:0.95rem;">5.0 ★</span></td>
+                <td style="max-width:320px;">
+                  <span style="font-size:0.82rem;color:#374151;">"The Banarasi saree I ordered exceeded expectations! The fabric has a royal sheen and arrived in beautiful luxury packaging with authenticity certificate."</span>
+                </td>
+                <td>21 Oct 2026</td>
+                <td><span class="badge-in" id="rev-b-1">Approved</span></td>
+                <td style="text-align:right;">
+                  <button type="button" class="btn btn-sm btn-outline" onclick="toggleReview('rev-b-1', this)">Hide</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Ritika Agrawal</strong><br>
+                  <span style="font-size:0.75rem;color:#6B7280;">ritika.a@example.com • Mumbai</span>
+                </td>
+                <td><strong style="color:#110D0F;font-size:0.88rem;">Peacock Blue Kanjivaram Pure Silk</strong></td>
+                <td><span style="color:#D97706;font-weight:700;font-size:0.95rem;">5.0 ★</span></td>
+                <td style="max-width:320px;">
+                  <span style="font-size:0.82rem;color:#374151;">"The zari work is even more stunning in person than on the website. Customer service called to confirm my blouse stitching preferences. Flawless service!"</span>
+                </td>
+                <td>18 Oct 2026</td>
+                <td><span class="badge-in" id="rev-b-2">Approved</span></td>
+                <td style="text-align:right;">
+                  <button type="button" class="btn btn-sm btn-outline" onclick="toggleReview('rev-b-2', this)">Hide</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Pooja Kulkarni</strong><br>
+                  <span style="font-size:0.75rem;color:#6B7280;">pooja.k@example.com • Nashik</span>
+                </td>
+                <td><strong style="color:#110D0F;font-size:0.88rem;">Pastel Pink Organza Floral Saree</strong></td>
+                <td><span style="color:#D97706;font-weight:700;font-size:0.95rem;">4.8 ★</span></td>
+                <td style="max-width:320px;">
+                  <span style="font-size:0.82rem;color:#374151;">"Lightweight, airy, and very comfortable for summer festivities. Delivered in 2 days right here in Nashik. Highly recommended!"</span>
+                </td>
+                <td>15 Oct 2026</td>
+                <td><span class="badge-in" id="rev-b-3">Approved</span></td>
+                <td style="text-align:right;">
+                  <button type="button" class="btn btn-sm btn-outline" onclick="toggleReview('rev-b-3', this)">Hide</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Ananya Deshmukh</strong><br>
+                  <span style="font-size:0.75rem;color:#6B7280;">ananya.d@example.com • Bangalore</span>
+                </td>
+                <td><strong style="color:#110D0F;font-size:0.88rem;">Velvet Bridal Embroidered Lehenga</strong></td>
+                <td><span style="color:#D97706;font-weight:700;font-size:0.95rem;">5.0 ★</span></td>
+                <td style="max-width:320px;">
+                  <span style="font-size:0.82rem;color:#374151;">"Wore this for my brother's wedding reception, got countless compliments. The velvet flare is majestic."</span>
+                </td>
+                <td>12 Oct 2026</td>
+                <td><span class="badge-sale" id="rev-b-4">Pending</span></td>
+                <td style="text-align:right;">
+                  <button type="button" class="btn btn-sm btn-primary" onclick="toggleReview('rev-b-4', this)">Approve</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+  function toggleReview(badgeId, btn) {
+    const badge = document.getElementById(badgeId);
+    if (badge.classList.contains('badge-in')) {
+      badge.className = 'badge-sale';
+      badge.textContent = 'Pending';
+      btn.className = 'btn btn-sm btn-primary';
+      btn.textContent = 'Approve';
+    } else {
+      badge.className = 'badge-in';
+      badge.textContent = 'Approved';
+      btn.className = 'btn btn-sm btn-outline';
+      btn.textContent = 'Hide';
+    }
+  }
+</script>
+</body>
+</html>
