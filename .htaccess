@@ -2,6 +2,9 @@
 # Suyog Textile — Apache Configuration (.htaccess)
 # ==============================================================================
 
+# Set DirectoryIndex so index.html loads by default at root https://suyogtextile.in/
+DirectoryIndex index.html index.php
+
 RewriteEngine On
 
 # 1. Force HTTPS
@@ -46,6 +49,7 @@ RewriteRule ^admin/notifications/?$ admin/notifications.html [L,QSA]
 RewriteRule ^admin/?$ admin/index.html [L,QSA]
 RewriteRule ^contact/?$ contact.html [L,QSA]
 RewriteRule ^about/?$ about.html [L,QSA]
+RewriteRule ^size-guide/?$ size-guide.html [L,QSA]
 
 # Error 404 Page
 ErrorDocument 404 /404.html

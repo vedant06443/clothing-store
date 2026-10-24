@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Size Guide & Fit Finder — Suyog Textile</title>
+  <meta name="description" content="Comprehensive Indian ethnic wear size guide and fit finder for Sarees, Kurtis, Lehengas, Salwar Suits, and Menswear at Suyog Textile.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="assets/images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Marcellus&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <style>
+    .size-guide-hero {
+      background: linear-gradient(135deg, rgba(88, 8, 32, 0.94), rgba(28, 4, 12, 0.88)), url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1600&q=80') center/cover;
+      color: #fff;
+      padding: 60px 0 50px;
+      text-align: center;
+    }
+    .fit-calculator-card {
+      background: #FFFDF7;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      margin-top: -35px;
+      position: relative;
+      z-index: 10;
+    }
+    .chart-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-sm);
+    }
+    .measure-guide-box {
+      background: #FAF8F5;
+      border-left: 4px solid var(--primary);
+      padding: 18px 20px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 24px;
+    }
+    .nav-pills .nav-link {
+      color: var(--dark);
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 10px 20px;
+      margin: 4px;
+      border: 1px solid var(--border);
+      background: #FFFDF7;
+    }
+    .nav-pills .nav-link.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar" role="banner">
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499 &nbsp;|&nbsp; Use code <a href="offers.html" style="color:var(--gold-light);text-decoration:underline;">WELCOME10</a> for 10% OFF!
+  </div>
+
+  <!-- Desktop Header -->
+  <header class="desktop-header">
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile Logo" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
+        </div>
+        <nav aria-label="Desktop Primary Navigation">
+          <ul class="desktop-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html?cat=sarees">Sarees</a></li>
+            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
+            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
+            <li><a href="shop.html?cat=dresses">Gown</a></li>
+            <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
+            <li><a href="shop.html?filter=new">New Arrivals</a></li>
+            <li><a href="offers.html" style="color:#DC2626;font-weight:600">Sale %</a></li>
+          </ul>
+        </nav>
+        <div class="desktop-nav-right">
+          <a href="wishlist.html" class="nav-icon-btn" title="My Wishlist" aria-label="View Wishlist">
+            <i class="bi bi-heart"></i>
+            <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
+          </a>
+          <a href="account.html" class="nav-icon-btn" title="My Account / Sign In" aria-label="My Account">
+            <i class="bi bi-person"></i>
+          </a>
+          <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Shopping Bag" aria-label="Shopping Bag" style="background:transparent;border:none;">
+            <i class="bi bi-bag"></i>
+            <span class="nav-badge cart-count-badge" style="display:none">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="size-guide-hero">
+    <div class="container">
+      <span style="display:inline-block;padding:6px 16px;background:rgba(255,255,255,0.15);border-radius:20px;font-size:0.8rem;letter-spacing:1px;text-transform:uppercase;color:#FBBF24;margin-bottom:12px;font-weight:600">
+        Tailored Elegance
+      </span>
+      <h1 style="font-family:var(--font-brand);font-size:clamp(2rem, 4vw, 2.8rem);margin-bottom:10px;">Size Guide & Fit Finder</h1>
+      <p style="max-width:620px;margin:0 auto;color:rgba(255,255,255,0.9);font-size:1.05rem;">
+        Find your flawless silhouette across all authentic Indian weaves, readymade ensembles, and fabrics.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="container my-5">
+    <!-- Interactive Calculator -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-9">
+        <div class="fit-calculator-card">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <span style="font-size:2rem">🎯</span>
+            <div>
+              <h3 style="font-family:var(--font-brand);font-size:1.35rem;margin:0;color:var(--dark)">Instant Fit Recommender</h3>
+              <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Enter your measurements in inches for your tailored Indian size</p>
+            </div>
+          </div>
+          <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-uppercase text-muted">Bust / Chest (Inches)</label>
+              <input type="number" id="page-calc-bust" class="form-control" placeholder="e.g. 36" min="28" max="52">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-uppercase text-muted">Waist (Inches)</label>
+              <input type="number" id="page-calc-waist" class="form-control" placeholder="e.g. 30" min="22" max="48">
+            </div>
+            <div class="col-md-4">
+              <button type="button" class="btn btn-primary w-100" onclick="calculatePageSize()" style="height:42px;font-weight:700">
+                Calculate Size
+              </button>
+            </div>
+          </div>
+          <div id="page-calc-result" class="alert alert-light mt-3 mb-0" style="display:none;border-left:4px solid var(--primary);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Measurement Categories Tabs -->
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <ul class="nav nav-pills justify-content-center mb-4" id="sizeTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="saree-tab" data-bs-toggle="pill" data-bs-target="#tab-sarees" type="button" role="tab">🥻 Sarees & Blouses</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="kurti-tab" data-bs-toggle="pill" data-bs-target="#tab-kurtis" type="button" role="tab">👗 Kurtis & Tunics</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="lehenga-tab" data-bs-toggle="pill" data-bs-target="#tab-lehengas" type="button" role="tab">💃 Lehengas & Gowns</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="suits-tab" data-bs-toggle="pill" data-bs-target="#tab-suits" type="button" role="tab">👘 Salwar Suits</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="mens-tab" data-bs-toggle="pill" data-bs-target="#tab-mens" type="button" role="tab">👳 Menswear</button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="sizeTabsContent">
+          <!-- Sarees Tab -->
+          <div class="tab-pane fade show active" id="tab-sarees" role="tabpanel">
+            <div class="chart-card">
+              <h3 style="font-family:var(--font-brand);font-size:1.2rem;margin-bottom:12px;color:var(--primary)">Saree Drape & Blouse Sizing</h3>
+              <p class="text-muted small">All Suyog Textile sarees are crafted in standard traditional dimensions with generous unstitched blouse pieces.</p>
+              
+              <div class="table-responsive mb-4">
+                <table class="table table-bordered table-hover text-center align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Standard Size</th>
+                      <th>India / UK Size</th>
+                      <th>Bust (Inches)</th>
+                      <th>Under Bust (Inches)</th>
+                      <th>Blouse Length (Inches)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>XS</strong></td><td>34</td><td>32" – 33"</td><td>26" – 27"</td><td>13.5"</td></tr>
+                    <tr><td><strong>S</strong></td><td>36</td><td>34" – 35"</td><td>28" – 29"</td><td>14.0"</td></tr>
+                    <tr><td><strong>M</strong></td><td>38</td><td>36" – 37"</td><td>30" – 31"</td><td>14.5"</td></tr>
+                    <tr><td><strong>L</strong></td><td>40</td><td>38" – 39"</td><td>32" – 33"</td><td>15.0"</td></tr>
+                    <tr><td><strong>XL</strong></td><td>42</td><td>40" – 41"</td><td>34" – 35"</td><td>15.5"</td></tr>
+                    <tr><td><strong>XXL</strong></td><td>44</td><td>42" – 43"</td><td>36" – 37"</td><td>16.0"</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="measure-guide-box">
+                <h5 class="fw-bold mb-2">💡 Standard Saree Dimensions</h5>
+                <ul class="mb-0 small text-muted">
+                  <li><strong>Saree Length:</strong> 5.5 Meters (approx. 6 yards) standard drape.</li>
+                  <li><strong>Blouse Piece:</strong> 0.8 to 1.0 Meter matching running or contrast unstitched fabric attached to the pallu.</li>
+                  <li><strong>Width / Height:</strong> 44 to 45 Inches standard fall margin.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kurtis Tab -->
+          <div class="tab-pane fade" id="tab-kurtis" role="tabpanel">
+            <div class="chart-card">
+              <h3 style="font-family:var(--font-brand);font-size:1.2rem;margin-bottom:12px;color:var(--primary)">Kurtis & Tunics Measurement Guide</h3>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Size</th>
+                      <th>Chest (in)</th>
+                      <th>Waist (in)</th>
+                      <th>Hip (in)</th>
+                      <th>Shoulder (in)</th>
+                      <th>Standard Length (in)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>XS (34)</strong></td><td>34"</td><td>30"</td><td>37"</td><td>13.5"</td><td>42"</td></tr>
+                    <tr><td><strong>S (36)</strong></td><td>36"</td><td>32"</td><td>39"</td><td>14.0"</td><td>44"</td></tr>
+                    <tr><td><strong>M (38)</strong></td><td>38"</td><td>34"</td><td>41"</td><td>14.5"</td><td>44"</td></tr>
+                    <tr><td><strong>L (40)</strong></td><td>40"</td><td>36"</td><td>43"</td><td>15.0"</td><td>45"</td></tr>
+                    <tr><td><strong>XL (42)</strong></td><td>42"</td><td>38"</td><td>45"</td><td>15.5"</td><td>45"</td></tr>
+                    <tr><td><strong>XXL (44)</strong></td><td>44"</td><td>40"</td><td>47"</td><td>16.0"</td><td>46"</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lehengas Tab -->
+          <div class="tab-pane fade" id="tab-lehengas" role="tabpanel">
+            <div class="chart-card">
+              <h3 style="font-family:var(--font-brand);font-size:1.2rem;margin-bottom:12px;color:var(--primary)">Lehenga Choli & Gowns Dimensions</h3>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Size</th>
+                      <th>Choli Bust (in)</th>
+                      <th>Skirst Waist (in)</th>
+                      <th>Skirst Length (in)</th>
+                      <th>Flare / Ghera (Meters)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>XS (34)</strong></td><td>33"</td><td>26" – 28"</td><td>40" – 41"</td><td>3.5m+</td></tr>
+                    <tr><td><strong>S (36)</strong></td><td>35"</td><td>28" – 30"</td><td>41" – 42"</td><td>3.5m+</td></tr>
+                    <tr><td><strong>M (38)</strong></td><td>37"</td><td>30" – 32"</td><td>41" – 42"</td><td>3.8m+</td></tr>
+                    <tr><td><strong>L (40)</strong></td><td>39"</td><td>32" – 34"</td><td>42" – 43"</td><td>4.0m+</td></tr>
+                    <tr><td><strong>XL (42)</strong></td><td>41"</td><td>34" – 36"</td><td>42" – 43"</td><td>4.0m+</td></tr>
+                    <tr><td><strong>XXL (44)</strong></td><td>43"</td><td>36" – 38"</td><td>42" – 43"</td><td>4.0m+</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Salwar Suits Tab -->
+          <div class="tab-pane fade" id="tab-suits" role="tabpanel">
+            <div class="chart-card">
+              <h3 style="font-family:var(--font-brand);font-size:1.2rem;margin-bottom:12px;color:var(--primary)">Salwar Kameez & Anarkali Dimensions</h3>
+              <p class="text-muted small">Includes standard 2-inch inner side margins for easy alterations.</p>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Size</th>
+                      <th>Kameez Bust (in)</th>
+                      <th>Kameez Waist (in)</th>
+                      <th>Salwar Length (in)</th>
+                      <th>Dupatta Length (Meters)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>S (36)</strong></td><td>36"</td><td>32"</td><td>38"</td><td>2.25m</td></tr>
+                    <tr><td><strong>M (38)</strong></td><td>38"</td><td>34"</td><td>39"</td><td>2.25m</td></tr>
+                    <tr><td><strong>L (40)</strong></td><td>40"</td><td>36"</td><td>40"</td><td>2.25m</td></tr>
+                    <tr><td><strong>XL (42)</strong></td><td>42"</td><td>38"</td><td>40"</td><td>2.50m</td></tr>
+                    <tr><td><strong>XXL (44)</strong></td><td>44"</td><td>40"</td><td>41"</td><td>2.50m</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Menswear Tab -->
+          <div class="tab-pane fade" id="tab-mens" role="tabpanel">
+            <div class="chart-card">
+              <h3 style="font-family:var(--font-brand);font-size:1.2rem;margin-bottom:12px;color:var(--primary)">Men's Ethnic Wear (Kurtas & Pyjamas)</h3>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Size Label</th>
+                      <th>Chest (Inches)</th>
+                      <th>Shoulder (Inches)</th>
+                      <th>Kurta Length (Inches)</th>
+                      <th>Collar (Inches)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>38 (S)</strong></td><td>38" – 40"</td><td>17.5"</td><td>40"</td><td>15.0"</td></tr>
+                    <tr><td><strong>40 (M)</strong></td><td>40" – 42"</td><td>18.0"</td><td>42"</td><td>15.5"</td></tr>
+                    <tr><td><strong>42 (L)</strong></td><td>42" – 44"</td><td>18.5"</td><td>43"</td><td>16.0"</td></tr>
+                    <tr><td><strong>44 (XL)</strong></td><td>44" – 46"</td><td>19.0"</td><td>44"</td><td>16.5"</td></tr>
+                    <tr><td><strong>46 (XXL)</strong></td><td>46" – 48"</td><td>19.5"</td><td>45"</td><td>17.0"</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Sizing Assistance CTA -->
+        <div class="p-4 text-center rounded-3 mt-4" style="background:linear-gradient(135deg, #FFFDF7, #FEF3C7);border:1px solid var(--border)">
+          <h4 style="font-family:var(--font-brand);color:var(--primary)">Need Personalized Sizing Assistance?</h4>
+          <p class="text-muted small mb-3">Our master drapers and stylists are happy to guide your measurements before ordering.</p>
+          <a href="https://wa.me/918669396037?text=Hi%20Suyog%20Textile%2C%20I%20need%20assistance%20choosing%20the%20right%20size." 
+             target="_blank" rel="noopener noreferrer" class="btn btn-primary px-4 py-2">
+            <i class="fa-brands fa-whatsapp me-2"></i> Chat with Sizing Expert
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="background:#1C1917;color:#fff;padding:60px 0 30px">
+    <div class="container">
+      <div class="row g-4 pb-4 border-bottom border-secondary">
+        <div class="col-lg-4">
+          <div class="footer-logo mb-3">
+            <span style="font-family:var(--font-brand);font-size:1.4rem;font-weight:700;color:var(--gold)">Suyog Textile</span>
+          </div>
+          <p style="color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.6">
+            Versatile clothing store offering a wide variety of readymade garments and fabrics for all ages. Celebrating the heritage of Indian textiles.
+          </p>
+          <div class="social-links mt-3">
+            <a href="https://wa.me/918669396037" class="btn btn-sm btn-outline-light" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-whatsapp text-success me-1"></i> WhatsApp Support
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <h5 style="color:var(--gold);font-family:var(--font-brand);margin-bottom:16px">Quick Links</h5>
+          <ul class="list-unstyled" style="line-height:2">
+            <li><a href="shop.html?cat=sarees" style="color:rgba(255,255,255,0.8);text-decoration:none">Sarees</a></li>
+            <li><a href="shop.html?cat=kurtis" style="color:rgba(255,255,255,0.8);text-decoration:none">Kurtis</a></li>
+            <li><a href="shop.html?cat=lehengas" style="color:rgba(255,255,255,0.8);text-decoration:none">Lehengas</a></li>
+            <li><a href="size-guide.html" style="color:var(--gold);text-decoration:none">Size Guide & Fit Finder</a></li>
+            <li><a href="about.html" style="color:rgba(255,255,255,0.8);text-decoration:none">Our Heritage</a></li>
+            <li><a href="contact.html" style="color:rgba(255,255,255,0.8);text-decoration:none">Contact Showroom</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <h5 style="color:var(--gold);font-family:var(--font-brand);margin-bottom:16px">Customer Care</h5>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:8px">
+            📍 Dedicated Showroom Support
+          </p>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:8px">
+            📞 +91 86693 96037
+          </p>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.9rem">
+            🚚 Free Pan-India Delivery on orders over ₹1,499
+          </p>
+        </div>
+      </div>
+      <div class="text-center pt-3 small" style="color:rgba(255,255,255,0.5)">
+        &copy; 2026 Suyog Textile. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script>
+    function calculatePageSize() {
+      const bust = parseFloat(document.getElementById('page-calc-bust').value);
+      const res = document.getElementById('page-calc-result');
+      if (!bust || isNaN(bust)) {
+        res.style.display = 'block';
+        res.innerHTML = '<span class="text-danger">Please enter your bust measurement.</span>';
+        return;
+      }
+      let size = 'M';
+      let inUk = '38';
+      if (bust <= 33) { size = 'XS'; inUk = '34'; }
+      else if (bust <= 35) { size = 'S'; inUk = '36'; }
+      else if (bust <= 37) { size = 'M'; inUk = '38'; }
+      else if (bust <= 39) { size = 'L'; inUk = '40'; }
+      else if (bust <= 41) { size = 'XL'; inUk = '42'; }
+      else { size = 'XXL'; inUk = '44'; }
+
+      res.style.display = 'block';
+      res.innerHTML = `✨ Recommended Fit: <strong style="color:var(--primary);font-size:1.05rem">${size} (India/UK ${inUk})</strong>. Tailored for Kurtis, Blouses, and Lehengas.`;
+    }
+  </script>
+</body>
+</html>

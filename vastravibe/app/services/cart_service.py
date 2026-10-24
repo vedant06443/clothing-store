@@ -25,7 +25,7 @@ def get_cart(db: Session, user_id: int) -> Dict[str, Any]:
         shipping = 0
         total = 0
     else:
-        shipping = 0 if subtotal >= 999 else 99
+        shipping = 0 if subtotal >= 1499 else 99
         total = subtotal + shipping
 
     return {
