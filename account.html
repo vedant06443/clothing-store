@@ -2,172 +2,473 @@
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>My Account — Suyog Textile</title>
+  <meta name="robots" content="noindex, nofollow">
 
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .account-layout { display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start; }
+    .account-nav-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px 14px; position: sticky; top: 100px; }
+    .account-tab-btn { display: flex; align-items: center; gap: 12px; width: 100%; border: none; background: transparent; padding: 12px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text); text-align: left; cursor: pointer; transition: all 0.2s; margin-bottom: 4px; }
+    .account-tab-btn:hover { background: #FAF6F8; color: var(--primary); }
+    .account-tab-btn.active { background: var(--primary); color: #fff; }
+    .account-content-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 30px; }
+    .order-card { border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: #fff; }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-placed { background: #EFF6FF; color: #1D4ED8; }
+    .status-confirmed { background: #FEF3C7; color: #B45309; }
+    .status-shipped { background: #F3E8FF; color: #6B21A8; }
+    .status-delivered { background: #ECFDF5; color: #047857; }
+    .status-cancelled { background: #FEF2F2; color: #B91C1C; }
+    @media (max-width: 991px) { .account-layout { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 
   <!-- Header -->
   <header class="desktop-header">
-    <div class="container d-flex justify-content-between align-items-center py-3">
-      <a href="index.html" class="navbar-logo">
-        <img src="assets/images/logo.png" alt="Suyog Textile" height="42">
-        <span class="brand-name ms-2">Suyog <span class="brand-highlight">Textile</span></span>
-      </a>
-      <div class="d-flex gap-2">
-        <a href="shop.html" class="btn btn-sm btn-outline">Shop Collections</a>
-        <button class="btn btn-sm btn-danger" onclick="handleLogout()">Sign Out</button>
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
+        </div>
+        <nav>
+          <ul class="desktop-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">All Collections</a></li>
+            <li><a href="cart.html">Shopping Bag</a></li>
+            <li><a href="wishlist.html">Wishlist</a></li>
+          </ul>
+        </nav>
+        <div class="desktop-nav-right">
+          <button onclick="handleSignOut()" class="btn btn-sm btn-outline text-danger border-danger">Sign Out</button>
+        </div>
       </div>
     </div>
   </header>
 
-  <main class="container my-5" style="min-height:60vh;">
-    <div class="row g-4">
-      <!-- Profile Card -->
-      <div class="col-lg-4">
-        <div class="card p-4" style="background:#FFFDF9;border-color:var(--border);border-radius:16px;">
-          <div class="text-center mb-3">
-            <div style="width:72px;height:72px;border-radius:50%;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;">
-              <span id="userInitial">P</span>
+  <main class="container my-5" style="min-height: 65vh;">
+    <div class="account-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="account-nav-card">
+        <div class="text-center pb-3 mb-3 border-bottom">
+          <div style="width:52px; height:52px; border-radius:50%; background:var(--cream-dark); color:var(--primary); font-weight:700; font-size:1.3rem; display:flex; align-items:center; justify-content:center; margin:0 auto 10px;">
+            <i class="bi bi-person"></i>
+          </div>
+          <strong id="sideUserName" style="display:block; font-size:0.95rem;">Customer Account</strong>
+          <span id="sideUserEmail" style="font-size:0.78rem; color:var(--text-muted); word-break:break-all;">Loading...</span>
+        </div>
+
+        <button class="account-tab-btn active" id="tabBtnOrders" onclick="switchTab('orders')">
+          <i class="bi bi-box-seam"></i> My Orders
+        </button>
+        <button class="account-tab-btn" id="tabBtnProfile" onclick="switchTab('profile')">
+          <i class="bi bi-person-lines-fill"></i> Edit Profile
+        </button>
+        <button class="account-tab-btn" id="tabBtnAddresses" onclick="switchTab('addresses')">
+          <i class="bi bi-geo-alt"></i> Saved Addresses
+        </button>
+        <button class="account-tab-btn" id="tabBtnGuest" onclick="switchTab('guest')">
+          <i class="bi bi-search"></i> Track Order (Guest)
+        </button>
+        <button class="account-tab-btn text-danger" onclick="handleSignOut()">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </button>
+      </aside>
+
+      <!-- Main Account Panel -->
+      <section class="account-content-card">
+        <!-- Tab 1: Orders -->
+        <div id="panelOrders">
+          <h2 style="font-family: var(--font-brand); font-size: 1.5rem; margin-bottom: 6px;">My Orders</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px;">Track live progress and view receipts for all your orders.</p>
+          <div id="ordersContainer">
+            <div class="text-muted text-center py-5">Loading orders...</div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Profile -->
+        <div id="panelProfile" style="display:none;">
+          <h2 style="font-family: var(--font-brand); font-size: 1.5rem; margin-bottom: 6px;">Profile Details</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px;">Update your personal contact details.</p>
+
+          <div id="profileAlert" class="alert d-none small"></div>
+
+          <form id="profileForm" onsubmit="handleSaveProfile(event)" style="max-width:480px;">
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Full Name</label>
+              <input type="text" id="profFullName" class="form-control" required>
             </div>
-            <h3 id="userName" style="font-family:var(--font-brand);margin:12px 0 2px;">Priya Sharma</h3>
-            <div id="userRole" class="badge bg-gold text-dark mb-2">Verified Patron</div>
-            <p id="userEmail" class="text-muted small mb-1">priya@example.com</p>
-            <p id="userPhone" class="text-muted small">+91 9812345678</p>
-          </div>
-
-          <hr>
-          <div class="d-flex flex-column gap-2">
-            <a href="orders.html" class="btn btn-sm btn-outline text-start"><i class="bi bi-box-seam me-2"></i> My Orders & Live Tracking</a>
-            <a href="wishlist.html" class="btn btn-sm btn-outline text-start"><i class="bi bi-heart me-2"></i> My Wishlist</a>
-            <a href="cart.html" class="btn btn-sm btn-outline text-start"><i class="bi bi-bag me-2"></i> Current Shopping Bag</a>
-            <div id="adminPortalLink">
-              <a href="admin/index.html" class="btn btn-sm btn-primary text-start w-100"><i class="bi bi-speedometer2 me-2"></i> Admin Management Portal</a>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Mobile Number</label>
+              <input type="tel" id="profPhone" class="form-control" required pattern="[0-9]{10}" maxlength="10">
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Orders & Details -->
-      <div class="col-lg-8">
-        <div class="card p-4 mb-4" style="border-radius:16px;border-color:var(--border);">
-          <h4 style="font-family:var(--font-brand);margin-bottom:16px;">Recent Orders</h4>
-          <div id="userOrdersList">
-            <!-- Injected by JS -->
-          </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Email Address</label>
+              <input type="email" id="profEmail" class="form-control text-muted" disabled>
+              <small class="text-muted">Email cannot be changed.</small>
+            </div>
+            <button type="submit" id="btnSaveProfile" class="btn btn-primary px-4 py-2 fw-bold mt-2">Save Profile</button>
+          </form>
         </div>
 
-        <div class="card p-4" style="border-radius:16px;border-color:var(--border);">
-          <h4 style="font-family:var(--font-brand);margin-bottom:16px;">Default Delivery Address</h4>
-          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.6;margin:0;">
-            📍 <strong>Home Address:</strong><br>
-            Flat 402, Royal Palms, Market Yard Road, Satpur,<br>
-            Nashik, Maharashtra - 422007
-          </p>
+        <!-- Tab 3: Saved Addresses -->
+        <div id="panelAddresses" style="display:none;">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h2 style="font-family: var(--font-brand); font-size: 1.5rem; margin-bottom: 4px;">Saved Addresses</h2>
+              <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0;">Manage your shipping destinations for faster checkout.</p>
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="showAddAddressForm()">+ Add Address</button>
+          </div>
+
+          <div id="addressFormWrap" class="p-3 mb-4 border rounded" style="display:none; background:#FFFDF9;">
+            <h4 style="font-size:1.1rem; margin-bottom:14px;">Add New Address</h4>
+            <form onsubmit="handleSaveAddress(event)">
+              <div class="row g-2">
+                <div class="col-md-6 mb-2">
+                  <label class="small fw-bold">Label (e.g. Home, Office)</label>
+                  <input type="text" id="addrLabel" class="form-control form-control-sm" required value="Home">
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label class="small fw-bold">6-Digit PIN Code</label>
+                  <input type="text" id="addrPin" class="form-control form-control-sm" required pattern="[0-9]{6}" maxlength="6">
+                </div>
+                <div class="col-12 mb-2">
+                  <label class="small fw-bold">Street Address</label>
+                  <input type="text" id="addrLine1" class="form-control form-control-sm" required placeholder="Flat, society, landmark">
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label class="small fw-bold">City</label>
+                  <input type="text" id="addrCity" class="form-control form-control-sm" required placeholder="e.g. Nashik">
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label class="small fw-bold">State</label>
+                  <input type="text" id="addrState" class="form-control form-control-sm" required value="Maharashtra">
+                </div>
+                <div class="col-12 mb-2">
+                  <label class="small"><input type="checkbox" id="addrDefault" class="me-1"> Set as default delivery address</label>
+                </div>
+              </div>
+              <div class="d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-sm btn-primary">Save Address</button>
+                <button type="button" class="btn btn-sm btn-outline" onclick="hideAddressForm()">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="addressesList">
+            <div class="text-muted text-center py-4">Loading saved addresses...</div>
+          </div>
         </div>
-      </div>
+
+        <!-- Tab 4: Guest Order Tracker -->
+        <div id="panelGuest" style="display:none;">
+          <h2 style="font-family: var(--font-brand); font-size: 1.5rem; margin-bottom: 6px;">Track Order</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px;">Look up order tracking with your unique Order ID and 10-digit mobile number.</p>
+
+          <form onsubmit="handleGuestTrack(event)" style="max-width:480px;" class="mb-4">
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Order ID (e.g. SYG-261025-1234)</label>
+              <input type="text" id="guestOrderNo" class="form-control text-uppercase" required placeholder="SYG-...">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">10-Digit Mobile Number</label>
+              <input type="tel" id="guestPhone" class="form-control" required pattern="[0-9]{10}" maxlength="10" placeholder="e.g. 9812345678">
+            </div>
+            <button type="submit" id="btnGuestTrack" class="btn btn-primary px-4 py-2 fw-bold">Search Order Status</button>
+          </form>
+
+          <div id="guestResultWrap" style="display:none;" class="p-3 border rounded"></div>
+        </div>
+      </section>
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="footer">
     <div class="container footer-bottom">
-      <p>© 2026 Suyog Textile. Authentic Indian Ethnic Wear.</p>
+      <p>© 2026 Suyog Textile. Real-Time Indian Clothing.</p>
     </div>
   </footer>
 
-  <script src="assets/js/products.js"></script>
+  <!-- Scripts: Pinned Supabase JS + Store Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabaseClient.js"></script>
   <script src="assets/js/store.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      let user = null;
-      try {
-        user = JSON.parse(localStorage.getItem('suyog_auth_user'));
-      } catch(e) {}
+    let currentUser = null;
 
-      if (!user) {
-        user = {
-          name: 'Priya Sharma',
-          email: 'priya@example.com',
-          phone: '+91 9812345678',
-          isAdmin: false
-        };
-        localStorage.setItem('suyog_auth_user', JSON.stringify(user));
-      }
+    function switchTab(tab) {
+      ['orders', 'profile', 'addresses', 'guest'].forEach(t => {
+        const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+        const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (btn) btn.classList.toggle('active', t === tab);
+        if (panel) panel.style.display = (t === tab) ? 'block' : 'none';
+      });
 
-      document.getElementById('userName').textContent = user.name;
-      document.getElementById('userInitial').textContent = user.name.charAt(0);
-      document.getElementById('userEmail').textContent = user.email;
-      document.getElementById('userPhone').textContent = user.phone;
-
-      if (user.isAdmin) {
-        document.getElementById('userRole').textContent = 'Administrator';
-        document.getElementById('adminPortalLink').style.display = 'block';
-      }
-
-      // Check last order
-      let lastOrder = null;
-      try {
-        lastOrder = JSON.parse(localStorage.getItem('suyog_last_order'));
-      } catch(e) {}
-
-      const ordersEl = document.getElementById('userOrdersList');
-      if (lastOrder) {
-        ordersEl.innerHTML = `
-          <div class="border rounded p-3 mb-2" style="background:#FFFDF9;">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <strong>Order ID: ${lastOrder.orderId}</strong>
-              <span class="badge bg-success">Confirmed</span>
-            </div>
-            <div class="small text-muted mb-2">Placed on: ${lastOrder.date} | Payment: ${lastOrder.paymentMethod}</div>
-            <div class="small mb-2">
-              ${lastOrder.cart.map(c => `<div>• ${c.quantity}x ${c.name} (${c.size})</div>`).join('')}
-            </div>
-            <div class="d-flex justify-content-between align-items-center pt-2 border-top flex-wrap gap-2">
-              <strong>Total: ₹${lastOrder.totals.total.toLocaleString('en-IN')}</strong>
-              <div class="d-flex gap-2">
-                <a href="order-detail.html?id=${lastOrder.orderId}" class="btn btn-sm btn-outline">Track Delivery</a>
-                <a href="invoice.html?id=${lastOrder.orderId}" class="btn btn-sm btn-gold">Tax Invoice</a>
-              </div>
-            </div>
-          </div>
-        `;
-      } else {
-        ordersEl.innerHTML = `
-          <div class="border rounded p-3 mb-2" style="background:#FFFDF9;">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <strong>Order #SYG-2026-1042</strong>
-              <span class="badge bg-primary">Shipped in Transit</span>
-            </div>
-            <div class="small text-muted mb-2">Placed on: 21 Oct 2026 | Courier: BlueDart Express (AWB: BLD884920149IN)</div>
-            <div class="small mb-2">
-              <div>• 1x Crimson Red Royal Banarasi Katan Silk Saree (Free Size)</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center pt-2 border-top flex-wrap gap-2">
-              <strong>Total: ₹8,999</strong>
-              <div class="d-flex gap-2">
-                <a href="order-detail.html?id=1042" class="btn btn-sm btn-outline">Track Delivery</a>
-                <a href="invoice.html?id=1042" class="btn btn-sm btn-gold">Tax Invoice</a>
-                <a href="orders.html" class="btn btn-sm btn-primary">All Orders &rarr;</a>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-    });
-
-    function handleLogout() {
-      localStorage.removeItem('suyog_auth_user');
-      Store.showToast("Signed out successfully");
-      setTimeout(() => { window.location.href = 'index.html'; }, 400);
+      if (tab === 'orders') loadOrders();
+      if (tab === 'addresses') loadAddresses();
     }
+
+    async function initAccount() {
+      if (window.location.hash === '#guest-track') {
+        switchTab('guest');
+        return;
+      }
+
+      if (!window.isSupabaseConfigured()) {
+        switchTab('guest');
+        return;
+      }
+
+      const { data: { session } } = await window.supabaseClient.auth.getSession();
+      if (!session || !session.user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      currentUser = session.user;
+      document.getElementById('sideUserEmail').textContent = currentUser.email;
+      document.getElementById('profEmail').value = currentUser.email;
+
+      // Fetch Profile
+      const { data: prof } = await window.supabaseClient
+        .from('profiles')
+        .select('full_name, phone')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (prof) {
+        document.getElementById('sideUserName').textContent = prof.full_name || 'Customer';
+        document.getElementById('profFullName').value = prof.full_name || '';
+        document.getElementById('profPhone').value = prof.phone || '';
+      }
+
+      loadOrders();
+    }
+
+    async function loadOrders() {
+      const container = document.getElementById('ordersContainer');
+      if (!currentUser) return;
+
+      const { data: orders, error } = await window.supabaseClient
+        .from('orders')
+        .select('*, order_items(*)')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      if (error || !orders || orders.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5">
+            <span style="font-size:3rem;">📦</span>
+            <h4 style="margin-top:12px;">No orders placed yet</h4>
+            <p class="text-muted">Explore handloom sarees and lehengas to place your first order.</p>
+            <a href="shop.html" class="btn btn-sm btn-primary">Start Shopping &rarr;</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(o => {
+        const dateStr = new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        const cfg = window.SITE_CONFIG || {};
+        const waNum = cfg.whatsappNumber || "918669396037";
+        const waMsg = `Namaste Suyog Textile, inquiring about status of Order #${o.order_no}.`;
+
+        return `
+          <div class="order-card">
+            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+              <div>
+                <strong>${o.order_no}</strong>
+                <span class="text-muted small ms-2">${dateStr}</span>
+              </div>
+              <span class="status-badge status-${o.status}">${o.status}</span>
+            </div>
+            <div class="small text-muted mb-3">
+              Payment: <strong>${o.payment_method.toUpperCase()}</strong> (${o.payment_status}) | Deliver to: ${o.address_line1}, ${o.city}
+            </div>
+
+            <div class="mb-3">
+              ${(o.order_items || []).map(item => `
+                <div class="d-flex justify-content-between small py-1 border-bottom">
+                  <span>${item.qty}x ${item.name_snapshot} (${item.size})</span>
+                  <strong>₹${item.total_price_inr.toLocaleString('en-IN')}</strong>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center pt-2">
+              <span class="fw-bold">Total: ₹${o.total_inr.toLocaleString('en-IN')}</span>
+              <a href="https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}" target="_blank" class="btn btn-sm btn-whatsapp py-1 px-3">
+                <i class="fa-brands fa-whatsapp me-1"></i> Inquire Updates
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function handleSaveProfile(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSaveProfile');
+      const alertEl = document.getElementById('profileAlert');
+      btn.disabled = true;
+
+      const fullName = document.getElementById('profFullName').value.trim();
+      const phone = document.getElementById('profPhone').value.trim();
+
+      const { error } = await window.supabaseClient
+        .from('profiles')
+        .update({ full_name: fullName, phone: phone })
+        .eq('id', currentUser.id);
+
+      btn.disabled = false;
+      alertEl.classList.remove('d-none');
+      if (error) {
+        alertEl.className = 'alert alert-danger small';
+        alertEl.textContent = 'Error updating profile: ' + error.message;
+      } else {
+        alertEl.className = 'alert alert-success small';
+        alertEl.textContent = '✓ Profile saved successfully!';
+        document.getElementById('sideUserName').textContent = fullName;
+      }
+    }
+
+    // Addresses CRUD
+    function showAddAddressForm() {
+      document.getElementById('addressFormWrap').style.display = 'block';
+    }
+    function hideAddressForm() {
+      document.getElementById('addressFormWrap').style.display = 'none';
+    }
+
+    async function loadAddresses() {
+      const container = document.getElementById('addressesList');
+      if (!currentUser) return;
+
+      const { data: addrs } = await window.supabaseClient
+        .from('addresses')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('is_default', { ascending: false });
+
+      if (!addrs || addrs.length === 0) {
+        container.innerHTML = '<div class="text-muted text-center py-4">No addresses saved yet. Click "+ Add Address" above.</div>';
+        return;
+      }
+
+      container.innerHTML = addrs.map(a => `
+        <div class="p-3 border rounded mb-2 d-flex justify-content-between align-items-start">
+          <div>
+            <span class="badge bg-secondary me-2">${a.label}</span>
+            ${a.is_default ? '<span class="badge bg-success">Default</span>' : ''}
+            <div class="mt-2 font-monospace small">${a.line1}, ${a.city}, ${a.state} - ${a.pincode}</div>
+          </div>
+          <div class="d-flex gap-2">
+            ${!a.is_default ? `<button onclick="setDefaultAddress('${a.id}')" class="btn btn-sm btn-outline">Set Default</button>` : ''}
+            <button onclick="deleteAddress('${a.id}')" class="btn btn-sm text-danger border-0">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function handleSaveAddress(e) {
+      e.preventDefault();
+      const newAddr = {
+        user_id: currentUser.id,
+        label: document.getElementById('addrLabel').value.trim(),
+        line1: document.getElementById('addrLine1').value.trim(),
+        city: document.getElementById('addrCity').value.trim(),
+        state: document.getElementById('addrState').value.trim(),
+        pincode: document.getElementById('addrPin').value.trim(),
+        is_default: document.getElementById('addrDefault').checked
+      };
+
+      if (newAddr.is_default) {
+        await window.supabaseClient.from('addresses').update({ is_default: false }).eq('user_id', currentUser.id);
+      }
+
+      await window.supabaseClient.from('addresses').insert(newAddr);
+      hideAddressForm();
+      loadAddresses();
+    }
+
+    async function setDefaultAddress(id) {
+      await window.supabaseClient.from('addresses').update({ is_default: false }).eq('user_id', currentUser.id);
+      await window.supabaseClient.from('addresses').update({ is_default: true }).eq('id', id);
+      loadAddresses();
+    }
+
+    async function deleteAddress(id) {
+      if (confirm('Delete this address?')) {
+        await window.supabaseClient.from('addresses').delete().eq('id', id);
+        loadAddresses();
+      }
+    }
+
+    // Guest Order Track
+    async function handleGuestTrack(e) {
+      e.preventDefault();
+      const orderNo = document.getElementById('guestOrderNo').value.trim();
+      const phone = document.getElementById('guestPhone').value.trim();
+      const wrap = document.getElementById('guestResultWrap');
+      wrap.style.display = 'block';
+      wrap.innerHTML = '<div class="text-muted text-center py-2">Searching order records...</div>';
+
+      if (!window.isSupabaseConfigured()) {
+        wrap.innerHTML = '<div class="text-danger small">Tracking service currently unavailable. Please inquire on WhatsApp.</div>';
+        return;
+      }
+
+      const { data, error } = await window.supabaseClient.rpc('get_order_status', {
+        order_no: orderNo,
+        phone: phone
+      });
+
+      if (error || !data || !data.found) {
+        wrap.innerHTML = '<div class="text-danger small text-center py-2">No matching order found for this Order Number and Phone. Please verify and try again.</div>';
+        return;
+      }
+
+      const dateStr = new Date(data.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      wrap.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <strong>Order: ${data.order_no}</strong>
+          <span class="status-badge status-${data.status}">${data.status}</span>
+        </div>
+        <div class="small text-muted mb-2">Date: ${dateStr} | Customer: ${data.customer_name} | Total: ₹${data.total_inr.toLocaleString('en-IN')}</div>
+        <div class="small p-2 bg-light rounded mb-2">Note: ${data.tracking_note || 'Order is being processed at our boutique showroom.'}</div>
+        <div class="small">
+          <strong>Items:</strong>
+          ${(data.items || []).map(i => `<div>• ${i.qty}x ${i.name} (${i.size})</div>`).join('')}
+        </div>
+      `;
+    }
+
+    async function handleSignOut() {
+      if (window.isSupabaseConfigured()) {
+        await window.supabaseClient.auth.signOut();
+      }
+      window.location.href = 'index.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', initAccount);
   </script>
 </body>
 </html>

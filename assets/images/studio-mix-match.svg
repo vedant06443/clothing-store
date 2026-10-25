@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="100%" height="100%">
+  <defs>
+    <linearGradient id="studioBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C1917" />
+      <stop offset="50%" stop-color="#292524" />
+      <stop offset="100%" stop-color="#1C1917" />
+    </linearGradient>
+    <linearGradient id="studioGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="50%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="1000" fill="url(#studioBg)" />
+  <circle cx="500" cy="420" r="280" fill="rgba(217,119,6,0.08)" stroke="url(#studioGold)" stroke-width="2" stroke-dasharray="8,6" />
+  <circle cx="500" cy="420" r="200" fill="rgba(88,8,32,0.3)" stroke="url(#studioGold)" stroke-width="1.5" />
+  
+  <text x="500" y="380" font-family="'Cinzel', serif" font-size="70" text-anchor="middle">🎨</text>
+  <text x="500" y="470" font-family="'Cinzel', serif" font-size="32" font-weight="700" fill="#FFFDF7" text-anchor="middle" letter-spacing="2">STYLE STUDIO</text>
+  <text x="500" y="515" font-family="'Outfit', sans-serif" font-size="16" fill="#FDE68A" text-anchor="middle">Curate & Bundle Your Look</text>
+  
+  <rect x="250" y="620" width="500" height="60" rx="30" fill="rgba(255,255,255,0.06)" stroke="rgba(253,230,138,0.3)" />
+  <text x="500" y="657" font-family="'Outfit', sans-serif" font-size="16" font-weight="600" fill="#FFFDF7" text-anchor="middle">✨ Select 2+ Pieces for 15% Bundle Discount</text>
+</svg>

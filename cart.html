@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Shopping Bag — Suyog Textile</title>
+  <meta name="robots" content="noindex, nofollow">
 
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,7 +19,7 @@
 
   <!-- Announcement Bar -->
   <div class="announcement-bar">
-    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499 &nbsp;|&nbsp; Use code WELCOME10 for 10% OFF!
+    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹1,499
   </div>
 
   <!-- Header -->
@@ -37,10 +38,10 @@
         <nav>
           <ul class="desktop-nav-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="shop.html?cat=sarees">Sarees</a></li>
-            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
-            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
-            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
+            <li><a href="shop.html?category=sarees">Sarees</a></li>
+            <li><a href="shop.html?category=salwar-suits">Salwar Suits</a></li>
+            <li><a href="shop.html?category=lehengas">Lehenga Choli</a></li>
+            <li><a href="shop.html?category=kurtis">Kurti</a></li>
             <li><a href="shop.html">All Collections</a></li>
           </ul>
         </nav>
@@ -66,12 +67,14 @@
   <!-- Main Cart Section -->
   <main class="container my-5" style="min-height:55vh;">
     <h1 style="font-family:var(--font-brand);font-size:clamp(1.6rem, 3vw, 2.2rem);margin-bottom:8px;">Your Shopping Bag</h1>
-    <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:28px;">Review your handpicked weaves before proceeding to delivery.</p>
+    <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:28px;">Live verified inventory and prices from Suyog Textile showroom.</p>
 
     <div class="row g-4" id="cartGridContainer">
       <div class="col-lg-8">
         <div class="card p-4" style="background:#fff;border-color:var(--border);">
-          <div id="cartItemsList"></div>
+          <div id="cartItemsList">
+            <div class="text-center py-4 text-muted">Loading your shopping bag...</div>
+          </div>
         </div>
       </div>
 
@@ -92,19 +95,19 @@
             <strong id="summaryShipping">FREE</strong>
           </div>
           <div class="d-flex justify-content-between pt-3 mt-3 border-top" style="font-size:1.25rem;font-weight:700;color:var(--primary);">
-            <span>Total Payable</span>
+            <span>Total Amount</span>
             <span id="summaryTotal">₹0</span>
           </div>
 
           <!-- Coupon Input -->
           <div class="d-flex gap-2 my-3">
             <input type="text" id="couponInput" class="form-control form-control-sm text-uppercase fw-bold" placeholder="Coupon (e.g. WELCOME10)">
-            <button class="btn btn-sm btn-gold" onclick="applyCouponCode()">Apply</button>
+            <button class="btn btn-sm btn-gold" id="btnApplyCoupon" onclick="applyCoupon()">Apply</button>
           </div>
           <div id="appliedCouponTag" class="small mb-3"></div>
 
-          <a href="checkout.html" class="btn btn-primary w-100 py-3 fw-bold mb-2">Proceed to Checkout &rarr;</a>
-          <button class="btn btn-whatsapp w-100 py-2" onclick="Store.orderViaWhatsApp()">
+          <a href="checkout.html" id="btnProceedCheckout" class="btn btn-primary w-100 py-3 fw-bold mb-2">Proceed to Checkout &rarr;</a>
+          <button class="btn btn-whatsapp w-100 py-2" onclick="orderViaWhatsApp()">
             <i class="fa-brands fa-whatsapp me-2"></i> Order via WhatsApp
           </button>
         </div>
@@ -127,17 +130,23 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="assets/js/products.js"></script>
+  <!-- Scripts: Pinned Supabase JS + Store Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabaseClient.js"></script>
+  <script src="assets/data/products.js"></script>
   <script src="assets/js/store.js"></script>
   <script>
-    function renderCartPage() {
-      const cart = Store.getCart();
-      const totals = Store.getCartTotals();
+    let appliedCoupon = null;
+    let currentCartData = { items: [], subtotal: 0 };
+
+    async function renderCart() {
       const grid = document.getElementById('cartGridContainer');
       const emptyView = document.getElementById('emptyCartView');
 
-      if (cart.length === 0) {
+      currentCartData = await Store.fetchCartDetails();
+
+      if (currentCartData.items.length === 0) {
         if (grid) grid.style.display = 'none';
         if (emptyView) emptyView.style.display = 'block';
         return;
@@ -147,51 +156,113 @@
       if (emptyView) emptyView.style.display = 'none';
 
       const listEl = document.getElementById('cartItemsList');
-      listEl.innerHTML = cart.map((item, idx) => `
+      listEl.innerHTML = currentCartData.items.map((item, idx) => `
         <div class="d-flex gap-3 align-items-center py-3 border-bottom">
           <img src="${item.image}" alt="${item.name}" style="width:75px;height:95px;object-fit:cover;border-radius:6px;">
           <div class="flex-grow-1">
             <h4 style="font-size:1rem;margin-bottom:4px;"><a href="product.html?id=${item.id}" style="color:var(--dark);">${item.name}</a></h4>
-            <div class="small text-muted mb-1">Size: ${item.size} | Color: ${item.color}</div>
-            <strong style="color:var(--primary);">₹${item.price.toLocaleString('en-IN')}</strong>
+            <div class="small text-muted mb-1">Size: ${item.size}</div>
+            <strong style="color:var(--primary);">₹${item.unitPrice.toLocaleString('en-IN')}</strong>
           </div>
           <div class="qty-stepper">
-            <button onclick="Store.updateQuantity(${idx}, ${item.quantity - 1})">-</button>
-            <span>${item.quantity}</span>
-            <button onclick="Store.updateQuantity(${idx}, ${item.quantity + 1})">+</button>
+            <button onclick="handleQtyChange(${idx}, ${item.qty - 1})">-</button>
+            <span>${item.qty}</span>
+            <button onclick="handleQtyChange(${idx}, ${item.qty + 1})">+</button>
           </div>
           <div style="font-weight:700;color:var(--primary);min-width:80px;text-align:right;">
-            ₹${(item.price * item.quantity).toLocaleString('en-IN')}
+            ₹${item.totalPrice.toLocaleString('en-IN')}
           </div>
-          <button style="background:transparent;border:none;cursor:pointer;color:var(--error);font-size:1.1rem;padding:0 6px;" onclick="Store.removeFromCart(${idx})" title="Remove item">✕</button>
+          <button style="background:transparent;border:none;cursor:pointer;color:var(--error);font-size:1.1rem;padding:0 6px;" onclick="handleRemoveItem(${idx})" title="Remove item">✕</button>
         </div>
       `).join('');
 
-      document.getElementById('summarySubtotal').textContent = `₹${totals.subtotal.toLocaleString('en-IN')}`;
-      document.getElementById('summaryShipping').textContent = totals.shipping === 0 ? 'FREE' : `₹${totals.shipping}`;
-      document.getElementById('summaryTotal').textContent = `₹${totals.total.toLocaleString('en-IN')}`;
+      updateSummary();
+    }
+
+    async function handleQtyChange(idx, newQty) {
+      Store.updateQuantity(idx, newQty);
+      if (appliedCoupon) {
+        // Re-validate coupon
+        await applyCoupon(appliedCoupon.code);
+      }
+      await renderCart();
+    }
+
+    async function handleRemoveItem(idx) {
+      Store.removeFromCart(idx);
+      appliedCoupon = null;
+      await renderCart();
+    }
+
+    async function applyCoupon(forcedCode = null) {
+      const code = forcedCode || document.getElementById('couponInput').value.trim();
+      const tag = document.getElementById('appliedCouponTag');
+      if (!code) return;
+
+      const res = await Store.validateCouponServer(code);
+      if (res && res.valid) {
+        appliedCoupon = {
+          code: res.code,
+          discount: res.discount_inr
+        };
+        sessionStorage.setItem('suyog_active_coupon', res.code);
+        tag.innerHTML = `<span class="text-success fw-bold">✓ Coupon ${res.code} applied! (-₹${res.discount_inr})</span> <a href="javascript:void(0)" onclick="removeCoupon()" class="text-danger ms-2">[Remove]</a>`;
+      } else {
+        appliedCoupon = null;
+        sessionStorage.removeItem('suyog_active_coupon');
+        tag.innerHTML = `<span class="text-danger">${res ? res.error : 'Invalid coupon'}</span>`;
+      }
+      updateSummary();
+    }
+
+    function removeCoupon() {
+      appliedCoupon = null;
+      sessionStorage.removeItem('suyog_active_coupon');
+      document.getElementById('couponInput').value = '';
+      document.getElementById('appliedCouponTag').innerHTML = '';
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const subtotal = currentCartData.subtotal;
+      const threshold = (window.SITE_CONFIG && window.SITE_CONFIG.freeShippingThreshold) || 1499;
+      const fee = (window.SITE_CONFIG && window.SITE_CONFIG.shippingFee) || 0;
+      
+      const shipping = subtotal >= threshold ? 0 : fee;
+      const discount = appliedCoupon ? appliedCoupon.discount : 0;
+      const total = Math.max(0, subtotal - discount + shipping);
+
+      document.getElementById('summarySubtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('summaryShipping').textContent = shipping === 0 ? 'FREE' : `₹${shipping}`;
+      document.getElementById('summaryTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
 
       const discLine = document.getElementById('discountLine');
-      const couponTag = document.getElementById('appliedCouponTag');
-      if (totals.discount > 0) {
+      if (discount > 0) {
         discLine.style.display = 'flex';
-        document.getElementById('summaryDiscount').textContent = `-₹${totals.discount.toLocaleString('en-IN')}`;
-        couponTag.innerHTML = `
-          <span class="text-success fw-bold">✓ Coupon ${totals.appliedCoupon.code} applied!</span>
-          <a href="javascript:void(0)" onclick="Store.removeCoupon()" class="text-danger ms-2">[Remove]</a>
-        `;
+        document.getElementById('summaryDiscount').textContent = `-₹${discount.toLocaleString('en-IN')}`;
       } else {
         discLine.style.display = 'none';
-        couponTag.innerHTML = '';
       }
     }
 
-    function applyCouponCode() {
-      const code = document.getElementById('couponInput').value;
-      if (code) Store.applyCoupon(code);
+    function orderViaWhatsApp() {
+      const cfg = window.SITE_CONFIG || {};
+      const wa = cfg.whatsappNumber || "918669396037";
+      if (currentCartData.items.length === 0) return;
+
+      const itemsText = currentCartData.items.map(i => `• ${i.qty}x ${i.name} (${i.size}) - ₹${i.totalPrice}`).join('\n');
+      const msg = `Namaste Suyog Textile, I want to order the following from my shopping bag:\n\n${itemsText}\n\nSubtotal: ₹${currentCartData.subtotal}\nShipping: Free\n\nPlease confirm availability!`;
+      window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    document.addEventListener('DOMContentLoaded', renderCartPage);
+    document.addEventListener('DOMContentLoaded', async () => {
+      const savedCoupon = sessionStorage.getItem('suyog_active_coupon');
+      if (savedCoupon) {
+        document.getElementById('couponInput').value = savedCoupon;
+        await applyCoupon(savedCoupon);
+      }
+      await renderCart();
+    });
   </script>
 </body>
 </html>

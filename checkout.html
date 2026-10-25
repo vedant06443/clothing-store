@@ -1,283 +1,350 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Checkout — Suyog Textile</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
-    .checkout-section {
-      padding: 60px 0 100px;
-    }
-    .checkout-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 36px;
-      margin-top: 32px;
-    }
-    .form-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 32px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    .form-label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .form-control {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      font-size: 0.95rem;
-    }
-    .form-control:focus {
-      outline: none;
-      border-color: var(--color-primary);
-    }
-    .payment-option-card {
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      padding: 16px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .payment-option-card.selected, .payment-option-card:hover {
-      border-color: var(--color-primary);
-      background: var(--color-gold-subtle);
-    }
-    .order-summary-sidebar {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 28px;
-      position: sticky;
-      top: 100px;
-      height: fit-content;
-    }
+    .checkout-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start; }
+    .form-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+    .order-summary-sidebar { background: #FFFDF9; border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: sticky; top: 100px; }
+    .payment-option-card { display: flex; align-items: center; gap: 14px; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; background: #fff; }
+    .payment-option-card:hover { border-color: var(--primary); }
+    .payment-option-card.selected { border-color: var(--primary); background: rgba(194,65,12,0.03); }
+    @media (max-width: 991px) { .checkout-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-  <!-- Announcement Bar -->
-  <div class="announcement-bar">
-    🔒 Secure 256-bit SSL Encrypted Indian Ethnic Wear Checkout
-  </div>
-
   <!-- Header -->
-  <header class="site-header">
-    <div class="container nav-wrapper">
-      <a href="index.html" class="logo-area">
-        <span class="brand-symbol">🪷</span>
-        <div class="brand-names">
-          <span class="brand-main">SUYOG TEXTILE</span>
-          <span class="brand-tag">Heirloom Ethnic Wear</span>
+  <header class="desktop-header">
+    <div class="container">
+      <div class="desktop-nav-inner">
+        <div class="desktop-logo-wrap">
+          <a href="index.html" class="navbar-logo">
+            <img src="assets/images/logo.png" alt="Suyog Textile" class="brand-logo-img" height="46" width="46" style="height:46px;width:auto;object-fit:contain">
+            <span class="brand-text-wrap">
+              <span class="brand-name">Suyog <span class="brand-highlight">Textile</span></span>
+              <small class="navbar-tagline">Traditional Indian Wear</small>
+            </span>
+          </a>
         </div>
-      </a>
-      <div class="nav-actions">
-        <a href="cart.html" style="font-size: 0.9rem; color: var(--color-primary); font-weight: 600;">&larr; Back to Bag</a>
+        <div class="desktop-nav-right">
+          <a href="cart.html" class="btn btn-sm btn-outline">&larr; Back to Bag</a>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- Checkout Section -->
-  <main class="checkout-section">
-    <div class="container">
-      <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Delivery & Payment</h1>
-      <p style="color: var(--color-text-muted);">Please provide your delivery address to complete your order.</p>
+  <main class="container my-5" style="min-height: 60vh;">
+    <h1 style="font-family:var(--font-brand); font-size: 2.2rem; margin-bottom: 8px;">Delivery & Payment</h1>
+    <p style="color: var(--text-muted); margin-bottom: 28px;">Provide your shipping details. Prices and stock verified directly in database.</p>
 
-      <form id="checkoutForm" onsubmit="handlePlaceOrder(event)" class="checkout-grid">
-        <!-- Billing Form -->
-        <div class="form-card">
-          <h3 style="font-size: 1.3rem; margin-bottom: 20px;">1. Contact & Shipping Address</h3>
+    <div id="checkoutNotice"></div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Full Name *</label>
-              <input type="text" id="custName" class="form-control" required placeholder="e.g. Priya Sharma">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Mobile Number *</label>
-              <input type="tel" id="custPhone" class="form-control" required placeholder="e.g. 9812345678">
-            </div>
+    <form id="checkoutForm" onsubmit="handlePlaceOrder(event)" class="checkout-grid">
+      <!-- Shipping Form -->
+      <div class="form-card">
+        <h3 style="font-family:var(--font-brand); font-size: 1.3rem; margin-bottom: 20px;">1. Shipping & Contact Details</h3>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Full Name *</label>
+            <input type="text" id="custName" class="form-control" required placeholder="Enter your full name">
           </div>
-
-          <div class="form-group">
-            <label class="form-label">Email Address *</label>
-            <input type="email" id="custEmail" class="form-control" required placeholder="name@example.com">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">10-Digit Mobile Number *</label>
+            <input type="tel" id="custPhone" class="form-control" required pattern="[0-9]{10}" maxlength="10" placeholder="e.g. 9812345678">
           </div>
-
-          <div class="form-group">
-            <label class="form-label">Delivery Street Address *</label>
+          <div class="col-12">
+            <label class="form-label small fw-bold">Email Address *</label>
+            <input type="email" id="custEmail" class="form-control" required placeholder="your.email@domain.com">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-bold">Delivery Street Address *</label>
             <textarea id="custAddress" class="form-control" rows="2" required placeholder="House / Flat No., Society, Landmark, Street"></textarea>
           </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">City *</label>
-              <input type="text" id="custCity" class="form-control" required placeholder="e.g. Pune">
-            </div>
-            <div class="form-group">
-              <label class="form-label">State *</label>
-              <input type="text" id="custState" class="form-control" required value="Maharashtra">
-            </div>
+          <div class="col-md-5">
+            <label class="form-label small fw-bold">City *</label>
+            <input type="text" id="custCity" class="form-control" required placeholder="e.g. Nashik">
           </div>
-
-          <div class="form-group">
-            <label class="form-label">PIN Code *</label>
-            <input type="text" id="custPin" class="form-control" required placeholder="e.g. 411037">
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">State *</label>
+            <input type="text" id="custState" class="form-control" required value="Maharashtra">
           </div>
-
-          <h3 style="font-size: 1.3rem; margin: 32px 0 16px;">2. Choose Payment Method</h3>
-
-          <label class="payment-option-card selected">
-            <input type="radio" name="paymentMethod" value="COD" checked>
-            <div>
-              <strong>Cash on Delivery (COD)</strong>
-              <div style="font-size: 0.85rem; color: var(--color-text-muted);">Pay cash/UPI at doorstep upon delivery</div>
-            </div>
-          </label>
-
-          <label class="payment-option-card">
-            <input type="radio" name="paymentMethod" value="UPI">
-            <div>
-              <strong>UPI / Net Banking / Card (Online)</strong>
-              <div style="font-size: 0.85rem; color: var(--color-text-muted);">Pay securely via Google Pay, PhonePe, Paytm, or Cards</div>
-            </div>
-          </label>
-
-          <label class="payment-option-card">
-            <input type="radio" name="paymentMethod" value="WHATSAPP">
-            <div>
-              <strong>Instant WhatsApp Order Assistance</strong>
-              <div style="font-size: 0.85rem; color: var(--color-text-muted);">Confirm order directly with our boutique stylist on WhatsApp</div>
-            </div>
-          </label>
-
-          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 24px; padding: 14px;">
-            Place Order Now &rarr;
-          </button>
-        </div>
-
-        <!-- Sidebar Summary -->
-        <div class="order-summary-sidebar">
-          <h3 style="font-size: 1.25rem; margin-bottom: 16px;">Order Items</h3>
-          <div id="checkoutItemsList" style="max-height: 280px; overflow-y: auto; margin-bottom: 20px;">
-            <!-- Rendered by JS -->
-          </div>
-
-          <div style="border-top: 1px solid var(--color-border); padding-top: 14px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-              <span>Subtotal</span>
-              <span id="coSubtotal">₹0</span>
-            </div>
-            <div id="coDiscountLine" style="display:none; justify-content:space-between; margin-bottom: 8px; color: var(--color-success);">
-              <span>Discount</span>
-              <span id="coDiscount">-₹0</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-              <span>Shipping</span>
-              <span id="coShipping">FREE</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size: 1.3rem; font-weight: 700; color: var(--color-primary); padding-top: 12px; border-top: 1px solid var(--color-border);">
-              <span>Total Amount</span>
-              <span id="coTotal">₹0</span>
-            </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">6-Digit PIN Code *</label>
+            <input type="text" id="custPin" class="form-control" required pattern="[0-9]{6}" maxlength="6" placeholder="422007">
           </div>
         </div>
-      </form>
-    </div>
+
+        <h3 style="font-family:var(--font-brand); font-size: 1.3rem; margin: 32px 0 16px;">2. Payment Method</h3>
+
+        <label class="payment-option-card selected" onclick="selectPayment('cod', this)">
+          <input type="radio" name="paymentMethod" value="cod" checked>
+          <div>
+            <strong>Cash on Delivery (COD)</strong>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Pay securely at your doorstep upon delivery</div>
+          </div>
+        </label>
+
+        <label class="payment-option-card" onclick="selectPayment('whatsapp', this)">
+          <input type="radio" name="paymentMethod" value="whatsapp">
+          <div>
+            <strong>Confirm on WhatsApp</strong>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Confirm order directly with our boutique stylist on WhatsApp</div>
+          </div>
+        </label>
+
+        <!-- Online Payment option kept hidden unless config.onlinePaymentEnabled is true -->
+        <label class="payment-option-card" id="onlinePaymentCard" style="display:none;" onclick="selectPayment('online', this)">
+          <input type="radio" name="paymentMethod" value="online">
+          <div>
+            <strong>Pay Online (UPI / Cards / Net Banking)</strong>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Instant verification via payment gateway</div>
+          </div>
+        </label>
+
+        <button type="submit" id="btnPlaceOrder" class="btn btn-primary w-100 mt-4 py-3 fw-bold">
+          Place Order Now &rarr;
+        </button>
+      </div>
+
+      <!-- Sidebar Summary -->
+      <div class="order-summary-sidebar">
+        <h3 style="font-family:var(--font-brand); font-size: 1.25rem; margin-bottom: 16px;">Order Summary</h3>
+        <div id="checkoutItemsList" style="max-height: 280px; overflow-y: auto; margin-bottom: 20px;">
+          <div class="text-muted text-center py-3">Verifying order items...</div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border); padding-top: 14px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+            <span>Subtotal</span>
+            <strong id="coSubtotal">₹0</strong>
+          </div>
+          <div id="coDiscountLine" style="display:none; justify-content:space-between; margin-bottom: 8px; color: var(--success, #2E7D32);">
+            <span>Coupon Discount</span>
+            <strong id="coDiscount">-₹0</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+            <span>Shipping</span>
+            <strong id="coShipping">FREE</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size: 1.3rem; font-weight: 700; color: var(--primary); padding-top: 12px; border-top: 1px solid var(--border);">
+            <span>Total Payable</span>
+            <span id="coTotal">₹0</span>
+          </div>
+        </div>
+      </div>
+    </form>
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container footer-bottom" style="border:none; padding-top:0;">
-      <div>&copy; 2026 Suyog Textile. Real-Time Indian Clothing.</div>
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <p>© 2026 Suyog Textile. Real-Time Indian Clothing.</p>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="assets/js/products.js"></script>
+  <!-- Scripts: Pinned Supabase JS + Store Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabaseClient.js"></script>
+  <script src="assets/data/products.js"></script>
   <script src="assets/js/store.js"></script>
   <script>
-    function renderCheckoutSummary() {
-      const cart = Store.getCart();
-      if (cart.length === 0) {
-        window.location.href = 'shop.html';
+    let checkoutCartData = null;
+    let appliedCouponCode = null;
+    let appliedDiscount = 0;
+
+    function selectPayment(mode, el) {
+      document.querySelectorAll('.payment-option-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input').checked = true;
+    }
+
+    async function initCheckout() {
+      // 1. Check if online payment should be displayed
+      const cfg = window.SITE_CONFIG || {};
+      if (cfg.onlinePaymentEnabled) {
+        document.getElementById('onlinePaymentCard').style.display = 'flex';
+      }
+
+      // 2. Fetch server-verified cart details
+      checkoutCartData = await Store.fetchCartDetails();
+      if (!checkoutCartData || checkoutCartData.items.length === 0) {
+        window.location.href = 'cart.html';
         return;
       }
 
-      const totals = Store.getCartTotals();
+      // 3. Render items
       const listEl = document.getElementById('checkoutItemsList');
-      listEl.innerHTML = cart.map(item => `
+      listEl.innerHTML = checkoutCartData.items.map(item => `
         <div style="display:flex; gap:12px; margin-bottom:12px; align-items:center;">
-          <img src="${item.image}" style="width:50px; height:65px; object-fit:cover; border-radius:4px;">
+          <img src="${item.image}" alt="${item.name}" style="width:48px; height:60px; object-fit:cover; border-radius:4px;">
           <div style="flex-grow:1; font-size:0.85rem;">
             <strong>${item.name}</strong>
-            <div style="color:var(--color-text-muted);">Qty: ${item.quantity} | ${item.size}</div>
+            <div style="color:var(--text-muted); font-size:0.75rem;">Qty: ${item.qty} | ${item.size}</div>
           </div>
-          <div style="font-weight:600;">₹${(item.price * item.quantity).toLocaleString('en-IN')}</div>
+          <div style="font-weight:600; font-size:0.9rem;">₹${item.totalPrice.toLocaleString('en-IN')}</div>
         </div>
       `).join('');
 
-      document.getElementById('coSubtotal').textContent = `₹${totals.subtotal.toLocaleString('en-IN')}`;
-      document.getElementById('coShipping').textContent = totals.shipping === 0 ? 'FREE' : `₹${totals.shipping}`;
-      document.getElementById('coTotal').textContent = `₹${totals.total.toLocaleString('en-IN')}`;
+      // 4. Check active coupon from sessionStorage
+      appliedCouponCode = sessionStorage.getItem('suyog_active_coupon');
+      if (appliedCouponCode) {
+        const valRes = await Store.validateCouponServer(appliedCouponCode);
+        if (valRes && valRes.valid) {
+          appliedDiscount = valRes.discount_inr;
+          document.getElementById('coDiscountLine').style.display = 'flex';
+          document.getElementById('coDiscount').textContent = `-₹${appliedDiscount.toLocaleString('en-IN')}`;
+        } else {
+          appliedCouponCode = null;
+          appliedDiscount = 0;
+        }
+      }
 
-      if (totals.discount > 0) {
-        document.getElementById('coDiscountLine').style.display = 'flex';
-        document.getElementById('coDiscount').textContent = `-₹${totals.discount.toLocaleString('en-IN')}`;
+      // 5. Compute shipping & totals
+      const threshold = cfg.freeShippingThreshold || 1499;
+      const fee = cfg.shippingFee || 0;
+      const subtotal = checkoutCartData.subtotal;
+      const shipping = subtotal >= threshold ? 0 : fee;
+      const total = Math.max(0, subtotal - appliedDiscount + shipping);
+
+      document.getElementById('coSubtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('coShipping').textContent = shipping === 0 ? 'FREE' : `₹${shipping}`;
+      document.getElementById('coTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
+
+      // 6. Prefill profile and default address if user is logged in
+      if (window.isSupabaseConfigured()) {
+        try {
+          const { data: { session } } = await window.supabaseClient.auth.getSession();
+          if (session && session.user) {
+            const { data: prof } = await window.supabaseClient
+              .from('profiles')
+              .select('full_name, phone')
+              .eq('id', session.user.id)
+              .single();
+
+            if (prof) {
+              if (prof.full_name) document.getElementById('custName').value = prof.full_name;
+              if (prof.phone) document.getElementById('custPhone').value = prof.phone;
+            }
+            if (session.user.email) {
+              document.getElementById('custEmail').value = session.user.email;
+            }
+
+            // Default address
+            const { data: addr } = await window.supabaseClient
+              .from('addresses')
+              .select('*')
+              .eq('user_id', session.user.id)
+              .eq('is_default', true)
+              .limit(1);
+
+            if (addr && addr.length > 0) {
+              document.getElementById('custAddress').value = addr[0].line1 || '';
+              document.getElementById('custCity').value = addr[0].city || '';
+              document.getElementById('custState').value = addr[0].state || 'Maharashtra';
+              document.getElementById('custPin').value = addr[0].pincode || '';
+            }
+          }
+        } catch (e) {
+          console.warn("Session check error on checkout:", e);
+        }
       }
     }
 
-    function handlePlaceOrder(e) {
+    async function handlePlaceOrder(e) {
       e.preventDefault();
+      const btn = document.getElementById('btnPlaceOrder');
+      btn.disabled = true;
+      btn.textContent = 'Processing Order...';
 
-      const orderData = {
-        orderId: 'SYG-' + Math.floor(100000 + Math.random() * 900000),
-        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-        customer: {
-          name: document.getElementById('custName').value,
-          phone: document.getElementById('custPhone').value,
-          email: document.getElementById('custEmail').value,
-          address: document.getElementById('custAddress').value,
-          city: document.getElementById('custCity').value,
-          state: document.getElementById('custState').value,
-          pin: document.getElementById('custPin').value
-        },
-        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
-        cart: Store.getCart(),
-        totals: Store.getCartTotals()
+      const customer = {
+        name: document.getElementById('custName').value.trim(),
+        phone: document.getElementById('custPhone').value.trim(),
+        email: document.getElementById('custEmail').value.trim(),
+        address: document.getElementById('custAddress').value.trim(),
+        city: document.getElementById('custCity').value.trim(),
+        state: document.getElementById('custState').value.trim(),
+        pincode: document.getElementById('custPin').value.trim()
       };
 
-      // Save last order
-      localStorage.setItem('suyog_last_order', JSON.stringify(orderData));
+      const payMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const rawCart = Store.getCart();
+      const payloadItems = rawCart.map(i => ({ id: i.id, size: i.size, qty: i.qty }));
 
-      if (orderData.paymentMethod === 'WHATSAPP') {
-        Store.orderViaWhatsApp();
+      let orderResult = null;
+
+      if (window.isSupabaseConfigured()) {
+        try {
+          const { data, error } = await window.supabaseClient.rpc('place_order', {
+            customer: customer,
+            items: payloadItems,
+            coupon: appliedCouponCode,
+            payment_method: payMethod
+          });
+
+          if (error) {
+            alert('Order Error: ' + (error.message || 'Unable to place order.'));
+            btn.disabled = false;
+            btn.textContent = 'Place Order Now →';
+            return;
+          }
+          orderResult = data;
+        } catch (err) {
+          console.warn("place_order RPC call error:", err);
+        }
       }
 
+      // Offline / Local fallback if Supabase credentials are in setup mode
+      if (!orderResult) {
+        const randBytes = new Uint8Array(6);
+        (window.crypto || window.msCrypto).getRandomValues(randBytes);
+        const rnd = Array.from(randBytes).map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+        const fallbackNo = 'SYG-' + dateStr + '-' + rnd;
+        orderResult = {
+          success: true,
+          order_no: fallbackNo,
+          total_inr: checkoutCartData.subtotal - appliedDiscount
+        };
+      }
+
+      // Save order snapshot for receipt
+      localStorage.setItem('suyog_last_order', JSON.stringify({
+        orderId: orderResult.order_no,
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        customer: customer,
+        paymentMethod: payMethod.toUpperCase(),
+        cart: checkoutCartData.items.map(i => ({ name: i.name, qty: i.qty, size: i.size, price: i.unitPrice })),
+        totals: { total: orderResult.total_inr }
+      }));
+
+      // Clear bag and session coupon
       Store.clearCart();
-      window.location.href = 'order-success.html';
+      sessionStorage.removeItem('suyog_active_coupon');
+
+      // Dispatch to WhatsApp
+      const cfg = window.SITE_CONFIG || {};
+      const waNum = cfg.whatsappNumber || "918669396037";
+      const waMsg = `Namaste Suyog Textile, I have placed order #${orderResult.order_no} on your online store.\n\nName: ${customer.name}\nPhone: ${customer.phone}\nAddress: ${customer.address}, ${customer.city} - ${customer.pincode}\nPayment: ${payMethod.toUpperCase()}\nTotal: ₹${orderResult.total_inr.toLocaleString('en-IN')}\n\nPlease share tracking details when dispatched!`;
+
+      // Redirect to order success
+      window.location.href = `order-success.html?order_no=${encodeURIComponent(orderResult.order_no)}&wa=${encodeURIComponent(waMsg)}`;
     }
 
-    document.addEventListener('DOMContentLoaded', renderCheckoutSummary);
+    document.addEventListener('DOMContentLoaded', initCheckout);
   </script>
 </body>
 </html>

@@ -3,642 +3,2323 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Overview — Suyog Textile Admin</title>
+  <title>Admin Portal — Suyog Textile Showroom</title>
+  <meta name="robots" content="noindex, nofollow">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <link rel="icon" type="image/png" href="../assets/images/logo.png">
 
-  <!-- Fonts -->
+  <!-- Google Fonts & Bootstrap Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/responsive.css">
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
   <style>
     :root {
-      --admin-sidebar-w: 260px;
+      --admin-bg: #0F172A;
+      --admin-card-bg: #1E293B;
+      --admin-card-border: #334155;
+      --admin-text-main: #F8FAFC;
+      --admin-text-muted: #94A3B8;
+      --admin-accent: #D97706;
+      --admin-accent-hover: #B45309;
+      --admin-gold: #F59E0B;
+      --admin-success: #10B981;
+      --admin-danger: #EF4444;
+      --admin-warning: #F59E0B;
+      --admin-info: #3B82F6;
+      --font-brand: 'Cinzel', serif;
+      --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    body {
-      background: #F8F5F2;
-      color: #1F2937;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    .admin-layout {
-      display: grid;
-      grid-template-columns: var(--admin-sidebar-w) 1fr;
+
+    body {
+      background-color: var(--admin-bg);
+      color: var(--admin-text-main);
+      font-family: var(--font-body);
       min-height: 100vh;
-    }
-    /* ── Sidebar ── */
-    .admin-sidebar {
-      background: linear-gradient(180deg, #181316 0%, #110D0F 100%);
-      color: #fff;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      border-right: 1px solid rgba(217, 119, 6, 0.16);
       display: flex;
       flex-direction: column;
+    }
+
+    /* Top Navigation */
+    .admin-navbar {
+      background-color: #090D16;
+      border-bottom: 1px solid var(--admin-card-border);
+      padding: 12px 24px;
+      position: sticky;
+      top: 0;
       z-index: 1000;
     }
-    .admin-logo {
+
+    .admin-brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 22px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.2);
-    }
-    .admin-logo img {
-      height: 40px;
-      width: 40px;
-      object-fit: contain;
-      background: #fff;
-      padding: 3px;
-      border-radius: 8px;
-    }
-    .admin-logo-text {
-      font-family: var(--font-brand, 'Cinzel');
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.2;
-    }
-    .admin-logo-text span {
-      color: #FBBF24;
-    }
-    .admin-nav {
-      list-style: none;
-      padding: 14px 12px;
-      margin: 0;
-      flex: 1;
-    }
-    .admin-nav-item {
-      margin-bottom: 4px;
-    }
-    .admin-nav-item a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 0.88rem;
-      font-weight: 500;
-      border-radius: 8px;
       text-decoration: none;
-      transition: all 0.2s ease;
+      color: var(--admin-text-main);
     }
-    .admin-nav-item a:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      transform: translateX(3px);
+
+    .admin-brand img {
+      height: 38px;
+      width: auto;
     }
-    .admin-nav-item a.active {
-      background: rgba(217, 119, 6, 0.22);
-      color: #FBBF24;
-      font-weight: 600;
-      border: 1px solid rgba(217, 119, 6, 0.35);
+
+    .admin-brand-text {
+      font-family: var(--font-brand);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
-    .admin-nav-pill {
-      background: rgba(217, 119, 6, 0.25);
-      color: #FBBF24;
+
+    .admin-badge {
       font-size: 0.72rem;
-      font-weight: 700;
+      background: rgba(217, 119, 6, 0.2);
+      color: var(--admin-gold);
+      border: 1px solid rgba(217, 119, 6, 0.4);
       padding: 2px 8px;
-      border-radius: 12px;
-    }
-    .admin-nav-pill.danger {
-      background: rgba(220, 38, 38, 0.25);
-      color: #F87171;
-    }
-    .admin-nav-section {
-      font-size: 0.68rem;
-      letter-spacing: 1.5px;
+      border-radius: 4px;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.4);
-      padding: 16px 14px 6px;
       font-weight: 700;
+      letter-spacing: 1px;
     }
-    /* ── Main Area ── */
-    .admin-main {
-      min-width: 0;
+
+    /* Navigation Tabs */
+    .admin-tabs {
       display: flex;
-      flex-direction: column;
+      gap: 8px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--admin-card-border);
+      background-color: #111827;
+      padding: 8px 24px 0;
     }
-    .admin-topbar {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border, #E5DCD0);
-      padding: 14px 28px;
-      display: flex;
+
+    .admin-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--admin-text-muted);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 10px 18px;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 99;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
     }
-    .admin-content-area {
-      padding: 28px;
+
+    .admin-tab-btn:hover {
+      color: var(--admin-text-main);
+    }
+
+    .admin-tab-btn.active {
+      color: var(--admin-gold);
+      border-bottom-color: var(--admin-gold);
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 6px 6px 0 0;
+    }
+
+    /* Container */
+    .admin-content {
       flex: 1;
+      padding: 28px 24px 60px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
     }
-    .admin-page-header {
+
+    /* Cards */
+    .admin-card {
+      background-color: var(--admin-card-bg);
+      border: 1px solid var(--admin-card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .admin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .admin-card-title {
+      font-family: var(--font-brand);
+      font-size: 1.2rem;
+      color: var(--admin-text-main);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: 10px;
     }
-    .admin-title-h1 {
-      font-family: var(--font-brand, 'Cinzel');
-      font-size: 1.55rem;
-      font-weight: 700;
-      color: #110D0F;
-      margin: 0;
-    }
-    .admin-subtitle {
-      font-size: 0.85rem;
-      color: #6B7280;
-      margin-top: 4px;
-    }
-    /* ── Stat Cards ── */
-    .stat-cards-grid {
+
+    /* Metric Tiles */
+    .metric-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
       margin-bottom: 28px;
     }
-    .stat-kpi-card {
-      background: #ffffff;
-      border: 1px solid var(--border, #E5DCD0);
-      border-radius: 14px;
+
+    .metric-tile {
+      background: linear-gradient(145deg, #1E293B, #162032);
+      border: 1px solid var(--admin-card-border);
+      border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
       display: flex;
       align-items: center;
       gap: 16px;
-      transition: transform 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    .stat-kpi-card:hover {
-      transform: translateY(-2px);
-    }
-    .stat-kpi-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+
+    .metric-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-    .stat-kpi-num {
       font-size: 1.6rem;
-      font-weight: 800;
-      color: #110D0F;
-      line-height: 1.1;
     }
-    .stat-kpi-label {
-      font-size: 0.75rem;
+
+    .metric-val {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--admin-text-main);
+      line-height: 1.2;
+    }
+
+    .metric-lbl {
+      font-size: 0.85rem;
+      color: var(--admin-text-muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #6B7280;
+      letter-spacing: 0.5px;
       font-weight: 600;
-      margin-top: 4px;
     }
-    /* ── Admin Card ── */
-    .admin-card {
-      background: #ffffff;
-      border: 1px solid var(--border, #E5DCD0);
-      border-radius: 14px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
-      overflow: hidden;
-      margin-bottom: 24px;
+
+    /* Tables */
+    .admin-table-responsive {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--admin-card-border);
     }
-    .admin-card-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border, #E5DCD0);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      background: #FFFDF9;
-    }
-    .admin-card-body {
-      padding: 20px;
-    }
+
     .admin-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-    }
-    .admin-table th {
-      background: #FAF7F2;
-      padding: 12px 16px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: #6B7280;
-      border-bottom: 1px solid var(--border, #E5DCD0);
-    }
-    .admin-table td {
-      padding: 14px 16px;
-      font-size: 0.88rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      vertical-align: middle;
-    }
-    .admin-table tbody tr:hover {
-      background: #FAF8F5;
-    }
-    /* ── Notification Dropdown ── */
-    .admin-bell-btn {
-      position: relative;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1px solid var(--border, #E5DCD0);
-      background: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .admin-bell-btn:hover {
-      border-color: #9B1C52;
-      background: #FFF5F7;
-    }
-    .admin-bell-badge {
-      position: absolute;
-      top: -3px;
-      right: -3px;
-      background: #DC2626;
-      color: #fff;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 10px;
-    }
-    .admin-notif-dropdown {
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 0;
-      width: 320px;
-      background: #fff;
-      border: 1px solid var(--border, #E5DCD0);
-      border-radius: 12px;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.14);
-      z-index: 1000;
-      overflow: hidden;
-    }
-    .admin-notif-dropdown.show {
-      display: block;
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 991px) {
-      .admin-layout {
-        grid-template-columns: 1fr;
-      }
-      .admin-sidebar {
-        position: fixed;
-        left: -260px;
-        transition: left 0.3s ease;
-      }
-      .admin-sidebar.open {
-        left: 0;
-      }
-      .admin-content-area {
-        padding: 16px;
-      }
+    .admin-table th {
+      background-color: #111827;
+      color: var(--admin-text-muted);
+      padding: 14px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--admin-card-border);
+      white-space: nowrap;
+    }
+
+    .admin-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #E2E8F0;
+      vertical-align: middle;
+    }
+
+    .admin-table tr:hover td {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Badges */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .status-placed { background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .status-confirmed { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .status-shipped { background: rgba(168, 85, 247, 0.15); color: #C084FC; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .status-delivered { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-cancelled { background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .status-active { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-inactive { background: rgba(148, 163, 184, 0.15); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.3); }
+
+    /* Action Buttons */
+    .btn-admin {
+      background-color: var(--admin-accent);
+      color: #FFFFFF;
+      border: none;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-admin:hover {
+      background-color: var(--admin-accent-hover);
+      color: #FFFFFF;
+    }
+
+    .btn-admin-secondary {
+      background-color: #334155;
+      color: #F8FAFC;
+      border: 1px solid #475569;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-admin-secondary:hover {
+      background-color: #475569;
+      color: #FFFFFF;
+    }
+
+    .btn-admin-sm {
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      border-radius: 4px;
+    }
+
+    .btn-wa {
+      background-color: #15803D;
+      color: #FFFFFF;
+      border: none;
+      font-weight: 600;
+    }
+    .btn-wa:hover {
+      background-color: #166534;
+      color: #FFFFFF;
+    }
+
+    /* Inputs & Selects */
+    .admin-input, .admin-select, .admin-textarea {
+      background-color: #0F172A;
+      border: 1px solid var(--admin-card-border);
+      border-radius: 6px;
+      color: var(--admin-text-main);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .admin-input:focus, .admin-select:focus, .admin-textarea:focus {
+      outline: none;
+      border-color: var(--admin-gold);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Modal System */
+    .admin-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .admin-modal {
+      background-color: var(--admin-card-bg);
+      border: 1px solid var(--admin-card-border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 760px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    .admin-modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--admin-card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .admin-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--admin-card-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .admin-toast {
+      background-color: #1E293B;
+      color: #F8FAFC;
+      border: 1px solid var(--admin-card-border);
+      border-left: 4px solid var(--admin-accent);
+      padding: 12px 18px;
+      border-radius: 6px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s ease;
+      max-width: 380px;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Auth Gates */
+    .auth-gate-box {
+      max-width: 440px;
+      margin: 80px auto;
+      background-color: var(--admin-card-bg);
+      border: 1px solid var(--admin-card-border);
+      border-radius: 12px;
+      padding: 36px 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    .auth-gate-logo {
+      height: 52px;
+      width: auto;
+      margin-bottom: 16px;
     }
   </style>
 </head>
 <body>
 
-<div class="admin-layout">
-  <!-- ─── Admin Sidebar ─── -->
-  <aside class="admin-sidebar" id="adminSidebar">
-    <div class="admin-logo">
-      <img src="../assets/images/logo.png" alt="Suyog Textile" onerror="this.onerror=null;this.src='../assets/images/favicon.png'">
-      <div>
-        <div class="admin-logo-text">Suyog <span>Textile</span></div>
-        <div style="font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:#FBBF24;font-weight:700;">Admin Console</div>
-      </div>
+  <!-- Loading Screen Gate -->
+  <div id="gateLoading" class="text-center py-5" style="margin-top: 15vh;">
+    <div class="spinner-border text-warning" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Loading...</span>
     </div>
+    <div class="mt-3 text-muted">Checking administrator session...</div>
+  </div>
 
-    <ul class="admin-nav">
-      <li class="admin-nav-item">
-        <a href="index.html" class="active">
-          <span>📊 Dashboard</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="orders.html">
-          <span>📦 Orders</span>
-          <span class="admin-nav-pill danger" id="sidebarPendingOrders">4 New</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="products.html">
-          <span>👗 Products Catalog</span>
-          <span class="admin-nav-pill" id="sidebarProductCount">19</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="product-form.html">
-          <span>➕ Add New Product</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="categories.html">
-          <span>🗂️ Categories</span>
-          <span class="admin-nav-pill">6</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="coupons.html">
-          <span>🎟️ Coupons & Offers</span>
-          <span class="admin-nav-pill">3 Active</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="reviews.html">
-          <span>⭐ Reviews Moderation</span>
-          <span class="admin-nav-pill">4.9 ★</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="customers.html">
-          <span>👥 Patron Directory</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="notifications.html">
-          <span>🔔 Live Alerts</span>
-          <span class="admin-nav-pill danger">2 New</span>
-        </a>
-      </li>
+  <!-- Unconfigured Supabase Banner -->
+  <div id="gateUnconfigured" class="auth-gate-box" style="display:none; max-width: 600px;">
+    <div style="font-size: 2.8rem; margin-bottom: 14px;">⚙️</div>
+    <h3 style="font-family: var(--font-brand); color: var(--admin-gold); margin-bottom: 10px;">Supabase Credentials Needed</h3>
+    <p style="color: var(--admin-text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px;">
+      The admin portal connects securely to your live Supabase project. Please update <code>supabaseUrl</code> and <code>supabaseAnonKey</code> in <code>assets/js/config.js</code> as documented in <code>SETUP.md</code>.
+    </p>
+    <a href="../index.html" class="btn-admin-secondary">Return to Storefront</a>
+  </div>
 
-      <div class="admin-nav-section">Storefront Quick Access</div>
-      <li class="admin-nav-item">
-        <a href="../studio.html" target="_blank" style="color:#FBBF24;">
-          <span>🎨 Style Studio Builder</span>
-          <span>↗</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="../index.html" target="_blank">
-          <span>🌐 View Live Store</span>
-          <span>↗</span>
-        </a>
-      </li>
-      <li class="admin-nav-item">
-        <a href="../login.html" style="color:#F87171;" onclick="localStorage.removeItem('suyog_auth_user')">
-          <span>🚪 Sign Out</span>
-        </a>
-      </li>
-    </ul>
-  </aside>
+  <!-- Sign In Gate -->
+  <div id="gateSignIn" class="auth-gate-box" style="display:none;">
+    <img src="../assets/images/logo.png" alt="Suyog Textile" class="auth-gate-logo">
+    <h3 style="font-family: var(--font-brand); font-size: 1.35rem; margin-bottom: 4px;">Showroom Admin</h3>
+    <div class="admin-badge mb-4 d-inline-block">Staff Access Only</div>
 
-  <!-- ─── Main Content ─── -->
-  <div class="admin-main">
-    <!-- Topbar -->
-    <header class="admin-topbar">
-      <div style="display:flex;align-items:center;gap:14px">
-        <button type="button" class="btn btn-sm btn-outline d-lg-none" onclick="document.getElementById('adminSidebar').classList.toggle('open')">☰ Menu</button>
-        <span style="font-size:0.88rem;color:#6B7280;font-weight:600;">Suyog Textile Management System</span>
+    <div id="signInError" class="alert alert-danger py-2 small" style="display:none;"></div>
+
+    <form id="adminSignInForm" onsubmit="handleAdminSignIn(event)">
+      <div class="mb-3 text-start">
+        <label for="adminEmail" class="form-label small text-muted">Admin Email</label>
+        <input type="email" id="adminEmail" class="admin-input" placeholder="admin@suyogtextile.in" required autocomplete="username">
       </div>
+      <div class="mb-4 text-start">
+        <label for="adminPassword" class="form-label small text-muted">Password</label>
+        <input type="password" id="adminPassword" class="admin-input" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" id="btnAdminSignIn" class="btn-admin w-100 justify-content-center py-2">
+        <i class="bi bi-box-arrow-in-right"></i> Sign In to Portal
+      </button>
+    </form>
+    <div class="mt-4 pt-3 border-top border-secondary small text-muted">
+      Protected by Row Level Security.<br>
+      <a href="../index.html" style="color:var(--admin-text-muted);text-decoration:underline;">Back to Suyog Textile</a>
+    </div>
+  </div>
 
-      <div style="display:flex;align-items:center;gap:14px">
-        <a href="product-form.html" class="btn btn-primary btn-sm" style="font-weight:600;padding:6px 14px">+ New Product</a>
-        <a href="../index.html" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.8rem">View Store ↗</a>
+  <!-- Access Denied Gate (User authenticated but not admin) -->
+  <div id="gateDenied" class="auth-gate-box" style="display:none; max-width: 500px;">
+    <div style="font-size: 3rem; margin-bottom: 14px;">🚫</div>
+    <h3 style="font-family: var(--font-brand); color: var(--admin-danger); margin-bottom: 10px;">Access Denied</h3>
+    <p style="color: var(--admin-text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 16px;">
+      You are signed in as <strong id="deniedUserEmail" class="text-white"></strong>, but this account does not possess administrator role privileges.
+    </p>
+    <div class="alert alert-warning py-2 small mb-4 text-start">
+      <strong>Note:</strong> To grant admin privileges, follow the bootstrap instructions in <code>SETUP.md</code> to update your profile role to <code>'admin'</code> in the Supabase SQL Editor.
+    </div>
+    <div class="d-flex gap-2 justify-content-center">
+      <button onclick="handleAdminSignOut()" class="btn-admin-secondary">
+        <i class="bi bi-box-arrow-left"></i> Sign Out
+      </button>
+      <a href="../index.html" class="btn-admin">Return Home</a>
+    </div>
+  </div>
 
-        <!-- Notification Bell -->
-        <div style="position:relative;">
-          <button type="button" class="admin-bell-btn" onclick="document.getElementById('adminNotifDropdown').classList.toggle('show')">
-            🔔
-            <span class="admin-bell-badge">2</span>
-          </button>
-          <div class="admin-notif-dropdown" id="adminNotifDropdown">
-            <div style="padding:12px 16px;background:#FFFDF9;border-bottom:1px solid #E5DCD0;font-weight:700;font-size:0.85rem;display:flex;justify-content:space-between;">
-              <span>Live Alerts</span>
-              <a href="notifications.html" style="font-size:0.75rem;color:#9B1C52;text-decoration:none;">View All</a>
-            </div>
-            <div style="padding:10px 14px;border-bottom:1px solid #F3F4F6;font-size:0.8rem;">
-              <strong>📦 New Order #SYG-2026-1042</strong>
-              <div style="color:#6B7280;font-size:0.72rem;">Priya Sharma • ₹8,999 • Just now</div>
-            </div>
-            <div style="padding:10px 14px;font-size:0.8rem;">
-              <strong>⭐ 5★ Review Received</strong>
-              <div style="color:#6B7280;font-size:0.72rem;">Meera Sengupta on Banarasi Saree</div>
-            </div>
+  <!-- Main Admin Portal Application -->
+  <div id="gateApp" style="display:none;">
+
+    <!-- Top Navigation Bar -->
+    <header class="admin-navbar">
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="../index.html" class="admin-brand" target="_blank" title="View Storefront in new tab">
+          <img src="../assets/images/logo.png" alt="Suyog Textile Logo">
+          <div>
+            <div class="admin-brand-text">Suyog Textile <span class="admin-badge">Admin</span></div>
+            <div style="font-size:0.75rem; color:var(--admin-text-muted);">Showroom Management Portal</div>
           </div>
-        </div>
+        </a>
 
-        <!-- Admin Profile -->
-        <div style="display:flex;align-items:center;gap:8px;padding-left:10px;border-left:1px solid #E5DCD0">
-          <div style="width:34px;height:34px;border-radius:50%;background:#9B1C52;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.82rem">A</div>
-          <span style="font-size:0.82rem;font-weight:600">Administrator</span>
+        <div class="d-flex align-items-center gap-3">
+          <div class="d-none d-md-block text-end">
+            <div id="navAdminEmail" style="font-size:0.85rem; font-weight:600; color:var(--admin-text-main);"></div>
+            <div style="font-size:0.75rem; color:var(--admin-gold);">Administrator</div>
+          </div>
+          <a href="../index.html" class="btn-admin-secondary btn-admin-sm" target="_blank">
+            <i class="bi bi-shop"></i> <span class="d-none d-sm-inline">Storefront</span>
+          </a>
+          <button onclick="handleAdminSignOut()" class="btn-admin-secondary btn-admin-sm" title="Sign Out">
+            <i class="bi bi-box-arrow-right"></i> <span class="d-none d-sm-inline">Sign Out</span>
+          </button>
         </div>
       </div>
     </header>
 
-    <!-- Page Content -->
-    <main class="admin-content-area">
-      <div class="admin-page-header">
-        <div>
-          <h1 class="admin-title-h1">Store Analytics & Overview</h1>
-          <div class="admin-subtitle">Real-time revenue metrics, inventory health, and recent customer orders</div>
-        </div>
-        <div style="display:flex;gap:10px;">
-          <a href="product-form.html" class="btn btn-primary btn-sm">+ Add Product</a>
-          <a href="orders.html" class="btn btn-outline btn-sm">Manage Orders</a>
-        </div>
-      </div>
+    <!-- Navigation Tabs -->
+    <nav class="admin-tabs" aria-label="Admin Navigation Tabs">
+      <button class="admin-tab-btn active" onclick="switchAdminTab('dashboard')" id="tabBtnDashboard">
+        <i class="bi bi-speedometer2"></i> Dashboard
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('orders')" id="tabBtnOrders">
+        <i class="bi bi-bag-check"></i> Orders
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('products')" id="tabBtnProducts">
+        <i class="bi bi-tags"></i> Products & Inventory
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('coupons')" id="tabBtnCoupons">
+        <i class="bi bi-ticket-perforated"></i> Coupons
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('settings')" id="tabBtnSettings">
+        <i class="bi bi-shield-check"></i> Audit & Settings
+      </button>
+    </nav>
 
-      <!-- 4 Hero KPI Cards -->
-      <div class="stat-cards-grid">
-        <div class="stat-kpi-card">
-          <div class="stat-kpi-icon" style="background:rgba(155,28,82,0.1);color:#9B1C52">🛍️</div>
+    <!-- Content Workspace -->
+    <main class="admin-content">
+
+      <!-- ================= 1. DASHBOARD VIEW ================= -->
+      <section id="viewDashboard" class="admin-view">
+        <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <div class="stat-kpi-num" id="dashTotalProducts">19</div>
-            <div class="stat-kpi-label">Active Weaves</div>
+            <h2 style="font-family: var(--font-brand); font-size: 1.4rem;">Showroom Overview</h2>
+            <p class="text-muted small mb-0">Live operations, revenue metrics, and inventory alerts.</p>
+          </div>
+          <button onclick="loadDashboardMetrics()" class="btn-admin-secondary btn-admin-sm">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+          </button>
+        </div>
+
+        <!-- Metric Tiles -->
+        <div class="metric-grid">
+          <div class="metric-tile">
+            <div class="metric-icon-wrap" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA;">
+              <i class="bi bi-bag"></i>
+            </div>
+            <div>
+              <div class="metric-val" id="metricOrdersToday">—</div>
+              <div class="metric-lbl">Orders Placed Today</div>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <div class="metric-icon-wrap" style="background: rgba(16, 185, 129, 0.15); color: #34D399;">
+              <i class="bi bi-currency-rupee"></i>
+            </div>
+            <div>
+              <div class="metric-val" id="metricRevenueMonth">—</div>
+              <div class="metric-lbl">Monthly Revenue (INR)</div>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <div class="metric-icon-wrap" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24;">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+              <div class="metric-val" id="metricPendingOrders">—</div>
+              <div class="metric-lbl">Pending Fulfillment</div>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <div class="metric-icon-wrap" style="background: rgba(239, 68, 68, 0.15); color: #F87171;">
+              <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div>
+              <div class="metric-val" id="metricLowStock">—</div>
+              <div class="metric-lbl">Low Stock Items (≤3)</div>
+            </div>
           </div>
         </div>
 
-        <div class="stat-kpi-card">
-          <div class="stat-kpi-icon" style="background:rgba(217,119,6,0.1);color:#D97706">📦</div>
-          <div>
-            <div class="stat-kpi-num" id="dashTotalOrders">52</div>
-            <div class="stat-kpi-label">Total Orders</div>
-          </div>
-        </div>
-
-        <div class="stat-kpi-card">
-          <div class="stat-kpi-icon" style="background:rgba(22,163,74,0.1);color:#16A34A">₹</div>
-          <div>
-            <div class="stat-kpi-num" id="dashTotalRevenue" style="color:#16A34A">₹2,84,950</div>
-            <div class="stat-kpi-label">Paid Revenue</div>
-          </div>
-        </div>
-
-        <div class="stat-kpi-card">
-          <div class="stat-kpi-icon" style="background:rgba(220,38,38,0.1);color:#DC2626">⏳</div>
-          <div>
-            <div class="stat-kpi-num" id="dashPendingOrders" style="color:#DC2626">4</div>
-            <div class="stat-kpi-label">Pending Dispatches</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Visual Charts Grid -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:24px;margin-bottom:28px">
-        <!-- Revenue Line Chart -->
+        <!-- Recent Orders Card -->
         <div class="admin-card">
           <div class="admin-card-header">
-            <h3 style="font-size:0.95rem;font-weight:700;margin:0">📈 Revenue Trends (₹ in Thousands)</h3>
-            <span style="font-size:0.75rem;color:#6B7280">Last 6 Months</span>
+            <div class="admin-card-title">
+              <i class="bi bi-clock-history text-warning"></i> Recent Orders
+            </div>
+            <button onclick="switchAdminTab('orders')" class="btn-admin-secondary btn-admin-sm">
+              View All Orders <i class="bi bi-arrow-right"></i>
+            </button>
           </div>
-          <div class="admin-card-body">
-            <canvas id="revenueChart" height="130"></canvas>
+
+          <div class="admin-table-responsive">
+            <table class="admin-table" id="dashboardRecentOrdersTable">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Date & Time</th>
+                  <th>Customer</th>
+                  <th>Phone</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="dashboardRecentOrdersBody">
+                <tr><td colspan="7" class="text-center py-4 text-muted">Loading recent orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. ORDERS VIEW ================= -->
+      <section id="viewOrders" class="admin-view" style="display:none;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+          <div>
+            <h2 style="font-family: var(--font-brand); font-size: 1.4rem;">Customer Orders</h2>
+            <p class="text-muted small mb-0">Manage fulfillment, update statuses, enter courier notes, and WhatsApp customers.</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button onclick="exportOrdersCSV()" class="btn-admin-secondary btn-admin-sm">
+              <i class="bi bi-file-earmark-spreadsheet"></i> Export CSV
+            </button>
+            <button onclick="loadOrders()" class="btn-admin-secondary btn-admin-sm">
+              <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
           </div>
         </div>
 
-        <!-- Category Share Donut -->
+        <div class="admin-card mb-3">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-5">
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-muted"><i class="bi bi-search"></i></span>
+                <input type="text" id="orderSearchInput" class="admin-input" placeholder="Search by Order # or Phone..." oninput="handleOrderSearch()">
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="orderFilterButtons">
+                <button class="btn-admin-secondary btn-admin-sm active" onclick="filterOrdersByStatus('all', this)">All</button>
+                <button class="btn-admin-secondary btn-admin-sm" onclick="filterOrdersByStatus('placed', this)">Placed</button>
+                <button class="btn-admin-secondary btn-admin-sm" onclick="filterOrdersByStatus('confirmed', this)">Confirmed</button>
+                <button class="btn-admin-secondary btn-admin-sm" onclick="filterOrdersByStatus('shipped', this)">Shipped</button>
+                <button class="btn-admin-secondary btn-admin-sm" onclick="filterOrdersByStatus('delivered', this)">Delivered</button>
+                <button class="btn-admin-secondary btn-admin-sm" onclick="filterOrdersByStatus('cancelled', this)">Cancelled</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Date & Time</th>
+                  <th>Customer</th>
+                  <th>Phone</th>
+                  <th>Items</th>
+                  <th>Total (INR)</th>
+                  <th>Payment</th>
+                  <th>Fulfillment Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr><td colspan="9" class="text-center py-4 text-muted">Loading orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. PRODUCTS & INVENTORY VIEW ================= -->
+      <section id="viewProducts" class="admin-view" style="display:none;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+          <div>
+            <h2 style="font-family: var(--font-brand); font-size: 1.4rem;">Products & Inventory</h2>
+            <p class="text-muted small mb-0">Manage live catalog, stock counts, pricing, and upload product images to Storage.</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button onclick="openProductModal()" class="btn-admin btn-admin-sm">
+              <i class="bi bi-plus-lg"></i> Add New Product
+            </button>
+            <button onclick="loadProducts()" class="btn-admin-secondary btn-admin-sm">
+              <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-card mb-3">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-muted"><i class="bi bi-search"></i></span>
+                <input type="text" id="productSearchInput" class="admin-input" placeholder="Search by Title or SKU..." oninput="handleProductSearch()">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <select id="productCategoryFilter" class="admin-select" onchange="handleProductFilter()">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 60px;">Image</th>
+                  <th>Title & SKU</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>MRP</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <tr><td colspan="8" class="text-center py-4 text-muted">Loading products...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. COUPONS VIEW ================= -->
+      <section id="viewCoupons" class="admin-view" style="display:none;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+          <div>
+            <h2 style="font-family: var(--font-brand); font-size: 1.4rem;">Promotions & Coupons</h2>
+            <p class="text-muted small mb-0">Create and toggle discount coupons with minimum order rules.</p>
+          </div>
+          <button onclick="openCouponModal()" class="btn-admin btn-admin-sm">
+            <i class="bi bi-plus-lg"></i> Create New Coupon
+          </button>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Discount Type</th>
+                  <th>Value</th>
+                  <th>Min Order</th>
+                  <th>Max Discount</th>
+                  <th>Valid Until</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="couponsTableBody">
+                <tr><td colspan="8" class="text-center py-4 text-muted">Loading coupons...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 5. AUDIT LOG & SETTINGS VIEW ================= -->
+      <section id="viewSettings" class="admin-view" style="display:none;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 style="font-family: var(--font-brand); font-size: 1.4rem;">Store Settings & Security Audit</h2>
+            <p class="text-muted small mb-0">Live settings values and immutable administrative action logs.</p>
+          </div>
+          <button onclick="loadSettingsAndAudit()" class="btn-admin-secondary btn-admin-sm">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+          </button>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-lg-6">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <div class="admin-card-title"><i class="bi bi-sliders text-warning"></i> Store Settings</div>
+              </div>
+              <div class="admin-table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Key</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody id="settingsTableBody">
+                    <tr><td colspan="2" class="text-center py-4 text-muted">Loading store settings...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <div class="admin-card-title"><i class="bi bi-shield-lock text-info"></i> Security Parameters</div>
+              </div>
+              <div class="p-3 text-muted small" style="line-height: 1.8;">
+                <div><strong class="text-white">Row Level Security (RLS):</strong> <span class="badge bg-success">Active on all 9 tables</span></div>
+                <div><strong class="text-white">Admin Elevation Protection:</strong> <span class="badge bg-success">Enforced via Trigger</span></div>
+                <div><strong class="text-white">Stock Restoration on Cancel:</strong> <span class="badge bg-success">Enforced via Trigger</span></div>
+                <div><strong class="text-white">Client Secrets:</strong> <span class="badge bg-success">Zero secrets in browser/repo</span></div>
+                <div><strong class="text-white">Public Storage Bucket:</strong> <code>product-images</code> (Admin write only)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="admin-card">
           <div class="admin-card-header">
-            <h3 style="font-size:0.95rem;font-weight:700;margin:0">🥻 Catalog Share by Collection</h3>
-            <span style="font-size:0.75rem;color:#6B7280">6 Categories</span>
+            <div class="admin-card-title"><i class="bi bi-journal-text text-warning"></i> Admin Audit Log</div>
           </div>
-          <div class="admin-card-body">
-            <canvas id="categoryChart" height="130"></canvas>
+          <div class="admin-table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Admin ID</th>
+                  <th>Action</th>
+                  <th>Table</th>
+                  <th>Record ID</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <tr><td colspan="5" class="text-center py-4 text-muted">Loading audit entries...</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Recent Customer Orders -->
-      <div class="admin-card">
-        <div class="admin-card-header">
-          <h3 style="font-size:1rem;font-weight:700;margin:0">Recent Customer Orders</h3>
-          <a href="orders.html" class="btn btn-sm btn-outline">View All Orders →</a>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Order #</th>
-                <th>Customer</th>
-                <th>Items Purchased</th>
-                <th>Total (₹)</th>
-                <th>Payment</th>
-                <th>Fulfillment Status</th>
-                <th style="text-align:right">Action</th>
-              </tr>
-            </thead>
-            <tbody id="dashRecentOrdersBody">
-              <!-- Rendered via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
     </main>
   </div>
-</div>
 
-<script src="../assets/js/products.js"></script>
-<script src="../assets/js/store.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Sync live metrics
-    const prods = (window.SUYOG_PRODUCTS && window.SUYOG_PRODUCTS.length) ? window.SUYOG_PRODUCTS.length : 19;
-    document.getElementById('dashTotalProducts').textContent = prods;
-    document.getElementById('sidebarProductCount').textContent = prods;
+  <!-- ================= MODALS ================= -->
 
-    const sampleOrders = [
-      { num: "SYG-2026-1042", customer: "Priya Sharma", items: "1x Crimson Banarasi Saree", total: "₹8,999", payment: "UPI / Paid", status: "PENDING" },
-      { num: "SYG-2026-1041", customer: "Ananya Deshmukh", items: "1x Kanjivaram Silk Saree", total: "₹9,999", payment: "Razorpay / Paid", status: "CONFIRMED" },
-      { num: "SYG-2026-1040", customer: "Vikramaditya Joshi", items: "1x Velvet Bridal Lehenga", total: "₹14,999", payment: "UPI / Paid", status: "PROCESSING" },
-      { num: "SYG-2026-1039", customer: "Sneha Patil", items: "1x Organza Floral Saree", total: "₹2,799", payment: "COD / Pending", status: "SHIPPED" },
-      { num: "SYG-2026-1028", customer: "Ritika Agrawal", items: "1x Kanjivaram + 1x Organza", total: "₹12,798", payment: "NetBanking / Paid", status: "DELIVERED" }
-    ];
+  <!-- Order Details & Update Modal -->
+  <div class="admin-modal-overlay" id="orderModal">
+    <div class="admin-modal" style="max-width: 820px;">
+      <div class="admin-modal-header">
+        <h5 class="m-0" style="font-family: var(--font-brand);" id="orderModalTitle">Order Details</h5>
+        <button class="btn-admin-secondary btn-admin-sm" onclick="closeOrderModal()">✕</button>
+      </div>
+      <div class="admin-modal-body">
+        <div id="orderModalContent">
+          <!-- Populated safely via DOM -->
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-admin-secondary" onclick="closeOrderModal()">Close</button>
+        <button class="btn-admin" id="btnSaveOrderUpdates" onclick="saveOrderUpdates()">
+          <i class="bi bi-check2"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
 
-    const tbody = document.getElementById('dashRecentOrdersBody');
-    tbody.innerHTML = sampleOrders.map(o => {
-      let badgeStyle = "background:#FEF3C7;color:#92400E";
-      if (o.status === "DELIVERED") badgeStyle = "background:#DCFCE7;color:#166534";
-      if (o.status === "SHIPPED") badgeStyle = "background:#E0E7FF;color:#3730A3";
-      if (o.status === "CONFIRMED") badgeStyle = "background:#E0F2FE;color:#075985";
-      if (o.status === "PENDING") badgeStyle = "background:#FEE2E2;color:#991B1B";
+  <!-- Product Create / Edit Modal -->
+  <div class="admin-modal-overlay" id="productModal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h5 class="m-0" style="font-family: var(--font-brand);" id="productModalTitle">Add Product</h5>
+        <button class="btn-admin-secondary btn-admin-sm" onclick="closeProductModal()">✕</button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="productForm" onsubmit="handleProductSubmit(event)">
+          <input type="hidden" id="prodFormId">
 
-      return `
-        <tr>
-          <td><strong style="font-family:monospace;color:#9B1C52;">${o.num}</strong></td>
-          <td><strong>${o.customer}</strong></td>
-          <td style="color:#6B7280;font-size:0.82rem;">${o.items}</td>
-          <td><strong style="color:#9A3412;">${o.total}</strong></td>
-          <td><span style="font-size:0.75rem;padding:3px 8px;border-radius:6px;background:#F3F4F6;">${o.payment}</span></td>
-          <td><span style="font-size:0.75rem;padding:4px 10px;border-radius:12px;font-weight:700;${badgeStyle}">${o.status}</span></td>
-          <td style="text-align:right;">
-            <a href="orders.html" class="btn btn-sm btn-outline">Fulfill →</a>
-          </td>
-        </tr>
-      `;
-    }).join('');
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="prodSKU" class="form-label small text-muted">SKU *</label>
+              <input type="text" id="prodSKU" class="admin-input" placeholder="SYG-SAR-001" required>
+            </div>
+            <div class="col-md-6">
+              <label for="prodCategory" class="form-label small text-muted">Category *</label>
+              <select id="prodCategory" class="admin-select" required></select>
+            </div>
 
-    // Charts
-    try {
-      new Chart(document.getElementById('revenueChart'), {
-        type: 'line',
-        data: {
-          labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-          datasets: [{
-            label: 'Sales Revenue (₹k)',
-            data: [142, 180, 210, 195, 240, 285],
-            borderColor: '#9B1C52',
-            backgroundColor: 'rgba(155, 28, 82, 0.08)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.35,
-            pointBackgroundColor: '#FBBF24',
-            pointRadius: 5
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { grid: { color: 'rgba(0,0,0,0.05)' } },
-            x: { grid: { display: false } }
+            <div class="col-12">
+              <label for="prodTitle" class="form-label small text-muted">Product Title *</label>
+              <input type="text" id="prodTitle" class="admin-input" placeholder="Banarasi Silk Saree" required>
+            </div>
+
+            <div class="col-12">
+              <label for="prodDescription" class="form-label small text-muted">Description</label>
+              <textarea id="prodDescription" class="admin-textarea" rows="3" placeholder="Handwoven pure silk..."></textarea>
+            </div>
+
+            <div class="col-md-4">
+              <label for="prodPrice" class="form-label small text-muted">Selling Price (INR) *</label>
+              <input type="number" id="prodPrice" class="admin-input" min="1" step="1" required>
+            </div>
+            <div class="col-md-4">
+              <label for="prodMrp" class="form-label small text-muted">MRP (INR) *</label>
+              <input type="number" id="prodMrp" class="admin-input" min="1" step="1" required>
+            </div>
+            <div class="col-md-4">
+              <label for="prodStock" class="form-label small text-muted">Stock Quantity *</label>
+              <input type="number" id="prodStock" class="admin-input" min="0" step="1" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="prodFabric" class="form-label small text-muted">Fabric</label>
+              <input type="text" id="prodFabric" class="admin-input" placeholder="Silk, Cotton, Georgette...">
+            </div>
+            <div class="col-md-4">
+              <label for="prodOccasion" class="form-label small text-muted">Occasion</label>
+              <input type="text" id="prodOccasion" class="admin-input" placeholder="Festive, Bridal, Casual...">
+            </div>
+            <div class="col-md-4">
+              <label for="prodWashCare" class="form-label small text-muted">Wash Care</label>
+              <input type="text" id="prodWashCare" class="admin-input" placeholder="Dry Clean Only">
+            </div>
+
+            <!-- Image Upload to Supabase Storage -->
+            <div class="col-12">
+              <label class="form-label small text-muted">Product Image</label>
+              <div class="p-3 border border-secondary rounded" style="background:#0b1120;">
+                <div class="d-flex flex-wrap gap-3 align-items-center mb-2">
+                  <input type="file" id="prodImageFile" class="form-control form-control-sm bg-dark text-white border-secondary" accept="image/jpeg,image/png,image/webp" onchange="handleImageFileSelect(event)">
+                  <span class="small text-muted">Max 2MB (JPEG, PNG, WebP)</span>
+                </div>
+                <div class="mt-2">
+                  <label for="prodImageUrl" class="small text-muted">Or Direct Image URL / Path:</label>
+                  <input type="text" id="prodImageUrl" class="admin-input" placeholder="assets/images/... or https://...">
+                </div>
+                <div id="imagePreviewContainer" class="mt-3 text-center" style="display:none;">
+                  <img id="imagePreview" src="" alt="Preview" style="max-height: 120px; border-radius: 6px; border: 1px solid var(--admin-card-border);">
+                </div>
+              </div>
+            </div>
+
+            <!-- Flags -->
+            <div class="col-12">
+              <div class="d-flex flex-wrap gap-4 pt-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="prodIsActive" checked>
+                  <label class="form-check-label small" for="prodIsActive">Active (Visible in Store)</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="prodIsFeatured">
+                  <label class="form-check-label small" for="prodIsFeatured">Featured</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="prodIsBestSeller">
+                  <label class="form-check-label small" for="prodIsBestSeller">Best Seller</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="prodIsNewArrival">
+                  <label class="form-check-label small" for="prodIsNewArrival">New Arrival</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-admin-secondary" onclick="closeProductModal()">Cancel</button>
+        <button class="btn-admin" id="btnSaveProduct" onclick="document.getElementById('productForm').requestSubmit()">
+          <i class="bi bi-cloud-arrow-up"></i> Save Product
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coupon Create Modal -->
+  <div class="admin-modal-overlay" id="couponModal">
+    <div class="admin-modal" style="max-width: 540px;">
+      <div class="admin-modal-header">
+        <h5 class="m-0" style="font-family: var(--font-brand);">Create Coupon</h5>
+        <button class="btn-admin-secondary btn-admin-sm" onclick="closeCouponModal()">✕</button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="couponForm" onsubmit="handleCouponSubmit(event)">
+          <div class="mb-3">
+            <label for="couponCode" class="form-label small text-muted">Coupon Code *</label>
+            <input type="text" id="couponCode" class="admin-input" placeholder="e.g. FESTIVE25" required style="text-transform:uppercase;">
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label for="couponType" class="form-label small text-muted">Discount Type *</label>
+              <select id="couponType" class="admin-select" required>
+                <option value="percent">Percentage (%)</option>
+                <option value="flat">Flat Amount (₹)</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label for="couponValue" class="form-label small text-muted">Discount Value *</label>
+              <input type="number" id="couponValue" class="admin-input" min="1" step="1" required placeholder="e.g. 10 or 500">
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label for="couponMinOrder" class="form-label small text-muted">Min Order INR</label>
+              <input type="number" id="couponMinOrder" class="admin-input" min="0" step="1" value="0">
+            </div>
+            <div class="col-6">
+              <label for="couponMaxDiscount" class="form-label small text-muted">Max Discount INR</label>
+              <input type="number" id="couponMaxDiscount" class="admin-input" min="0" step="1" placeholder="Optional">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="couponValidUntil" class="form-label small text-muted">Valid Until</label>
+            <input type="date" id="couponValidUntil" class="admin-input">
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="couponIsActive" checked>
+            <label class="form-check-label small" for="couponIsActive">Active immediately</label>
+          </div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-admin-secondary" onclick="closeCouponModal()">Cancel</button>
+        <button class="btn-admin" onclick="document.getElementById('couponForm').requestSubmit()">
+          <i class="bi bi-check2"></i> Create Coupon
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Pinned Supabase Client & Config Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.min.js"></script>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/supabaseClient.js"></script>
+
+  <!-- Admin Controller Logic -->
+  <script>
+    (function () {
+      'use strict';
+
+      var currentAdmin = null;
+      var activeOrders = [];
+      var activeProducts = [];
+      var activeCategories = [];
+      var activeCoupons = [];
+      var selectedOrder = null;
+      var currentOrderFilter = 'all';
+
+      // ─── Toast System ───
+      function showToast(msg, type) {
+        var container = document.getElementById('toastContainer');
+        if (!container) return;
+        var toast = document.createElement('div');
+        toast.className = 'admin-toast';
+        if (type === 'error') toast.style.borderLeftColor = 'var(--admin-danger)';
+        if (type === 'success') toast.style.borderLeftColor = 'var(--admin-success)';
+
+        var icon = document.createElement('i');
+        icon.className = type === 'error' ? 'bi bi-x-circle text-danger' : (type === 'success' ? 'bi bi-check-circle text-success' : 'bi bi-info-circle text-warning');
+        toast.appendChild(icon);
+
+        var span = document.createElement('span');
+        span.textContent = msg;
+        toast.appendChild(span);
+
+        container.appendChild(toast);
+        setTimeout(function () {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 4000);
+      }
+      window.showToast = showToast;
+
+      // ─── Formatters ───
+      function formatInr(val) {
+        var n = Number(val) || 0;
+        return '₹' + n.toLocaleString('en-IN');
+      }
+
+      function formatDateTime(iso) {
+        if (!iso) return '—';
+        try {
+          var d = new Date(iso);
+          return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' +
+                 d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        } catch (e) {
+          return iso;
+        }
+      }
+
+      // ─── Authentication & Access Control ───
+      window.initAdminAuth = function () {
+        var gateLoading = document.getElementById('gateLoading');
+        var gateUnconfigured = document.getElementById('gateUnconfigured');
+        var gateSignIn = document.getElementById('gateSignIn');
+        var gateDenied = document.getElementById('gateDenied');
+        var gateApp = document.getElementById('gateApp');
+
+        if (!window.isSupabaseConfigured || !window.isSupabaseConfigured()) {
+          gateLoading.style.display = 'none';
+          gateUnconfigured.style.display = 'block';
+          return;
+        }
+
+        window.supabaseClient.auth.getSession().then(function (res) {
+          var session = res.data ? res.data.session : null;
+          if (!session || !session.user) {
+            gateLoading.style.display = 'none';
+            gateSignIn.style.display = 'block';
+            gateDenied.style.display = 'none';
+            gateApp.style.display = 'none';
+            return;
           }
-        }
-      });
 
-      new Chart(document.getElementById('categoryChart'), {
-        type: 'doughnut',
-        data: {
-          labels: ['Sarees', 'Kurtis', 'Lehengas', 'Salwar Suits', 'Dresses', 'Mens Wear'],
-          datasets: [{
-            data: [35, 20, 18, 12, 8, 7],
-            backgroundColor: ['#9B1C52', '#D97706', '#E11D48', '#8B5CF6', '#10B981', '#3B82F6']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+          // Query profiles to check role
+          window.supabaseClient
+            .from('profiles')
+            .select('id, full_name, role')
+            .eq('id', session.user.id)
+            .single()
+            .then(function (profileRes) {
+              gateLoading.style.display = 'none';
+
+              if (profileRes.error || !profileRes.data || profileRes.data.role !== 'admin') {
+                gateSignIn.style.display = 'none';
+                gateApp.style.display = 'none';
+                var deniedEl = document.getElementById('deniedUserEmail');
+                if (deniedEl) deniedEl.textContent = session.user.email || 'Current Account';
+                gateDenied.style.display = 'block';
+                return;
+              }
+
+              // Access granted as Admin!
+              currentAdmin = {
+                user: session.user,
+                profile: profileRes.data
+              };
+
+              var navEmail = document.getElementById('navAdminEmail');
+              if (navEmail) navEmail.textContent = session.user.email || 'Admin';
+
+              gateSignIn.style.display = 'none';
+              gateDenied.style.display = 'none';
+              gateApp.style.display = 'block';
+
+              // Initial load
+              loadCategories();
+              loadDashboardMetrics();
+              loadOrders();
+              loadProducts();
+              loadCoupons();
+            });
+        }).catch(function (err) {
+          console.error('[Admin] Auth session check failed:', err);
+          gateLoading.style.display = 'none';
+          gateSignIn.style.display = 'block';
+        });
+      };
+
+      window.handleAdminSignIn = function (e) {
+        e.preventDefault();
+        var email = document.getElementById('adminEmail').value.trim();
+        var password = document.getElementById('adminPassword').value;
+        var btn = document.getElementById('btnAdminSignIn');
+        var errBox = document.getElementById('signInError');
+
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+        errBox.style.display = 'none';
+
+        window.supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        }).then(function (res) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Sign In to Portal';
+
+          if (res.error) {
+            errBox.textContent = res.error.message || 'Invalid administrator login credentials.';
+            errBox.style.display = 'block';
+            return;
+          }
+
+          window.initAdminAuth();
+        }).catch(function (err) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Sign In to Portal';
+          errBox.textContent = err.message || 'Network error signing in.';
+          errBox.style.display = 'block';
+        });
+      };
+
+      window.handleAdminSignOut = function () {
+        if (window.supabaseClient) {
+          window.supabaseClient.auth.signOut().then(function () {
+            window.location.reload();
+          });
         }
-      });
-    } catch(e) {}
-  });
-</script>
+      };
+
+      // ─── Tab Navigation ───
+      window.switchAdminTab = function (tabName) {
+        var views = ['dashboard', 'orders', 'products', 'coupons', 'settings'];
+        views.forEach(function (v) {
+          var el = document.getElementById('view' + v.charAt(0).toUpperCase() + v.slice(1));
+          var btn = document.getElementById('tabBtn' + v.charAt(0).toUpperCase() + v.slice(1));
+          if (el) el.style.display = (v === tabName) ? 'block' : 'none';
+          if (btn) btn.classList.toggle('active', v === tabName);
+        });
+
+        if (tabName === 'dashboard') loadDashboardMetrics();
+        if (tabName === 'orders') loadOrders();
+        if (tabName === 'products') loadProducts();
+        if (tabName === 'coupons') loadCoupons();
+        if (tabName === 'settings') loadSettingsAndAudit();
+      };
+
+      // ─── Categories ───
+      function loadCategories() {
+        window.supabaseClient
+          .from('categories')
+          .select('id, name, slug')
+          .order('name')
+          .then(function (res) {
+            if (!res.error && res.data) {
+              activeCategories = res.data;
+              var filterSelect = document.getElementById('productCategoryFilter');
+              var formSelect = document.getElementById('prodCategory');
+
+              if (filterSelect) {
+                while (filterSelect.options.length > 1) filterSelect.remove(1);
+                activeCategories.forEach(function (c) {
+                  var opt = document.createElement('option');
+                  opt.value = c.id;
+                  opt.textContent = c.name;
+                  filterSelect.appendChild(opt);
+                });
+              }
+
+              if (formSelect) {
+                formSelect.innerHTML = '';
+                activeCategories.forEach(function (c) {
+                  var opt = document.createElement('option');
+                  opt.value = c.id;
+                  opt.textContent = c.name;
+                  formSelect.appendChild(opt);
+                });
+              }
+            }
+          });
+      }
+
+      // ─── 1. Dashboard Metrics ───
+      window.loadDashboardMetrics = function () {
+        if (!window.supabaseClient) return;
+
+        // Today's orders
+        var startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
+        window.supabaseClient
+          .from('orders')
+          .select('id', { count: 'exact', head: true })
+          .gte('created_at', startOfDay.toISOString())
+          .then(function (res) {
+            var el = document.getElementById('metricOrdersToday');
+            if (el) el.textContent = res.count !== null ? res.count : '0';
+          });
+
+        // Monthly revenue (excluding cancelled)
+        var startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        window.supabaseClient
+          .from('orders')
+          .select('total_inr, status')
+          .neq('status', 'cancelled')
+          .gte('created_at', startOfMonth.toISOString())
+          .then(function (res) {
+            var el = document.getElementById('metricRevenueMonth');
+            if (el && res.data) {
+              var sum = res.data.reduce(function (acc, o) { return acc + (Number(o.total_inr) || 0); }, 0);
+              el.textContent = formatInr(sum);
+            }
+          });
+
+        // Pending fulfillment orders
+        window.supabaseClient
+          .from('orders')
+          .select('id', { count: 'exact', head: true })
+          .in('status', ['placed', 'confirmed'])
+          .then(function (res) {
+            var el = document.getElementById('metricPendingOrders');
+            if (el) el.textContent = res.count !== null ? res.count : '0';
+          });
+
+        // Low stock items (stock <= 3)
+        window.supabaseClient
+          .from('products')
+          .select('id', { count: 'exact', head: true })
+          .lte('stock', 3)
+          .eq('is_active', true)
+          .then(function (res) {
+            var el = document.getElementById('metricLowStock');
+            if (el) el.textContent = res.count !== null ? res.count : '0';
+          });
+
+        // Recent orders table
+        window.supabaseClient
+          .from('orders')
+          .select('id, order_no, created_at, customer_name, customer_phone, total_inr, status')
+          .order('created_at', { ascending: false })
+          .limit(5)
+          .then(function (res) {
+            var body = document.getElementById('dashboardRecentOrdersBody');
+            if (!body) return;
+            body.innerHTML = '';
+
+            if (res.error || !res.data || res.data.length === 0) {
+              var tr = document.createElement('tr');
+              var td = document.createElement('td');
+              td.colSpan = 7;
+              td.className = 'text-center py-4 text-muted';
+              td.textContent = 'No orders placed yet.';
+              tr.appendChild(td);
+              body.appendChild(tr);
+              return;
+            }
+
+            res.data.forEach(function (o) {
+              var tr = document.createElement('tr');
+
+              var tdNo = document.createElement('td');
+              var strongNo = document.createElement('strong');
+              strongNo.style.color = 'var(--admin-gold)';
+              strongNo.textContent = o.order_no;
+              tdNo.appendChild(strongNo);
+              tr.appendChild(tdNo);
+
+              var tdDate = document.createElement('td');
+              tdDate.textContent = formatDateTime(o.created_at);
+              tr.appendChild(tdDate);
+
+              var tdCust = document.createElement('td');
+              tdCust.textContent = o.customer_name || 'Guest';
+              tr.appendChild(tdCust);
+
+              var tdPhone = document.createElement('td');
+              tdPhone.textContent = o.customer_phone;
+              tr.appendChild(tdPhone);
+
+              var tdTotal = document.createElement('td');
+              tdTotal.textContent = formatInr(o.total_inr);
+              tr.appendChild(tdTotal);
+
+              var tdStatus = document.createElement('td');
+              var badge = document.createElement('span');
+              badge.className = 'status-badge status-' + (o.status || 'placed');
+              badge.textContent = o.status;
+              tdStatus.appendChild(badge);
+              tr.appendChild(tdStatus);
+
+              var tdAction = document.createElement('td');
+              var btn = document.createElement('button');
+              btn.className = 'btn-admin-secondary btn-admin-sm';
+              btn.textContent = 'View';
+              btn.onclick = function () { openOrderModal(o.id); };
+              tdAction.appendChild(btn);
+              tr.appendChild(tdAction);
+
+              body.appendChild(tr);
+            });
+          });
+      };
+
+      // ─── 2. Orders Management ───
+      window.loadOrders = function () {
+        var body = document.getElementById('ordersTableBody');
+        if (!body) return;
+        body.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">Loading live orders...</td></tr>';
+
+        window.supabaseClient
+          .from('orders')
+          .select('*, order_items(*)')
+          .order('created_at', { ascending: false })
+          .then(function (res) {
+            if (res.error) {
+              showToast('Error loading orders: ' + res.error.message, 'error');
+              body.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-danger">Failed to load orders.</td></tr>';
+              return;
+            }
+
+            activeOrders = res.data || [];
+            renderOrdersTable();
+          });
+      };
+
+      function renderOrdersTable() {
+        var body = document.getElementById('ordersTableBody');
+        if (!body) return;
+        body.innerHTML = '';
+
+        var search = (document.getElementById('orderSearchInput') ? document.getElementById('orderSearchInput').value : '').toLowerCase().trim();
+
+        var filtered = activeOrders.filter(function (o) {
+          var matchStatus = (currentOrderFilter === 'all') || (o.status === currentOrderFilter);
+          var matchSearch = !search ||
+            (o.order_no && o.order_no.toLowerCase().indexOf(search) !== -1) ||
+            (o.customer_phone && o.customer_phone.indexOf(search) !== -1) ||
+            (o.customer_name && o.customer_name.toLowerCase().indexOf(search) !== -1);
+          return matchStatus && matchSearch;
+        });
+
+        if (filtered.length === 0) {
+          var tr = document.createElement('tr');
+          var td = document.createElement('td');
+          td.colSpan = 9;
+          td.className = 'text-center py-4 text-muted';
+          td.textContent = 'No orders matching current filter/search.';
+          tr.appendChild(td);
+          body.appendChild(tr);
+          return;
+        }
+
+        filtered.forEach(function (o) {
+          var tr = document.createElement('tr');
+
+          var tdNo = document.createElement('td');
+          var strongNo = document.createElement('strong');
+          strongNo.style.color = 'var(--admin-gold)';
+          strongNo.textContent = o.order_no;
+          tdNo.appendChild(strongNo);
+          tr.appendChild(tdNo);
+
+          var tdDate = document.createElement('td');
+          tdDate.textContent = formatDateTime(o.created_at);
+          tr.appendChild(tdDate);
+
+          var tdCust = document.createElement('td');
+          tdCust.textContent = o.customer_name || 'Guest';
+          tr.appendChild(tdCust);
+
+          var tdPhone = document.createElement('td');
+          tdPhone.textContent = o.customer_phone;
+          tr.appendChild(tdPhone);
+
+          var tdItems = document.createElement('td');
+          var itemCount = o.order_items ? o.order_items.reduce(function (sum, it) { return sum + it.qty; }, 0) : 0;
+          tdItems.textContent = itemCount + ' item' + (itemCount === 1 ? '' : 's');
+          tr.appendChild(tdItems);
+
+          var tdTotal = document.createElement('td');
+          tdTotal.textContent = formatInr(o.total_inr);
+          tr.appendChild(tdTotal);
+
+          var tdPay = document.createElement('td');
+          var payBadge = document.createElement('span');
+          payBadge.className = 'badge bg-' + (o.payment_status === 'paid' ? 'success' : (o.payment_status === 'failed' ? 'danger' : 'secondary'));
+          payBadge.textContent = (o.payment_method ? o.payment_method.toUpperCase() : 'COD') + ' · ' + (o.payment_status || 'pending');
+          tdPay.appendChild(payBadge);
+          tr.appendChild(tdPay);
+
+          var tdStatus = document.createElement('td');
+          var badge = document.createElement('span');
+          badge.className = 'status-badge status-' + (o.status || 'placed');
+          badge.textContent = o.status;
+          tdStatus.appendChild(badge);
+          tr.appendChild(tdStatus);
+
+          var tdActions = document.createElement('td');
+          var btn = document.createElement('button');
+          btn.className = 'btn-admin-secondary btn-admin-sm';
+          btn.innerHTML = '<i class="bi bi-pencil-square"></i> Details';
+          btn.onclick = function () { openOrderModal(o.id); };
+          tdActions.appendChild(btn);
+          tr.appendChild(tdActions);
+
+          body.appendChild(tr);
+        });
+      }
+
+      window.handleOrderSearch = function () {
+        renderOrdersTable();
+      };
+
+      window.filterOrdersByStatus = function (status, btn) {
+        currentOrderFilter = status;
+        var buttons = document.querySelectorAll('#orderFilterButtons button');
+        buttons.forEach(function (b) { b.classList.remove('active'); });
+        if (btn) btn.classList.add('active');
+        renderOrdersTable();
+      };
+
+      // ─── Order Detail Modal & WhatsApp ───
+      window.openOrderModal = function (orderId) {
+        var order = activeOrders.find(function (o) { return o.id === orderId; });
+        if (!order) return;
+        selectedOrder = order;
+
+        var modal = document.getElementById('orderModal');
+        var title = document.getElementById('orderModalTitle');
+        var content = document.getElementById('orderModalContent');
+
+        title.textContent = 'Order #' + order.order_no;
+        content.innerHTML = '';
+
+        // Top info summary
+        var topRow = document.createElement('div');
+        topRow.className = 'row g-3 mb-4 p-3 rounded bg-dark border border-secondary';
+
+        var col1 = document.createElement('div');
+        col1.className = 'col-md-6';
+        var hCust = document.createElement('div');
+        hCust.className = 'text-warning small text-uppercase fw-bold mb-1';
+        hCust.textContent = 'Customer Details';
+        col1.appendChild(hCust);
+        var pCust = document.createElement('div');
+        pCust.innerHTML = '<strong>' + escapeHtml(order.customer_name || 'Guest') + '</strong><br>' +
+                          'Phone: ' + escapeHtml(order.customer_phone) + '<br>' +
+                          'Email: ' + escapeHtml(order.customer_email || 'Not provided');
+        col1.appendChild(pCust);
+        topRow.appendChild(col1);
+
+        var col2 = document.createElement('div');
+        col2.className = 'col-md-6';
+        var hShip = document.createElement('div');
+        hShip.className = 'text-warning small text-uppercase fw-bold mb-1';
+        hShip.textContent = 'Delivery Address';
+        col2.appendChild(hShip);
+        var pShip = document.createElement('div');
+        var addr = order.shipping_address || {};
+        pShip.innerHTML = escapeHtml(addr.street || '') + '<br>' +
+                          escapeHtml(addr.city || '') + ', ' + escapeHtml(addr.state || '') + ' - ' + escapeHtml(addr.postal_code || '');
+        col2.appendChild(pShip);
+        topRow.appendChild(col2);
+
+        content.appendChild(topRow);
+
+        // Items Table
+        var itemsTableWrap = document.createElement('div');
+        itemsTableWrap.className = 'admin-table-responsive mb-4';
+        var table = document.createElement('table');
+        table.className = 'admin-table';
+        table.innerHTML = '<thead><tr><th>SKU</th><th>Item</th><th>Size</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>';
+        var tBody = document.createElement('tbody');
+
+        if (order.order_items && order.order_items.length > 0) {
+          order.order_items.forEach(function (it) {
+            var tr = document.createElement('tr');
+            var tdSku = document.createElement('td'); tdSku.textContent = it.sku; tr.appendChild(tdSku);
+            var tdTitle = document.createElement('td'); tdTitle.textContent = it.title; tr.appendChild(tdTitle);
+            var tdSize = document.createElement('td'); tdSize.textContent = it.size || 'Free Size'; tr.appendChild(tdSize);
+            var tdQty = document.createElement('td'); tdQty.textContent = it.qty; tr.appendChild(tdQty);
+            var tdPrice = document.createElement('td'); tdPrice.textContent = formatInr(it.price_inr); tr.appendChild(tdPrice);
+            var tdLine = document.createElement('td'); tdLine.textContent = formatInr(it.line_total_inr); tr.appendChild(tdLine);
+            tBody.appendChild(tr);
+          });
+        }
+        table.appendChild(tBody);
+        itemsTableWrap.appendChild(table);
+        content.appendChild(itemsTableWrap);
+
+        // Price breakdown & Status Update Form
+        var formRow = document.createElement('div');
+        formRow.className = 'row g-3';
+
+        var colForm = document.createElement('div');
+        colForm.className = 'col-md-7';
+
+        colForm.innerHTML = `
+          <div class="mb-3">
+            <label class="form-label small text-muted">Fulfillment Status *</label>
+            <select id="modalOrderStatus" class="admin-select">
+              <option value="placed">Placed</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled (Restores Stock)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small text-muted">Payment Status *</label>
+            <select id="modalOrderPaymentStatus" class="admin-select">
+              <option value="pending">Pending</option>
+              <option value="paid">Paid</option>
+              <option value="failed">Failed</option>
+              <option value="refunded">Refunded</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small text-muted">Tracking Note / Courier Info</label>
+            <input type="text" id="modalOrderTracking" class="admin-input" placeholder="e.g. DTDC AWB 123456789">
+          </div>
+        `;
+        formRow.appendChild(colForm);
+
+        var colSummary = document.createElement('div');
+        colSummary.className = 'col-md-5';
+        colSummary.innerHTML = `
+          <div class="p-3 rounded bg-dark border border-secondary" style="font-size:0.9rem; line-height:2;">
+            <div class="d-flex justify-content-between"><span>Subtotal:</span><strong>${formatInr(order.subtotal_inr)}</strong></div>
+            <div class="d-flex justify-content-between"><span>Discount:</span><strong class="text-success">-${formatInr(order.discount_inr)}</strong></div>
+            <div class="d-flex justify-content-between"><span>Shipping:</span><strong>${order.shipping_fee_inr === 0 ? 'FREE' : formatInr(order.shipping_fee_inr)}</strong></div>
+            <hr class="my-2 border-secondary">
+            <div class="d-flex justify-content-between fs-6 text-warning"><span>Final Total:</span><strong>${formatInr(order.total_inr)}</strong></div>
+          </div>
+          <div class="mt-3">
+            <button type="button" class="btn-admin btn-wa w-100 justify-content-center" onclick="sendOrderWhatsApp()">
+              <i class="bi bi-whatsapp"></i> Update Customer on WhatsApp
+            </button>
+          </div>
+        `;
+        formRow.appendChild(colSummary);
+
+        content.appendChild(formRow);
+
+        // Pre-fill fields
+        var statusSelect = document.getElementById('modalOrderStatus');
+        if (statusSelect) statusSelect.value = order.status || 'placed';
+
+        var paySelect = document.getElementById('modalOrderPaymentStatus');
+        if (paySelect) paySelect.value = order.payment_status || 'pending';
+
+        var trackInput = document.getElementById('modalOrderTracking');
+        if (trackInput) trackInput.value = order.tracking_note || '';
+
+        modal.style.display = 'flex';
+      };
+
+      window.closeOrderModal = function () {
+        var modal = document.getElementById('orderModal');
+        if (modal) modal.style.display = 'none';
+        selectedOrder = null;
+      };
+
+      window.saveOrderUpdates = function () {
+        if (!selectedOrder) return;
+        var btn = document.getElementById('btnSaveOrderUpdates');
+        var newStatus = document.getElementById('modalOrderStatus').value;
+        var newPayment = document.getElementById('modalOrderPaymentStatus').value;
+        var newTracking = document.getElementById('modalOrderTracking').value.trim();
+
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+
+        window.supabaseClient
+          .from('orders')
+          .update({
+            status: newStatus,
+            payment_status: newPayment,
+            tracking_note: newTracking
+          })
+          .eq('id', selectedOrder.id)
+          .then(function (res) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-check2"></i> Save Changes';
+
+            if (res.error) {
+              showToast('Error updating order: ' + res.error.message, 'error');
+              return;
+            }
+
+            showToast('Order #' + selectedOrder.order_no + ' updated successfully!', 'success');
+            closeOrderModal();
+            loadOrders();
+            loadDashboardMetrics();
+          });
+      };
+
+      window.sendOrderWhatsApp = function () {
+        if (!selectedOrder) return;
+        var phone = selectedOrder.customer_phone.replace(/\D/g, '');
+        if (!phone.startsWith('91') && phone.length === 10) phone = '91' + phone;
+
+        var status = document.getElementById('modalOrderStatus').value;
+        var tracking = document.getElementById('modalOrderTracking').value.trim();
+
+        var msg = 'Namaste ' + (selectedOrder.customer_name || 'Customer') + ',\n\n' +
+                  'Update regarding your Suyog Textile order #' + selectedOrder.order_no + ':\n' +
+                  'Status: ' + status.toUpperCase() + '\n';
+        if (tracking) {
+          msg += 'Tracking / Delivery Note: ' + tracking + '\n';
+        }
+        msg += 'Total: ' + formatInr(selectedOrder.total_inr) + '\n\n' +
+               'Thank you for shopping with Suyog Textile, Nashik!';
+
+        var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+        window.open(url, '_blank');
+      };
+
+      // ─── Export Orders to CSV ───
+      window.exportOrdersCSV = function () {
+        if (!activeOrders || activeOrders.length === 0) {
+          showToast('No orders to export.', 'info');
+          return;
+        }
+
+        var headers = ['Order Number', 'Date', 'Customer Name', 'Customer Phone', 'Email', 'Total (INR)', 'Payment Status', 'Order Status', 'Tracking Note'];
+        var rows = [headers];
+
+        activeOrders.forEach(function (o) {
+          rows.push([
+            o.order_no,
+            o.created_at,
+            (o.customer_name || 'Guest').replace(/"/g, '""'),
+            o.customer_phone,
+            (o.customer_email || '').replace(/"/g, '""'),
+            o.total_inr,
+            o.payment_status || 'pending',
+            o.status || 'placed',
+            (o.tracking_note || '').replace(/"/g, '""')
+          ]);
+        });
+
+        var csvContent = 'data:text/csv;charset=utf-8,' + rows.map(function (e) {
+          return e.map(function (f) { return '"' + f + '"'; }).join(',');
+        }).join('\n');
+
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'suyog_orders_' + new Date().toISOString().slice(0, 10) + '.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast('Orders exported to CSV!', 'success');
+      };
+
+      // ─── 3. Products Management ───
+      window.loadProducts = function () {
+        var body = document.getElementById('productsTableBody');
+        if (!body) return;
+        body.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Loading live products...</td></tr>';
+
+        window.supabaseClient
+          .from('products')
+          .select('*, categories(name)')
+          .order('created_at', { ascending: false })
+          .then(function (res) {
+            if (res.error) {
+              showToast('Error loading products: ' + res.error.message, 'error');
+              body.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-danger">Failed to load products.</td></tr>';
+              return;
+            }
+
+            activeProducts = res.data || [];
+            renderProductsTable();
+          });
+      };
+
+      function renderProductsTable() {
+        var body = document.getElementById('productsTableBody');
+        if (!body) return;
+        body.innerHTML = '';
+
+        var search = (document.getElementById('productSearchInput') ? document.getElementById('productSearchInput').value : '').toLowerCase().trim();
+        var catId = document.getElementById('productCategoryFilter') ? document.getElementById('productCategoryFilter').value : 'all';
+
+        var filtered = activeProducts.filter(function (p) {
+          var matchCat = (catId === 'all') || (p.category_id === catId);
+          var matchSearch = !search ||
+            (p.title && p.title.toLowerCase().indexOf(search) !== -1) ||
+            (p.sku && p.sku.toLowerCase().indexOf(search) !== -1);
+          return matchCat && matchSearch;
+        });
+
+        if (filtered.length === 0) {
+          var tr = document.createElement('tr');
+          var td = document.createElement('td');
+          td.colSpan = 8;
+          td.className = 'text-center py-4 text-muted';
+          td.textContent = 'No products matching filter/search.';
+          tr.appendChild(td);
+          body.appendChild(tr);
+          return;
+        }
+
+        filtered.forEach(function (p) {
+          var tr = document.createElement('tr');
+
+          // Thumbnail
+          var tdImg = document.createElement('td');
+          var img = document.createElement('img');
+          img.src = p.image_url ? (p.image_url.startsWith('http') ? p.image_url : '../' + p.image_url) : '../assets/images/logo.png';
+          img.alt = p.title;
+          img.style.width = '44px';
+          img.style.height = '44px';
+          img.style.objectFit = 'cover';
+          img.style.borderRadius = '4px';
+          img.onerror = function () { this.src = '../assets/images/logo.png'; };
+          tdImg.appendChild(img);
+          tr.appendChild(tdImg);
+
+          // Title & SKU
+          var tdTitle = document.createElement('td');
+          var strongTitle = document.createElement('div');
+          strongTitle.style.fontWeight = '600';
+          strongTitle.textContent = p.title;
+          var smallSku = document.createElement('div');
+          smallSku.className = 'small text-muted';
+          smallSku.textContent = 'SKU: ' + p.sku;
+          tdTitle.appendChild(strongTitle);
+          tdTitle.appendChild(smallSku);
+          tr.appendChild(tdTitle);
+
+          // Category
+          var tdCat = document.createElement('td');
+          tdCat.textContent = (p.categories && p.categories.name) ? p.categories.name : '—';
+          tr.appendChild(tdCat);
+
+          // Price
+          var tdPrice = document.createElement('td');
+          tdPrice.textContent = formatInr(p.price_inr);
+          tr.appendChild(tdPrice);
+
+          // MRP
+          var tdMrp = document.createElement('td');
+          tdMrp.textContent = formatInr(p.mrp_inr);
+          tr.appendChild(tdMrp);
+
+          // Stock
+          var tdStock = document.createElement('td');
+          if (p.stock <= 3) {
+            var stockBadge = document.createElement('span');
+            stockBadge.className = 'badge bg-danger';
+            stockBadge.textContent = p.stock + ' (Low)';
+            tdStock.appendChild(stockBadge);
+          } else {
+            tdStock.textContent = p.stock;
+          }
+          tr.appendChild(tdStock);
+
+          // Status
+          var tdStatus = document.createElement('td');
+          var sBadge = document.createElement('span');
+          sBadge.className = 'status-badge ' + (p.is_active ? 'status-active' : 'status-inactive');
+          sBadge.textContent = p.is_active ? 'Active' : 'Hidden';
+          tdStatus.appendChild(sBadge);
+          tr.appendChild(tdStatus);
+
+          // Actions
+          var tdActions = document.createElement('td');
+          var btnEdit = document.createElement('button');
+          btnEdit.className = 'btn-admin-secondary btn-admin-sm me-1';
+          btnEdit.innerHTML = '<i class="bi bi-pencil"></i> Edit';
+          btnEdit.onclick = function () { openProductModal(p.id); };
+          tdActions.appendChild(btnEdit);
+
+          var btnToggle = document.createElement('button');
+          btnToggle.className = 'btn-admin-secondary btn-admin-sm';
+          btnToggle.innerHTML = p.is_active ? '<i class="bi bi-eye-slash"></i> Hide' : '<i class="bi bi-eye"></i> Show';
+          btnToggle.onclick = function () { toggleProductActive(p.id, !p.is_active); };
+          tdActions.appendChild(btnToggle);
+
+          tr.appendChild(tdActions);
+          body.appendChild(tr);
+        });
+      }
+
+      window.handleProductSearch = function () { renderProductsTable(); };
+      window.handleProductFilter = function () { renderProductsTable(); };
+
+      window.toggleProductActive = function (prodId, newActiveState) {
+        window.supabaseClient
+          .from('products')
+          .update({ is_active: newActiveState })
+          .eq('id', prodId)
+          .then(function (res) {
+            if (res.error) {
+              showToast('Error updating status: ' + res.error.message, 'error');
+              return;
+            }
+            showToast('Product status updated!', 'success');
+            loadProducts();
+          });
+      };
+
+      // ─── Product Create / Edit Modal ───
+      window.openProductModal = function (prodId) {
+        var modal = document.getElementById('productModal');
+        var form = document.getElementById('productForm');
+        var title = document.getElementById('productModalTitle');
+        var preview = document.getElementById('imagePreviewContainer');
+        var fileInput = document.getElementById('prodImageFile');
+
+        form.reset();
+        if (fileInput) fileInput.value = '';
+        if (preview) preview.style.display = 'none';
+
+        if (prodId) {
+          var p = activeProducts.find(function (item) { return item.id === prodId; });
+          if (!p) return;
+          title.textContent = 'Edit Product: ' + p.title;
+          document.getElementById('prodFormId').value = p.id;
+          document.getElementById('prodSKU').value = p.sku || '';
+          document.getElementById('prodCategory').value = p.category_id || '';
+          document.getElementById('prodTitle').value = p.title || '';
+          document.getElementById('prodDescription').value = p.description || '';
+          document.getElementById('prodPrice').value = p.price_inr || 0;
+          document.getElementById('prodMrp').value = p.mrp_inr || 0;
+          document.getElementById('prodStock').value = p.stock || 0;
+          document.getElementById('prodFabric').value = p.fabric || '';
+          document.getElementById('prodOccasion').value = p.occasion || '';
+          document.getElementById('prodWashCare').value = p.wash_care || '';
+          document.getElementById('prodImageUrl').value = p.image_url || '';
+          document.getElementById('prodIsActive').checked = !!p.is_active;
+          document.getElementById('prodIsFeatured').checked = !!p.is_featured;
+          document.getElementById('prodIsBestSeller').checked = !!p.is_best_seller;
+          document.getElementById('prodIsNewArrival').checked = !!p.is_new_arrival;
+
+          if (p.image_url) {
+            var img = document.getElementById('imagePreview');
+            img.src = p.image_url.startsWith('http') ? p.image_url : '../' + p.image_url;
+            preview.style.display = 'block';
+          }
+        } else {
+          title.textContent = 'Add New Product';
+          document.getElementById('prodFormId').value = '';
+          document.getElementById('prodIsActive').checked = true;
+        }
+
+        modal.style.display = 'flex';
+      };
+
+      window.closeProductModal = function () {
+        var modal = document.getElementById('productModal');
+        if (modal) modal.style.display = 'none';
+      };
+
+      // Handle Image File Selection & Preview
+      window.handleImageFileSelect = function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 2 * 1024 * 1024) {
+          showToast('Image size exceeds 2MB limit.', 'error');
+          e.target.value = '';
+          return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+          var img = document.getElementById('imagePreview');
+          img.src = evt.target.result;
+          document.getElementById('imagePreviewContainer').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      };
+
+      window.handleProductSubmit = function (e) {
+        e.preventDefault();
+        var btn = document.getElementById('btnSaveProduct');
+        var prodId = document.getElementById('prodFormId').value;
+        var fileInput = document.getElementById('prodImageFile');
+
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+
+        function saveRecord(finalImageUrl) {
+          var titleVal = document.getElementById('prodTitle').value.trim();
+          var slugVal = titleVal.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+          var payload = {
+            sku: document.getElementById('prodSKU').value.trim().toUpperCase(),
+            category_id: document.getElementById('prodCategory').value,
+            title: titleVal,
+            slug: slugVal,
+            description: document.getElementById('prodDescription').value.trim(),
+            price_inr: parseInt(document.getElementById('prodPrice').value, 10),
+            mrp_inr: parseInt(document.getElementById('prodMrp').value, 10),
+            stock: parseInt(document.getElementById('prodStock').value, 10),
+            fabric: document.getElementById('prodFabric').value.trim() || null,
+            occasion: document.getElementById('prodOccasion').value.trim() || null,
+            wash_care: document.getElementById('prodWashCare').value.trim() || null,
+            image_url: finalImageUrl || document.getElementById('prodImageUrl').value.trim() || null,
+            is_active: document.getElementById('prodIsActive').checked,
+            is_featured: document.getElementById('prodIsFeatured').checked,
+            is_best_seller: document.getElementById('prodIsBestSeller').checked,
+            is_new_arrival: document.getElementById('prodIsNewArrival').checked
+          };
+
+          var query = prodId
+            ? window.supabaseClient.from('products').update(payload).eq('id', prodId)
+            : window.supabaseClient.from('products').insert([payload]);
+
+          query.then(function (res) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-cloud-arrow-up"></i> Save Product';
+
+            if (res.error) {
+              showToast('Error saving product: ' + res.error.message, 'error');
+              return;
+            }
+
+            showToast('Product saved successfully!', 'success');
+            closeProductModal();
+            loadProducts();
+            loadDashboardMetrics();
+          });
+        }
+
+        // Check if an image file needs to be uploaded to Storage first
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+          var file = fileInput.files[0];
+          var fileExt = file.name.split('.').pop();
+          var fileName = 'prod_' + Date.now() + '.' + fileExt;
+          var filePath = fileName;
+
+          window.supabaseClient.storage
+            .from('product-images')
+            .upload(filePath, file, { cacheControl: '3600', upsert: true })
+            .then(function (uploadRes) {
+              if (uploadRes.error) {
+                showToast('Storage upload note: ' + uploadRes.error.message + '. Saving with fallback URL.', 'warning');
+                saveRecord(document.getElementById('prodImageUrl').value.trim());
+                return;
+              }
+
+              var publicUrlRes = window.supabaseClient.storage.from('product-images').getPublicUrl(filePath);
+              var publicUrl = publicUrlRes && publicUrlRes.data ? publicUrlRes.data.publicUrl : filePath;
+              saveRecord(publicUrl);
+            })
+            .catch(function (err) {
+              showToast('Upload error: ' + err.message, 'warning');
+              saveRecord(document.getElementById('prodImageUrl').value.trim());
+            });
+        } else {
+          saveRecord(document.getElementById('prodImageUrl').value.trim());
+        }
+      };
+
+      // ─── 4. Coupons Management ───
+      window.loadCoupons = function () {
+        var body = document.getElementById('couponsTableBody');
+        if (!body) return;
+        body.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Loading coupons...</td></tr>';
+
+        window.supabaseClient
+          .from('coupons')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .then(function (res) {
+            if (res.error) {
+              showToast('Error loading coupons: ' + res.error.message, 'error');
+              body.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-danger">Failed to load coupons.</td></tr>';
+              return;
+            }
+
+            activeCoupons = res.data || [];
+            renderCouponsTable();
+          });
+      };
+
+      function renderCouponsTable() {
+        var body = document.getElementById('couponsTableBody');
+        if (!body) return;
+        body.innerHTML = '';
+
+        if (activeCoupons.length === 0) {
+          var tr = document.createElement('tr');
+          var td = document.createElement('td');
+          td.colSpan = 8;
+          td.className = 'text-center py-4 text-muted';
+          td.textContent = 'No coupons created yet.';
+          tr.appendChild(td);
+          body.appendChild(tr);
+          return;
+        }
+
+        activeCoupons.forEach(function (c) {
+          var tr = document.createElement('tr');
+
+          var tdCode = document.createElement('td');
+          var strongCode = document.createElement('strong');
+          strongCode.style.color = 'var(--admin-gold)';
+          strongCode.textContent = c.code;
+          tdCode.appendChild(strongCode);
+          tr.appendChild(tdCode);
+
+          var tdType = document.createElement('td');
+          tdType.textContent = c.discount_type === 'percent' ? 'Percentage' : 'Flat Amount';
+          tr.appendChild(tdType);
+
+          var tdVal = document.createElement('td');
+          tdVal.textContent = c.discount_type === 'percent' ? c.discount_value + '%' : formatInr(c.discount_value);
+          tr.appendChild(tdVal);
+
+          var tdMin = document.createElement('td');
+          tdMin.textContent = formatInr(c.min_order_inr);
+          tr.appendChild(tdMin);
+
+          var tdMax = document.createElement('td');
+          tdMax.textContent = c.max_discount_inr ? formatInr(c.max_discount_inr) : 'None';
+          tr.appendChild(tdMax);
+
+          var tdValid = document.createElement('td');
+          tdValid.textContent = c.valid_until ? new Date(c.valid_until).toLocaleDateString('en-IN') : 'Ongoing';
+          tr.appendChild(tdValid);
+
+          var tdStatus = document.createElement('td');
+          var sBadge = document.createElement('span');
+          sBadge.className = 'status-badge ' + (c.is_active ? 'status-active' : 'status-inactive');
+          sBadge.textContent = c.is_active ? 'Active' : 'Disabled';
+          tdStatus.appendChild(sBadge);
+          tr.appendChild(tdStatus);
+
+          var tdAction = document.createElement('td');
+          var btn = document.createElement('button');
+          btn.className = 'btn-admin-secondary btn-admin-sm';
+          btn.innerHTML = c.is_active ? '<i class="bi bi-slash-circle"></i> Disable' : '<i class="bi bi-check-circle"></i> Enable';
+          btn.onclick = function () { toggleCouponActive(c.id, !c.is_active); };
+          tdAction.appendChild(btn);
+          tr.appendChild(tdAction);
+
+          body.appendChild(tr);
+        });
+      }
+
+      window.openCouponModal = function () {
+        var modal = document.getElementById('couponModal');
+        var form = document.getElementById('couponForm');
+        form.reset();
+        document.getElementById('couponIsActive').checked = true;
+        modal.style.display = 'flex';
+      };
+
+      window.closeCouponModal = function () {
+        var modal = document.getElementById('couponModal');
+        if (modal) modal.style.display = 'none';
+      };
+
+      window.handleCouponSubmit = function (e) {
+        e.preventDefault();
+        var code = document.getElementById('couponCode').value.trim().toUpperCase();
+        var type = document.getElementById('couponType').value;
+        var val = parseInt(document.getElementById('couponValue').value, 10);
+        var minOrder = parseInt(document.getElementById('couponMinOrder').value, 10) || 0;
+        var maxDisc = document.getElementById('couponMaxDiscount').value ? parseInt(document.getElementById('couponMaxDiscount').value, 10) : null;
+        var validUntil = document.getElementById('couponValidUntil').value ? new Date(document.getElementById('couponValidUntil').value).toISOString() : null;
+        var isActive = document.getElementById('couponIsActive').checked;
+
+        window.supabaseClient
+          .from('coupons')
+          .insert([{
+            code: code,
+            discount_type: type,
+            discount_value: val,
+            min_order_inr: minOrder,
+            max_discount_inr: maxDisc,
+            valid_until: validUntil,
+            is_active: isActive
+          }])
+          .then(function (res) {
+            if (res.error) {
+              showToast('Error creating coupon: ' + res.error.message, 'error');
+              return;
+            }
+            showToast('Coupon ' + code + ' created!', 'success');
+            closeCouponModal();
+            loadCoupons();
+          });
+      };
+
+      window.toggleCouponActive = function (couponId, newState) {
+        window.supabaseClient
+          .from('coupons')
+          .update({ is_active: newState })
+          .eq('id', couponId)
+          .then(function (res) {
+            if (res.error) {
+              showToast('Error toggling coupon: ' + res.error.message, 'error');
+              return;
+            }
+            showToast('Coupon updated!', 'success');
+            loadCoupons();
+          });
+      };
+
+      // ─── 5. Settings & Audit Log ───
+      window.loadSettingsAndAudit = function () {
+        // Load Settings
+        window.supabaseClient
+          .from('settings')
+          .select('key, value')
+          .order('key')
+          .then(function (res) {
+            var body = document.getElementById('settingsTableBody');
+            if (!body) return;
+            body.innerHTML = '';
+
+            if (res.error || !res.data || res.data.length === 0) {
+              var tr = document.createElement('tr');
+              var td = document.createElement('td');
+              td.colSpan = 2;
+              td.className = 'text-center py-4 text-muted';
+              td.textContent = 'No settings found.';
+              tr.appendChild(td);
+              body.appendChild(tr);
+              return;
+            }
+
+            res.data.forEach(function (s) {
+              var tr = document.createElement('tr');
+              var tdKey = document.createElement('td');
+              var strongK = document.createElement('strong');
+              strongK.textContent = s.key;
+              tdKey.appendChild(strongK);
+              tr.appendChild(tdKey);
+
+              var tdVal = document.createElement('td');
+              var codeVal = document.createElement('code');
+              codeVal.textContent = typeof s.value === 'object' ? JSON.stringify(s.value) : String(s.value);
+              tdVal.appendChild(codeVal);
+              tr.appendChild(tdVal);
+
+              body.appendChild(tr);
+            });
+          });
+
+        // Load Audit Log
+        window.supabaseClient
+          .from('admin_audit_log')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(20)
+          .then(function (res) {
+            var body = document.getElementById('auditTableBody');
+            if (!body) return;
+            body.innerHTML = '';
+
+            if (res.error || !res.data || res.data.length === 0) {
+              var tr = document.createElement('tr');
+              var td = document.createElement('td');
+              td.colSpan = 5;
+              td.className = 'text-center py-4 text-muted';
+              td.textContent = 'No audit log entries recorded yet.';
+              tr.appendChild(td);
+              body.appendChild(tr);
+              return;
+            }
+
+            res.data.forEach(function (log) {
+              var tr = document.createElement('tr');
+
+              var tdTime = document.createElement('td');
+              tdTime.textContent = formatDateTime(log.created_at);
+              tr.appendChild(tdTime);
+
+              var tdAdmin = document.createElement('td');
+              tdAdmin.textContent = log.admin_id ? log.admin_id.slice(0, 8) + '...' : 'System';
+              tr.appendChild(tdAdmin);
+
+              var tdAction = document.createElement('td');
+              var aBadge = document.createElement('span');
+              aBadge.className = 'badge bg-secondary';
+              aBadge.textContent = log.action;
+              tdAction.appendChild(aBadge);
+              tr.appendChild(tdAction);
+
+              var tdTable = document.createElement('td');
+              var tCode = document.createElement('code');
+              tCode.textContent = log.target_table;
+              tdTable.appendChild(tCode);
+              tr.appendChild(tdTable);
+
+              var tdRec = document.createElement('td');
+              tdRec.textContent = log.record_id ? log.record_id.slice(0, 8) + '...' : '—';
+              tr.appendChild(tdRec);
+
+              body.appendChild(tr);
+            });
+          });
+      };
+
+      // XSS Protection Helper
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      // Initialize when DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.initAdminAuth);
+      } else {
+        window.initAdminAuth();
+      }
+    })();
+  </script>
 </body>
 </html>

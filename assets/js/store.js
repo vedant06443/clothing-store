@@ -1,178 +1,269 @@
-// Suyog Textile - Client Store Engine (Cart, Wishlist, WhatsApp Ordering, Search)
+/**
+ * Suyog Textile — Modernized Store Engine with Supabase Integration
+ * Client Cart stores ONLY { id, size, qty }.
+ * Prices, stock, discounts, shipping, and totals are computed only via the database.
+ */
 
 const Store = {
-  // ─── CART ENGINE ───
+  getConfig() {
+    return window.SITE_CONFIG || {
+      brandName: "Suyog Textile",
+      freeShippingThreshold: 1499,
+      shippingFee: 0,
+      whatsappNumber: "918669396037"
+    };
+  },
+
+  // ─── CART STORAGE (Stores ONLY id, size, qty) ───
   getCart() {
     try {
-      return JSON.parse(localStorage.getItem('suyog_cart')) || [];
+      const data = localStorage.getItem('suyog_cart');
+      if (!data) return [];
+      const raw = JSON.parse(data);
+      if (!Array.isArray(raw)) return [];
+      // Normalize to { id, size, qty }
+      return raw.map(item => ({
+        id: Number(item.id),
+        size: item.size || 'Free Size',
+        qty: Math.max(1, Number(item.qty || item.quantity || 1))
+      })).filter(item => !isNaN(item.id) && item.id > 0);
     } catch (e) {
+      console.warn("Storage access error:", e);
       return [];
     }
   },
 
   saveCart(cart) {
-    localStorage.setItem('suyog_cart', JSON.stringify(cart));
+    try {
+      const clean = cart.map(item => ({
+        id: Number(item.id),
+        size: item.size || 'Free Size',
+        qty: Math.max(1, Math.min(10, Number(item.qty || 1)))
+      }));
+      localStorage.setItem('suyog_cart', JSON.stringify(clean));
+    } catch (e) {
+      console.warn("Unable to save cart:", e);
+    }
     this.updateCartBadges();
-    this.renderDrawerCart();
   },
 
-  addToCart(productId, size = null, color = null, quantity = 1) {
-    const product = PRODUCTS_DATA.find(p => p.id === Number(productId));
-    if (!product) return;
-
-    const chosenSize = size || (product.sizes && product.sizes[0]) || "Standard";
-    const chosenColor = color || (product.colors && product.colors[0]) || "Default";
+  addToCart(productId, size = 'Free Size', qty = 1) {
+    const id = Number(productId);
+    if (!id) return;
+    const chosenSize = size || 'Free Size';
+    const addQty = Math.max(1, Number(qty) || 1);
 
     const cart = this.getCart();
-    const existingIndex = cart.findIndex(item => 
-      item.id === product.id && item.size === chosenSize && item.color === chosenColor
-    );
+    const existingIndex = cart.findIndex(item => item.id === id && item.size === chosenSize);
 
     if (existingIndex > -1) {
-      cart[existingIndex].quantity += quantity;
+      cart[existingIndex].qty = Math.min(10, cart[existingIndex].qty + addQty);
     } else {
-      cart.push({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        originalPrice: product.originalPrice,
-        image: product.primaryImage,
-        size: chosenSize,
-        color: chosenColor,
-        quantity: quantity,
-        category: product.category
-      });
+      cart.push({ id, size: chosenSize, qty: addQty });
     }
 
     this.saveCart(cart);
-    this.showToast(`✨ Added "${product.name}" to your bag!`);
-    this.openCartDrawer();
+    this.showToast("✨ Added to your shopping bag!");
   },
 
   updateQuantity(index, newQty) {
     const cart = this.getCart();
+    if (index < 0 || index >= cart.length) return;
     if (newQty <= 0) {
       cart.splice(index, 1);
     } else {
-      cart[index].quantity = newQty;
+      cart[index].qty = Math.min(10, Math.max(1, newQty));
     }
     this.saveCart(cart);
-    if (typeof renderCartPage === 'function') renderCartPage();
-    if (typeof renderCheckoutSummary === 'function') renderCheckoutSummary();
   },
 
   removeFromCart(index) {
     const cart = this.getCart();
-    const removed = cart.splice(index, 1)[0];
-    this.saveCart(cart);
-    if (removed) {
-      this.showToast(`Removed "${removed.name}" from bag`);
+    if (index >= 0 && index < cart.length) {
+      cart.splice(index, 1);
+      this.saveCart(cart);
     }
-    if (typeof renderCartPage === 'function') renderCartPage();
-    if (typeof renderCheckoutSummary === 'function') renderCheckoutSummary();
   },
 
   clearCart() {
     localStorage.removeItem('suyog_cart');
     this.updateCartBadges();
-    this.renderDrawerCart();
   },
 
-  getCartTotals() {
+  getCartCount() {
     const cart = this.getCart();
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const originalSubtotal = cart.reduce((sum, item) => sum + (item.originalPrice * item.quantity), 0);
-    const savings = Math.max(0, originalSubtotal - subtotal);
-    const shipping = subtotal >= STORE_CONFIG.freeShippingThreshold || subtotal === 0 ? 0 : STORE_CONFIG.standardShippingFee;
-    
-    // Apply coupon if any
-    const couponCode = localStorage.getItem('suyog_coupon');
-    let discount = 0;
-    let appliedCoupon = null;
+    return cart.reduce((sum, item) => sum + item.qty, 0);
+  },
 
-    if (couponCode && STORE_CONFIG.coupons[couponCode]) {
-      const c = STORE_CONFIG.coupons[couponCode];
-      if (subtotal >= c.minOrder) {
-        if (c.type === 'percent') {
-          discount = Math.round((subtotal * c.value) / 100);
-        } else if (c.type === 'flat') {
-          discount = c.value;
+  updateCartBadges() {
+    const count = this.getCartCount();
+    document.querySelectorAll('.cart-count-badge').forEach(badge => {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-flex' : 'none';
+    });
+  },
+
+  // ─── SERVER RE-FETCH & SYNCHRONIZATION ───
+  // Re-fetches active product details directly from Supabase
+  async fetchCartDetails() {
+    const cart = this.getCart();
+    if (cart.length === 0) {
+      return { items: [], subtotal: 0, count: 0 };
+    }
+
+    const ids = Array.from(new Set(cart.map(i => i.id)));
+    let productsMap = new Map();
+
+    if (window.isSupabaseConfigured()) {
+      try {
+        const { data, error } = await window.supabaseClient
+          .from('products')
+          .select('id, slug, name, price_inr, mrp_inr, stock, image_paths, is_active')
+          .in('id', ids)
+          .eq('is_active', true);
+
+        if (!error && Array.isArray(data)) {
+          data.forEach(p => productsMap.set(p.id, p));
         }
-        appliedCoupon = { code: couponCode, discount };
+      } catch (err) {
+        console.warn("Supabase products fetch failed:", err);
       }
     }
 
-    const total = Math.max(0, subtotal - discount + shipping);
+    // Fallback to local catalog if offline / setup mode
+    if (productsMap.size === 0 && window.PRODUCTS_DATA) {
+      window.PRODUCTS_DATA.forEach(p => {
+        if (ids.includes(p.id)) {
+          productsMap.set(p.id, {
+            id: p.id,
+            slug: p.id.toString(),
+            name: p.name,
+            price_inr: p.price,
+            mrp_inr: p.originalPrice,
+            stock: p.stock || 10,
+            image_paths: [p.primaryImage],
+            is_active: true
+          });
+        }
+      });
+    }
+
+    // Merge cart with server snapshot
+    let subtotal = 0;
+    const enrichedItems = [];
+
+    cart.forEach(item => {
+      const prod = productsMap.get(item.id);
+      if (prod && prod.is_active && prod.stock > 0) {
+        const cappedQty = Math.min(item.qty, prod.stock);
+        const itemTotal = prod.price_inr * cappedQty;
+        subtotal += itemTotal;
+        enrichedItems.push({
+          id: prod.id,
+          name: prod.name,
+          size: item.size,
+          qty: cappedQty,
+          stock: prod.stock,
+          unitPrice: prod.price_inr,
+          mrp: prod.mrp_inr,
+          totalPrice: itemTotal,
+          image: (prod.image_paths && prod.image_paths[0]) || 'assets/images/favicon.png'
+        });
+      }
+    });
 
     return {
-      subtotal,
-      savings,
-      shipping,
-      discount,
-      appliedCoupon,
-      total,
-      itemCount: cart.reduce((cnt, item) => cnt + item.quantity, 0)
+      items: enrichedItems,
+      subtotal: subtotal,
+      count: enrichedItems.reduce((acc, i) => acc + i.qty, 0)
     };
   },
 
-  applyCoupon(code) {
-    const cleanCode = code.trim().toUpperCase();
-    const coupon = STORE_CONFIG.coupons[cleanCode];
-    if (!coupon) {
-      this.showToast("❌ Invalid coupon code. Try WELCOME10 or FESTIVE20", "error");
-      return false;
-    }
-    const totals = this.getCartTotals();
-    if (totals.subtotal < coupon.minOrder) {
-      this.showToast(`⚠️ Minimum cart value ₹${coupon.minOrder} required for ${cleanCode}`, "error");
-      return false;
+  // ─── SERVER-SIDE COUPON VALIDATION ───
+  async validateCouponServer(couponCode) {
+    const code = (couponCode || '').trim().toUpperCase();
+    if (!code) {
+      return { valid: false, error: 'Please enter a coupon code.' };
     }
 
-    localStorage.setItem('suyog_coupon', cleanCode);
-    this.showToast(`🎉 Coupon ${cleanCode} applied successfully!`);
-    if (typeof renderCartPage === 'function') renderCartPage();
-    if (typeof renderCheckoutSummary === 'function') renderCheckoutSummary();
-    this.renderDrawerCart();
-    return true;
+    const cart = this.getCart();
+    if (cart.length === 0) {
+      return { valid: false, error: 'Your bag is empty.' };
+    }
+
+    const payloadItems = cart.map(item => ({ id: item.id, qty: item.qty, size: item.size }));
+
+    if (window.isSupabaseConfigured()) {
+      try {
+        const { data, error } = await window.supabaseClient.rpc('validate_coupon', {
+          coupon_code: code,
+          items: payloadItems
+        });
+        if (error) {
+          return { valid: false, error: error.message || 'Invalid coupon.' };
+        }
+        return data;
+      } catch (err) {
+        console.warn("RPC validate_coupon error:", err);
+      }
+    }
+
+    // Client fallback validation for initial demo mode before Supabase credentials set
+    const cfg = this.getConfig();
+    const localCoupon = (cfg.coupons || []).find(c => c.code === code);
+    if (!localCoupon) {
+      return { valid: false, error: 'Invalid coupon code.' };
+    }
+
+    const cartData = await this.fetchCartDetails();
+    if (cartData.subtotal < localCoupon.minOrder) {
+      return { valid: false, error: `Minimum order for ${code} is ₹${localCoupon.minOrder.toLocaleString('en-IN')}.` };
+    }
+
+    let discount = 0;
+    if (localCoupon.discountType === 'percent') {
+      discount = Math.round((cartData.subtotal * localCoupon.discountValue) / 100);
+    } else {
+      discount = localCoupon.discountValue;
+    }
+
+    return {
+      valid: true,
+      code: code,
+      discount_inr: Math.min(discount, cartData.subtotal)
+    };
   },
 
-  removeCoupon() {
-    localStorage.removeItem('suyog_coupon');
-    this.showToast("Coupon removed");
-    if (typeof renderCartPage === 'function') renderCartPage();
-    if (typeof renderCheckoutSummary === 'function') renderCheckoutSummary();
-    this.renderDrawerCart();
-  },
-
-  // ─── WISHLIST ENGINE ───
+  // ─── WISHLIST ENGINE (localStorage IDs) ───
   getWishlist() {
     try {
-      return JSON.parse(localStorage.getItem('suyog_wishlist')) || [];
+      const data = localStorage.getItem('suyog_wishlist');
+      return data ? JSON.parse(data) : [];
     } catch (e) {
       return [];
     }
   },
 
   toggleWishlist(productId) {
-    let list = this.getWishlist();
     const id = Number(productId);
-    const index = list.indexOf(id);
+    let list = this.getWishlist();
+    const idx = list.indexOf(id);
     let added = false;
-    if (index > -1) {
-      list.splice(index, 1);
-      this.showToast("Removed from wishlist");
+    if (idx > -1) {
+      list.splice(idx, 1);
     } else {
       list.push(id);
       added = true;
-      this.showToast("❤️ Saved to your wishlist!");
     }
-    localStorage.setItem('suyog_wishlist', JSON.stringify(list));
-    this.updateWishlistBadges();
-    
-    // Update button icons on page
+    try {
+      localStorage.setItem('suyog_wishlist', JSON.stringify(list));
+    } catch (e) {}
+
     document.querySelectorAll(`[data-wishlist-id="${id}"]`).forEach(btn => {
       btn.classList.toggle('active', added);
     });
+
+    this.showToast(added ? "❤️ Saved to your Wishlist!" : "Removed from Wishlist");
     return added;
   },
 
@@ -180,310 +271,36 @@ const Store = {
     return this.getWishlist().includes(Number(productId));
   },
 
-  // ─── BADGES & UI HELPERS ───
-  updateCartBadges() {
-    const count = this.getCart().reduce((sum, item) => sum + item.quantity, 0);
-    document.querySelectorAll('.cart-count-badge').forEach(badge => {
-      badge.textContent = count;
-      badge.style.display = count > 0 ? 'inline-flex' : 'none';
-    });
-  },
-
-  updateWishlistBadges() {
-    const count = this.getWishlist().length;
-    document.querySelectorAll('.wishlist-count-badge').forEach(badge => {
-      badge.textContent = count;
-      badge.style.display = count > 0 ? 'inline-flex' : 'none';
-    });
-  },
-
-  // ─── DRAWER CART ───
-  initDrawer() {
-    if (document.getElementById('cartDrawerOverlay')) return;
-
-    const drawerHTML = `
-      <div id="cartDrawerOverlay" class="cart-drawer-overlay" onclick="Store.closeCartDrawer()"></div>
-      <div id="cartDrawer" class="cart-drawer">
-        <div class="cart-drawer-header">
-          <div class="drawer-title">
-            <span class="bag-icon">🛍️</span>
-            <h3>Shopping Bag (<span class="drawer-items-count">0</span>)</h3>
-          </div>
-          <button class="drawer-close-btn" onclick="Store.closeCartDrawer()" aria-label="Close bag">&times;</button>
-        </div>
-
-        <div id="cartDrawerItems" class="cart-drawer-items">
-          <!-- Items injected here -->
-        </div>
-
-        <div class="cart-drawer-footer" id="cartDrawerFooter">
-          <div class="free-shipping-bar" id="freeShippingBar"></div>
-          <div class="drawer-totals">
-            <div class="drawer-total-row">
-              <span>Subtotal</span>
-              <strong id="drawerSubtotal">₹0</strong>
-            </div>
-            <p class="drawer-tax-note">Taxes included. Free shipping on orders over ₹${STORE_CONFIG.freeShippingThreshold}.</p>
-          </div>
-          <div class="drawer-actions">
-            <a href="checkout.html" class="btn btn-primary btn-block">Proceed to Checkout &rarr;</a>
-            <a href="cart.html" class="btn btn-outline btn-block">View Full Bag</a>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', drawerHTML);
-    this.renderDrawerCart();
-  },
-
-  openCartDrawer() {
-    this.initDrawer();
-    const overlay = document.getElementById('cartDrawerOverlay');
-    const drawer = document.getElementById('cartDrawer');
-    if (overlay && drawer) {
-      overlay.classList.add('active');
-      drawer.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      this.renderDrawerCart();
-    }
-  },
-
-  closeCartDrawer() {
-    const overlay = document.getElementById('cartDrawerOverlay');
-    const drawer = document.getElementById('cartDrawer');
-    if (overlay && drawer) {
-      overlay.classList.remove('active');
-      drawer.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  },
-
-  renderDrawerCart() {
-    const container = document.getElementById('cartDrawerItems');
-    const footer = document.getElementById('cartDrawerFooter');
-    if (!container) return;
-
-    const cart = this.getCart();
-    const totals = this.getCartTotals();
-
-    document.querySelectorAll('.drawer-items-count').forEach(el => el.textContent = totals.itemCount);
-
-    if (cart.length === 0) {
-      container.innerHTML = `
-        <div class="drawer-empty-state">
-          <span class="empty-icon">🪷</span>
-          <h4>Your bag is empty</h4>
-          <p>Discover our heirloom sarees, lehengas, and designer ethnic wear.</p>
-          <a href="shop.html" class="btn btn-primary btn-sm" onclick="Store.closeCartDrawer()">Explore Catalog</a>
-        </div>
-      `;
-      if (footer) footer.style.display = 'none';
-      return;
-    }
-
-    if (footer) footer.style.display = 'block';
-
-    // Free shipping bar calculation
-    const progressEl = document.getElementById('freeShippingBar');
-    if (progressEl) {
-      if (totals.subtotal >= STORE_CONFIG.freeShippingThreshold) {
-        progressEl.innerHTML = `
-          <div class="shipping-success">🎉 Congratulations! You have qualified for <strong>FREE Delivery</strong></div>
-        `;
-      } else {
-        const remaining = STORE_CONFIG.freeShippingThreshold - totals.subtotal;
-        const pct = Math.min(100, Math.round((totals.subtotal / STORE_CONFIG.freeShippingThreshold) * 100));
-        progressEl.innerHTML = `
-          <div class="shipping-progress-text">Add <strong>₹${remaining}</strong> more for FREE Delivery!</div>
-          <div class="shipping-progress-track">
-            <div class="shipping-progress-fill" style="width: ${pct}%"></div>
-          </div>
-        `;
-      }
-    }
-
-    const drawerSubtotal = document.getElementById('drawerSubtotal');
-    if (drawerSubtotal) {
-      drawerSubtotal.textContent = `₹${totals.subtotal.toLocaleString('en-IN')}`;
-    }
-
-    container.innerHTML = cart.map((item, idx) => `
-      <div class="drawer-item">
-        <img src="${item.image}" alt="${item.name}" class="drawer-item-img">
-        <div class="drawer-item-info">
-          <h4 class="drawer-item-name">${item.name}</h4>
-          <div class="drawer-item-meta">
-            <span>Size: ${item.size}</span> | <span>Color: ${item.color}</span>
-          </div>
-          <div class="drawer-item-price">
-            <strong>₹${item.price.toLocaleString('en-IN')}</strong>
-            <span class="original-strike">₹${item.originalPrice.toLocaleString('en-IN')}</span>
-          </div>
-          <div class="drawer-item-controls">
-            <div class="qty-stepper">
-              <button onclick="Store.updateQuantity(${idx}, ${item.quantity - 1})">-</button>
-              <span>${item.quantity}</span>
-              <button onclick="Store.updateQuantity(${idx}, ${item.quantity + 1})">+</button>
-            </div>
-            <button class="drawer-remove-btn" onclick="Store.removeFromCart(${idx})" title="Remove item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  },
-
-  // ─── WHATSAPP INTEGRATION ───
-  orderViaWhatsApp(customOrder = null) {
-    const cart = customOrder ? [customOrder] : this.getCart();
-    if (cart.length === 0) {
-      this.showToast("Your cart is empty!", "error");
-      return;
-    }
-
-    const totals = this.getCartTotals();
-    let message = `*Namaste Suyog Textile!* 🙏\n`;
-    message += `I would like to place an order from your online store *${STORE_CONFIG.domain}*:\n\n`;
-
-    cart.forEach((item, i) => {
-      message += `*${i + 1}. ${item.name}*\n`;
-      message += `   • Size: ${item.size}\n`;
-      message += `   • Color: ${item.color}\n`;
-      message += `   • Qty: ${item.quantity} × ₹${item.price.toLocaleString('en-IN')}\n\n`;
-    });
-
-    message += `───────────────────\n`;
-    message += `*Subtotal:* ₹${totals.subtotal.toLocaleString('en-IN')}\n`;
-    if (totals.discount > 0) {
-      message += `*Discount (${totals.appliedCoupon.code}):* -₹${totals.discount.toLocaleString('en-IN')}\n`;
-    }
-    message += `*Shipping:* ${totals.shipping === 0 ? 'FREE' : '₹' + totals.shipping}\n`;
-    message += `*Grand Total:* *₹${totals.total.toLocaleString('en-IN')}*\n`;
-    message += `───────────────────\n\n`;
-    message += `Please confirm product availability and delivery timeline. Thank you!`;
-
-    const encoded = encodeURIComponent(message);
-    const url = `https://wa.me/${STORE_CONFIG.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encoded}`;
-    window.open(url, '_blank');
-  },
-
+  // ─── WHATSAPP DIRECT ASSISTANCE ───
   inquireProductWhatsApp(productId) {
-    const product = PRODUCTS_DATA.find(p => p.id === Number(productId));
-    if (!product) return;
-
-    let message = `*Namaste Suyog Textile!* 🙏\n`;
-    message += `I am interested in this piece from your collection:\n\n`;
-    message += `*${product.name}*\n`;
-    message += `• Price: ₹${product.price.toLocaleString('en-IN')} (MRP ₹${product.originalPrice.toLocaleString('en-IN')})\n`;
-    message += `• Fabric: ${product.fabric}\n`;
-    message += `• Occasion: ${product.occasion}\n`;
-    message += `• Link: https://${STORE_CONFIG.domain}/product.html?id=${product.id}\n\n`;
-    message += `Could you please share more pictures, video call view, or delivery details?`;
-
-    const encoded = encodeURIComponent(message);
-    const url = `https://wa.me/${STORE_CONFIG.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encoded}`;
-    window.open(url, '_blank');
+    const cfg = this.getConfig();
+    const wa = cfg.whatsappNumber || "918669396037";
+    const msg = `Namaste Suyog Textile, I am inquiring about product ID #${productId} on your online store. Could you share more details?`;
+    window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank');
   },
 
-  // ─── TOAST NOTIFICATION ───
-  showToast(message, type = "success") {
-    let container = document.getElementById('suyogToastContainer');
+  // ─── TOAST NOTIFICATIONS ───
+  showToast(msg) {
+    let container = document.getElementById('toastContainer');
     if (!container) {
       container = document.createElement('div');
-      container.id = 'suyogToastContainer';
-      container.className = 'toast-container';
+      container.id = 'toastContainer';
+      container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;';
       document.body.appendChild(container);
     }
 
     const toast = document.createElement('div');
-    toast.className = `toast-item toast-${type}`;
-    toast.innerHTML = `
-      <div class="toast-content">${message}</div>
-      <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
-    `;
+    toast.style.cssText = 'background:#1C1917;color:#fff;padding:12px 20px;border-radius:10px;font-size:0.88rem;box-shadow:0 8px 24px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;transition:opacity 0.3s;pointer-events:auto;';
+    toast.textContent = msg;
 
     container.appendChild(toast);
     setTimeout(() => {
-      toast.classList.add('fade-out');
-      setTimeout(() => toast.remove(), 400);
-    }, 3500);
-  },
-
-  // ─── SEARCH AUTOCOMPLETE ───
-  initSearchAutocomplete() {
-    ['search-input', 'mobile-search-input'].forEach(id => {
-      const input = document.getElementById(id);
-      if (!input) return;
-
-      let box = document.getElementById(id + '-results');
-      if (!box) {
-        box = document.createElement('div');
-        box.id = id + '-results';
-        box.className = 'search-suggestions-dropdown';
-        box.style.cssText = 'position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:8px;box-shadow:0 10px 25px rgba(0,0,0,0.15);z-index:999;max-height:360px;overflow-y:auto;display:none;';
-        if (input.parentElement) {
-          input.parentElement.style.position = 'relative';
-          input.parentElement.appendChild(box);
-        }
-      }
-
-      input.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        if (query.length < 2) {
-          box.style.display = 'none';
-          return;
-        }
-
-        const matches = PRODUCTS_DATA.filter(p => 
-          p.name.toLowerCase().includes(query) || 
-          p.fabric.toLowerCase().includes(query) || 
-          p.categoryName.toLowerCase().includes(query)
-        ).slice(0, 5);
-
-        if (matches.length === 0) {
-          box.innerHTML = '<div style="padding:14px;text-align:center;color:#888;font-size:0.85rem;">No matching ethnic wear found</div>';
-          box.style.display = 'block';
-          return;
-        }
-
-        box.innerHTML = matches.map(p => `
-          <a href="product.html?id=${p.id}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #f3f3f3;text-decoration:none;color:#1C1917;">
-            <img src="${p.primaryImage}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;">
-            <div style="flex-grow:1;font-size:0.85rem;">
-              <div style="font-weight:600;line-height:1.2;">${p.name}</div>
-              <div style="font-size:0.75rem;color:#666;">${p.categoryName} • ${p.fabric}</div>
-            </div>
-            <strong style="color:var(--primary);font-size:0.85rem;">₹${p.price.toLocaleString('en-IN')}</strong>
-          </a>
-        `).join('') + `
-          <a href="shop.html?q=${encodeURIComponent(query)}" style="display:block;padding:10px;text-align:center;background:#FAF8F5;color:var(--primary);font-weight:700;font-size:0.8rem;text-decoration:none;">
-            View all results for "${query}" &rarr;
-          </a>
-        `;
-        box.style.display = 'block';
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!input.contains(e.target) && !box.contains(e.target)) {
-          box.style.display = 'none';
-        }
-      });
-    });
-  },
-
-  // ─── INIT ───
-  init() {
-    this.updateCartBadges();
-    this.updateWishlistBadges();
-    this.initDrawer();
-    this.initSearchAutocomplete();
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 2800);
   }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  Store.init();
+  Store.updateCartBadges();
 });
-

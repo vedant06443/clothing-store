@@ -1,18 +1,17 @@
 services:
-  - type: web
+  - type: static
     name: suyogtextile
-    runtime: python
-    rootDir: vastravibe
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    plan: free
-    autoDeploy: true
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.9
-      - key: APP_ENV
-        value: production
-      - key: DEBUG
-        value: "false"
-      - key: SECRET_KEY
-        generateValue: true
+    staticPublishPath: ./
+    routes:
+      - type: redirect
+        source: /register.html
+        destination: /login.html
+      - type: redirect
+        source: /orders.html
+        destination: /account.html
+      - type: redirect
+        source: /order-detail.html
+        destination: /account.html
+      - type: redirect
+        source: /invoice.html
+        destination: /account.html

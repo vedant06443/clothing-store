@@ -180,7 +180,6 @@
           <a href="wishlist.html" class="drawer-link"><span>♡ My Wishlist</span></a>
           <a href="account.html" class="drawer-link"><span>👤 My Profile & Orders</span></a>
           <a href="size-guide.html" class="drawer-link"><span>📏 Size Guide & Fit Finder</span></a>
-          <a href="admin.html" class="drawer-link"><span>⚙️ Admin Portal</span></a>
           <a href="about.html" class="drawer-link"><span>📖 Our Heritage</span></a>
           <a href="contact.html" class="drawer-link"><span>📍 Contact Showroom</span></a>
         </div>
@@ -455,44 +454,6 @@
     </div>
   </section>
 
-  <!-- ─── REVIEWS / TESTIMONIALS (4.9 Star Rating) ─── -->
-  <section class="reviews-section" style="padding:45px 0 65px;background:#FAF6F8">
-    <div class="container">
-      <div class="section-header text-center mb-4" data-aos="fade-up">
-        <div class="section-tag" style="color:var(--primary);font-weight:700;letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;margin-bottom:6px">Verified Customer Love</div>
-        <h2 class="section-title" style="font-family:var(--font-brand);font-size:clamp(1.4rem, 3vw, 2.1rem)">Loved by 1,200+ Verified Buyers</h2>
-        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(217,119,6,0.12);padding:6px 16px;border-radius:20px;margin-top:10px;border:1px solid rgba(217,119,6,0.3)">
-          <span style="color:#D97706;font-size:1.1rem;font-weight:800">4.9 ★★★★★</span>
-          <span style="color:#78350F;font-size:0.82rem;font-weight:600">Rated across Google & Online Store</span>
-        </div>
-      </div>
-
-      <div class="row g-3 g-md-4">
-        <div class="col-md-4" data-aos="fade-up">
-          <div class="testimonial-card" style="background:#fff;padding:24px;border-radius:16px;border:1px solid var(--border);height:100%;box-shadow:0 4px 16px rgba(0,0,0,0.03)">
-            <div class="stars" style="color:#F59E0B;font-size:1.1rem;margin-bottom:8px">★★★★★</div>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--text)">“The Banarasi saree I ordered exceeded expectations! The fabric has a royal sheen and arrived in beautiful luxury packaging.”</p>
-            <div class="testimonial-meta" style="margin-top:14px;font-size:0.82rem"><strong>Meera S.</strong>, <span style="color:var(--text-muted)">Verified Buyer</span></div>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="testimonial-card" style="background:#fff;padding:24px;border-radius:16px;border:1px solid var(--border);height:100%;box-shadow:0 4px 16px rgba(0,0,0,0.03)">
-            <div class="stars" style="color:#F59E0B;font-size:1.1rem;margin-bottom:8px">★★★★★</div>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--text)">“The lehenga and fabric quality are exceptional! The zari work is even more stunning in person than on the website.”</p>
-            <div class="testimonial-meta" style="margin-top:14px;font-size:0.82rem"><strong>Ritika A.</strong>, <span style="color:var(--text-muted)">Verified Buyer</span></div>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-          <div class="testimonial-card" style="background:#fff;padding:24px;border-radius:16px;border:1px solid var(--border);height:100%;box-shadow:0 4px 16px rgba(0,0,0,0.03)">
-            <div class="stars" style="color:#F59E0B;font-size:1.1rem;margin-bottom:8px">★★★★★</div>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--text)">“Fast delivery to Pune, easy payment via UPI, and customer care was helpful with my size query. Five stars!”</p>
-            <div class="testimonial-meta" style="margin-top:14px;font-size:0.82rem"><strong>Pooja K.</strong>, <span style="color:var(--text-muted)">Verified Buyer</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ─── VISIT OUR STORE / BOUTIQUE ADDRESS SECTION ─── -->
   <section class="store-address-section" style="padding:60px 0;background:linear-gradient(135deg, #FFFDF7 0%, #FFF8EE 100%);border-top:1px solid #FDE68A;border-bottom:1px solid #FDE68A;">
     <div class="container">
@@ -647,9 +608,8 @@
             <li><a href="contact.html">Contact Showroom</a></li>
             <li><a href="cart.html">Shopping Bag</a></li>
             <li><a href="wishlist.html">Saved Wishlist</a></li>
-            <li><a href="orders.html">Track Orders</a></li>
+            <li><a href="account.html">Track Orders</a></li>
             <li><a href="size-guide.html">Size Guide & Fit Finder</a></li>
-            <li><a href="admin/index.html" style="color:var(--gold-light);font-weight:600;">Staff / Admin Portal</a></li>
           </ul>
         </div>
 
@@ -840,11 +800,14 @@
     <span class="wa-floating-tooltip">💬 Chat on WhatsApp</span>
   </a>
 
-  <!-- Scripts -->
+  <!-- Scripts: Pinned Supabase JS + Store Engine -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="assets/js/products.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabaseClient.js"></script>
+  <script src="assets/data/products.js"></script>
   <script src="assets/js/store.js"></script>
   <script>
     function toggleMobileDrawer() {
@@ -1016,48 +979,86 @@
         `;
       }
 
-      // Render Fresh Picks Swiper
-      const arrivalsContainer = document.getElementById('homeNewArrivalsList');
-      if (arrivalsContainer && typeof PRODUCTS_DATA !== 'undefined') {
-        const freshProducts = PRODUCTS_DATA.slice(0, 8);
-        arrivalsContainer.innerHTML = freshProducts.map(p => `
-          <div class="swiper-slide">
-            ${renderProductCard(p, 'FRESH DROP')}
-          </div>
-        `).join('');
+      // Fetch active products from Supabase
+      async function loadHomeProducts() {
+        let prods = [];
+        if (window.isSupabaseConfigured()) {
+          try {
+            const { data, error } = await window.supabaseClient
+              .from('products')
+              .select('*, categories(slug, name)')
+              .eq('is_active', true)
+              .order('id', { ascending: true })
+              .limit(12);
 
-        // Initialize Swiper
-        if (typeof Swiper !== 'undefined') {
-          new Swiper('.new-arrivals-swiper', {
-            slidesPerView: 1,
-            spaceBetween: 18,
-            loop: true,
-            autoplay: {
-              delay: 3500,
-              disableOnInteraction: false
-            },
-            pagination: {
-              el: '.new-arrivals-swiper .swiper-pagination',
-              clickable: true
-            },
-            navigation: {
-              nextEl: '.new-arrivals-swiper .swiper-button-next',
-              prevEl: '.new-arrivals-swiper .swiper-button-prev'
-            },
-            breakpoints: {
-              576: { slidesPerView: 2, spaceBetween: 16 },
-              992: { slidesPerView: 3, spaceBetween: 20 },
-              1200: { slidesPerView: 4, spaceBetween: 24 }
+            if (!error && Array.isArray(data) && data.length > 0) {
+              prods = data.map(p => ({
+                id: p.id,
+                slug: p.slug,
+                name: p.name,
+                category: (p.categories && p.categories.slug) || 'sarees',
+                categoryName: (p.categories && p.categories.name) || 'Handloom',
+                price: p.price_inr,
+                originalPrice: p.mrp_inr,
+                fabric: 'Pure Handloom Weave',
+                badge: p.stock < 5 ? 'Limited Edition' : 'Bestseller',
+                primaryImage: (p.image_paths && p.image_paths[0]) || 'assets/images/favicon.png',
+                hoverImage: (p.image_paths && p.image_paths[1]) || null
+              }));
             }
-          });
+          } catch (e) {
+            console.warn("Supabase home load error:", e);
+          }
+        }
+
+        if (prods.length === 0 && typeof PRODUCTS_DATA !== 'undefined') {
+          prods = PRODUCTS_DATA;
+        }
+
+        // Render Fresh Picks Swiper
+        const arrivalsContainer = document.getElementById('homeNewArrivalsList');
+        if (arrivalsContainer && prods.length > 0) {
+          arrivalsContainer.innerHTML = prods.slice(0, 8).map(p => `
+            <div class="swiper-slide">
+              ${renderProductCard(p, 'FRESH DROP')}
+            </div>
+          `).join('');
+
+          // Initialize Swiper
+          if (typeof Swiper !== 'undefined') {
+            new Swiper('.new-arrivals-swiper', {
+              slidesPerView: 1,
+              spaceBetween: 18,
+              loop: true,
+              autoplay: {
+                delay: 3500,
+                disableOnInteraction: false
+              },
+              pagination: {
+                el: '.new-arrivals-swiper .swiper-pagination',
+                clickable: true
+              },
+              navigation: {
+                nextEl: '.new-arrivals-swiper .swiper-button-next',
+                prevEl: '.new-arrivals-swiper .swiper-button-prev'
+              },
+              breakpoints: {
+                576: { slidesPerView: 2, spaceBetween: 16 },
+                992: { slidesPerView: 3, spaceBetween: 20 },
+                1200: { slidesPerView: 4, spaceBetween: 24 }
+              }
+            });
+          }
+        }
+
+        // Render Bestsellers Grid
+        const bestsellersContainer = document.getElementById('homeBestsellersList');
+        if (bestsellersContainer && prods.length > 0) {
+          bestsellersContainer.innerHTML = prods.slice(0, 8).map(p => renderProductCard(p, 'BESTSELLER')).join('');
         }
       }
 
-      // Render Bestsellers Grid
-      const bestsellersContainer = document.getElementById('homeBestsellersList');
-      if (bestsellersContainer && typeof PRODUCTS_DATA !== 'undefined') {
-        bestsellersContainer.innerHTML = PRODUCTS_DATA.slice(0, 8).map(p => renderProductCard(p, 'BESTSELLER')).join('');
-      }
+      loadHomeProducts();
     });
   </script>
 </body>

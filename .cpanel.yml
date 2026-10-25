@@ -6,6 +6,5 @@ deployment:
     - /bin/cp -rf .htaccess $DEPLOYPATH/
     - /bin/cp -rf *.html $DEPLOYPATH/
     - /bin/cp -rf assets $DEPLOYPATH/
-    - /bin/cp -rf admin $DEPLOYPATH/
-    - /bin/cp -rf static $DEPLOYPATH/
-    - /bin/cp -rf vastravibe $DEPLOYPATH/
+    - /bin/cp -rf robots.txt $DEPLOYPATH/
+    - /bin/cp -rf sitemap.xml $DEPLOYPATH/

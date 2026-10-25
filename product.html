@@ -195,10 +195,7 @@
         <h1 id="productName" style="font-family:var(--font-brand);font-size:clamp(1.6rem, 3vw, 2.3rem);line-height:1.25;margin-bottom:12px;">Product Title</h1>
         
         <div class="d-flex align-items-center gap-2 mb-3">
-          <span style="color:var(--gold);">★★★★★</span>
-          <span id="ratingVal" style="font-weight:600;font-size:0.9rem;">4.9 (28 reviews)</span>
-          <span class="text-muted">•</span>
-          <span class="text-success fw-bold small">✓ 100% Authentic Quality Guaranteed</span>
+          <span class="text-success fw-bold small">✓ 100% Authentic Handcrafted Quality Guaranteed</span>
         </div>
 
         <div class="d-flex align-items-baseline gap-3 py-3 border-top border-bottom mb-4">
@@ -411,60 +408,135 @@
       <p>© 2026 Suyog Textile. All rights reserved. Made with ❤️ in India.</p>
       <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
         <a href="shop.html" style="color:var(--gold-light);">Collections &rarr;</a>
-        <a href="orders.html" style="color:var(--gold-light);">Track Orders</a>
-        <a href="admin/index.html" style="color:var(--gold-light);font-size:0.85rem;">Admin Portal</a>
+        <a href="account.html" style="color:var(--gold-light);">Track Orders</a>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="assets/js/products.js"></script>
+  <!-- Scripts: Pinned Supabase JS + Store Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabaseClient.js"></script>
+  <script src="assets/data/products.js"></script>
   <script src="assets/js/store.js"></script>
   <script>
     let currentProduct = null;
     let selectedColor = null;
     let selectedSize = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const prodId = Number(urlParams.get('id')) || 1;
-      currentProduct = PRODUCTS_DATA.find(p => p.id === prodId) || PRODUCTS_DATA[0];
+      const prodSlug = urlParams.get('slug');
 
-      document.getElementById('pageTitle').textContent = `${currentProduct.name} — Suyog Textile`;
-      document.getElementById('breadcrumbName').textContent = currentProduct.name;
-      document.getElementById('productBadge').textContent = currentProduct.badge || 'Handloom Verified';
-      document.getElementById('productName').textContent = currentProduct.name;
-      document.getElementById('ratingVal').textContent = `${currentProduct.rating} (${currentProduct.reviews} reviews)`;
-      document.getElementById('productPrice').textContent = `₹${currentProduct.price.toLocaleString('en-IN')}`;
-      document.getElementById('productMrp').textContent = `₹${currentProduct.originalPrice.toLocaleString('en-IN')}`;
+      // Try fetching from Supabase
+      if (window.isSupabaseConfigured()) {
+        try {
+          let query = window.supabaseClient.from('products').select('*').eq('is_active', true);
+          if (prodSlug) {
+            query = query.eq('slug', prodSlug);
+          } else {
+            query = query.eq('id', prodId);
+          }
+          const { data, error } = await query.single();
+          if (!error && data) {
+            currentProduct = {
+              id: data.id,
+              slug: data.slug,
+              name: data.name,
+              price: data.price_inr,
+              originalPrice: data.mrp_inr,
+              description: data.description,
+              sizes: data.sizes || ['Free Size'],
+              stock: data.stock,
+              primaryImage: (data.image_paths && data.image_paths[0]) || 'assets/images/favicon.png',
+              images: (data.image_paths && data.image_paths.length > 0) ? data.image_paths : ['assets/images/favicon.png'],
+              colors: ['Original Weave'],
+              fabric: 'Authentic Indian Weave',
+              occasion: 'Festive & Occasion Wear',
+              care: 'Dry clean only. Store in pure muslin or cotton wrap.'
+            };
+          }
+        } catch (e) {
+          console.warn("Supabase product load fallback:", e);
+        }
+      }
+
+      // Fallback to local catalog if offline / setup mode
+      if (!currentProduct && window.PRODUCTS_DATA) {
+        currentProduct = PRODUCTS_DATA.find(p => p.id === prodId || p.slug === prodSlug) || PRODUCTS_DATA[0];
+      }
+
+      if (!currentProduct) {
+        window.showFriendlyErrorState(document.querySelector('.product-detail-section'), 'Weave details could not be found. Please contact our showroom stylist on WhatsApp.');
+        return;
+      }
+
+      const titleEl = document.getElementById('pageTitle');
+      if (titleEl) titleEl.textContent = `${currentProduct.name} — Suyog Textile`;
+
+      const bcEl = document.getElementById('breadcrumbName');
+      if (bcEl) bcEl.textContent = currentProduct.name;
+
+      const badgeEl = document.getElementById('productBadge');
+      if (badgeEl) badgeEl.textContent = currentProduct.badge || 'Handloom Verified';
+
+      const nameEl = document.getElementById('productName');
+      if (nameEl) nameEl.textContent = currentProduct.name;
+
+      const priceEl = document.getElementById('productPrice');
+      if (priceEl) priceEl.textContent = `₹${currentProduct.price.toLocaleString('en-IN')}`;
+
+      const mrpEl = document.getElementById('productMrp');
+      if (mrpEl) mrpEl.textContent = `₹${currentProduct.originalPrice.toLocaleString('en-IN')}`;
       
-      const pct = Math.round(((currentProduct.originalPrice - currentProduct.price) / currentProduct.originalPrice) * 100);
-      document.getElementById('productDiscount').textContent = `${pct}% OFF`;
-      document.getElementById('productDesc').textContent = currentProduct.description;
+      const discEl = document.getElementById('productDiscount');
+      if (discEl && currentProduct.originalPrice > currentProduct.price) {
+        const pct = Math.round(((currentProduct.originalPrice - currentProduct.price) / currentProduct.originalPrice) * 100);
+        discEl.textContent = `${pct}% OFF`;
+      } else if (discEl) {
+        discEl.style.display = 'none';
+      }
+
+      const descEl = document.getElementById('productDesc');
+      if (descEl) descEl.textContent = currentProduct.description || '';
       
-      document.getElementById('specFabric').textContent = currentProduct.fabric;
-      document.getElementById('specOccasion').textContent = currentProduct.occasion;
-      document.getElementById('specCare').textContent = currentProduct.care;
+      const fabEl = document.getElementById('specFabric');
+      if (fabEl) fabEl.textContent = currentProduct.fabric || 'Pure Silk / Handloom';
+
+      const occEl = document.getElementById('specOccasion');
+      if (occEl) occEl.textContent = currentProduct.occasion || 'Wedding & Festive';
+
+      const careEl = document.getElementById('specCare');
+      if (careEl) careEl.textContent = currentProduct.care || 'Dry clean only.';
 
       const mainImg = document.getElementById('mainImage');
-      mainImg.src = currentProduct.primaryImage;
+      if (mainImg) mainImg.src = currentProduct.primaryImage;
 
       const thumbs = document.getElementById('galleryThumbs');
-      thumbs.innerHTML = currentProduct.images.map((img, i) => `
-        <button class="thumb-btn-img ${i === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
-          <img src="${img}" style="width:100%;height:100%;object-fit:cover;">
-        </button>
-      `).join('');
+      if (thumbs && currentProduct.images) {
+        thumbs.innerHTML = currentProduct.images.map((img, i) => `
+          <button class="thumb-btn-img ${i === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+            <img src="${img}" style="width:100%;height:100%;object-fit:cover;">
+          </button>
+        `).join('');
+      }
 
-      selectedColor = currentProduct.colors[0];
-      document.getElementById('colorPills').innerHTML = currentProduct.colors.map((c, i) => `
-        <button class="btn btn-sm ${i === 0 ? 'btn-primary' : 'btn-outline'}" onclick="selectColor('${c}', this)" style="border-radius:20px;">${c}</button>
-      `).join('');
+      selectedColor = (currentProduct.colors && currentProduct.colors[0]) || 'Standard';
+      const colorContainer = document.getElementById('colorPills');
+      if (colorContainer && currentProduct.colors) {
+        colorContainer.innerHTML = currentProduct.colors.map((c, i) => `
+          <button class="btn btn-sm ${i === 0 ? 'btn-primary' : 'btn-outline'}" onclick="selectColor('${c}', this)" style="border-radius:20px;">${c}</button>
+        `).join('');
+      }
 
-      selectedSize = currentProduct.sizes[0];
-      document.getElementById('sizePills').innerHTML = currentProduct.sizes.map((s, i) => `
-        <button class="btn btn-sm ${i === 0 ? 'btn-primary' : 'btn-outline'}" onclick="selectSize('${s}', this)" style="border-radius:20px;">${s}</button>
-      `).join('');
+      selectedSize = (currentProduct.sizes && currentProduct.sizes[0]) || 'Free Size';
+      const sizeContainer = document.getElementById('sizePills');
+      if (sizeContainer && currentProduct.sizes) {
+        sizeContainer.innerHTML = currentProduct.sizes.map((s, i) => `
+          <button class="btn btn-sm ${i === 0 ? 'btn-primary' : 'btn-outline'}" onclick="selectSize('${s}', this)" style="border-radius:20px;">${s}</button>
+        `).join('');
+      }
 
       updateDetailWishlistButton();
 

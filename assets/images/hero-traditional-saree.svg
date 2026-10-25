@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#580820" />
+      <stop offset="40%" stop-color="#8B1A4A" />
+      <stop offset="100%" stop-color="#2D0612" />
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="50%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+    <radialGradient id="goldGlow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="rgba(251,191,36,0.25)" />
+      <stop offset="100%" stop-color="rgba(0,0,0,0)" />
+    </radialGradient>
+    <pattern id="zariMotif" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M30 5 L55 30 L30 55 L5 30 Z" fill="none" stroke="rgba(253,230,138,0.12)" stroke-width="1.5" />
+      <circle cx="30" cy="30" r="4" fill="rgba(217,119,6,0.18)" />
+    </pattern>
+  </defs>
+  <rect width="1000" height="1200" fill="url(#heroBg)" />
+  <rect width="1000" height="1200" fill="url(#zariMotif)" />
+  <circle cx="500" cy="500" r="400" fill="url(#goldGlow)" />
+  
+  <!-- Outer Arch Border -->
+  <rect x="40" y="40" width="920" height="1120" rx="32" fill="none" stroke="url(#goldGradient)" stroke-width="2.5" opacity="0.6" />
+  <rect x="56" y="56" width="888" height="1088" rx="24" fill="none" stroke="rgba(253,230,138,0.3)" stroke-width="1" />
+
+  <!-- Center Graphic Mandala & Saree Drape Iconography -->
+  <g transform="translate(500, 480)">
+    <!-- Outer concentric rings -->
+    <circle r="220" fill="none" stroke="url(#goldGradient)" stroke-width="2" opacity="0.4" stroke-dasharray="6,6" />
+    <circle r="180" fill="none" stroke="url(#goldGradient)" stroke-width="1.5" opacity="0.6" />
+    <circle r="140" fill="rgba(88,8,32,0.6)" stroke="url(#goldGradient)" stroke-width="2" />
+    
+    <!-- Stylized Traditional Weave / Lotus Motif -->
+    <path d="M0 -90 C35 -40, 75 -20, 90 0 C75 20, 35 40, 0 90 C-35 40, -75 20, -90 0 C-75 -20, -35 -40, 0 -90 Z" fill="none" stroke="url(#goldGradient)" stroke-width="3" />
+    <circle cx="0" cy="0" r="28" fill="url(#goldGradient)" />
+    <text x="0" y="8" font-family="'Cinzel', serif" font-size="24" font-weight="bold" fill="#2D0612" text-anchor="middle">🪷</text>
+  </g>
+
+  <!-- Typography overlay -->
+  <text x="500" y="780" font-family="'Cinzel', 'Playfair Display', serif" font-size="44" font-weight="700" fill="#FFFDF7" text-anchor="middle" letter-spacing="4">SUYOG TEXTILE</text>
+  <text x="500" y="830" font-family="'Outfit', sans-serif" font-size="20" font-weight="500" fill="#FDE68A" text-anchor="middle" letter-spacing="3">TRADITIONAL INDIAN WEAR</text>
+  <line x1="380" y1="860" x2="620" y2="860" stroke="url(#goldGradient)" stroke-width="2" />
+  <text x="500" y="905" font-family="'Outfit', sans-serif" font-size="16" fill="rgba(255,255,255,0.85)" text-anchor="middle">Nashik Showroom • Pan-India Delivery</text>
+
+  <!-- Bottom Badges -->
+  <rect x="330" y="960" width="340" height="46" rx="23" fill="rgba(217,119,6,0.2)" stroke="url(#goldGradient)" stroke-width="1.5" />
+  <text x="500" y="989" font-family="'Outfit', sans-serif" font-size="14" font-weight="600" fill="#FFFDF7" text-anchor="middle">✨ Free Shipping on orders over ₹1,499</text>
+</svg>

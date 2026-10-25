@@ -3,33 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Sign In — Suyog Textile</title>
-  <meta name="description" content="Sign in to your Suyog Textile account to track orders, access your saved wishlist, and enjoy exclusive festive privileges.">
+  <title>Customer Sign In & Account — Suyog Textile</title>
+  <meta name="robots" content="noindex, nofollow">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
-  <link rel="apple-touch-icon" href="assets/images/favicon.png">
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap 5 & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-  <!-- Theme Stylesheets -->
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .auth-container { max-width: 480px; margin: 40px auto; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 36px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+    .auth-tab-btn { flex: 1; border: none; background: transparent; padding: 12px; font-weight: 700; font-size: 0.95rem; color: var(--text-muted); border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; }
+    .auth-tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+  </style>
 </head>
 <body>
-
-  <!-- Announcement Bar -->
-  <div class="announcement-bar">
-    ✨ <strong>Authentic Handcrafted Ethnic Wear</strong> &nbsp;|&nbsp; 🚚 Free Pan-India Shipping Above ₹999 &nbsp;|&nbsp; Use code <a href="offers.html" style="color:var(--gold-light);text-decoration:underline;">WELCOME10</a> for 10% OFF!
-  </div>
 
   <!-- Header -->
   <header class="desktop-header">
@@ -44,192 +35,254 @@
             </span>
           </a>
         </div>
-        <nav>
-          <ul class="desktop-nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="shop.html?cat=sarees">Sarees</a></li>
-            <li><a href="shop.html?cat=salwar-suits">Salwar Suits</a></li>
-            <li><a href="shop.html?cat=lehengas">Lehenga Choli</a></li>
-            <li><a href="shop.html?cat=kurtis">Kurti</a></li>
-            <li><a href="shop.html?cat=dresses">Gown</a></li>
-            <li><a href="shop.html?cat=mens-wear">Mens Wear</a></li>
-            <li><a href="shop.html?filter=new">New Arrivals</a></li>
-            <li><a href="studio.html" style="color:var(--gold);font-weight:600">✨ Style Studio</a></li>
-            <li><a href="offers.html" style="color:#DC2626;font-weight:600">Sale %</a></li>
-          </ul>
-        </nav>
         <div class="desktop-nav-right">
-          <a href="wishlist.html" class="nav-icon-btn" title="My Wishlist" aria-label="Wishlist">
-            <i class="bi bi-heart"></i>
-            <span class="nav-badge wishlist-count-badge" style="display:none">0</span>
-          </a>
-          <button class="nav-icon-btn" onclick="Store.openCartDrawer()" title="Shopping Bag" style="background:transparent;border:none;">
-            <i class="bi bi-bag"></i>
-            <span class="nav-badge cart-count-badge" style="display:none">0</span>
-          </button>
+          <a href="shop.html" class="btn btn-sm btn-outline">&larr; Back to Shop</a>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Header -->
-  <header class="mobile-header">
-    <div class="mobile-header-top">
-      <div class="mobile-header-left">
-        <a href="index.html" style="font-size:1.2rem;color:var(--primary);"><i class="bi bi-arrow-left"></i></a>
+  <main class="container my-5" style="min-height: 60vh;">
+    <div class="auth-container">
+      <div class="d-flex mb-4 border-bottom">
+        <button class="auth-tab-btn active" id="tabSignInBtn" onclick="switchAuthMode('signin')">Sign In</button>
+        <button class="auth-tab-btn" id="tabSignUpBtn" onclick="switchAuthMode('signup')">Create Account</button>
       </div>
-      <div class="mobile-header-center">
-        <span class="brand-name" style="font-size:1.15rem;">Suyog <span class="brand-highlight">Textile</span></span>
-      </div>
-      <div class="mobile-header-right">
-        <button class="nav-icon-btn" onclick="Store.openCartDrawer()" style="background:transparent;border:none;">
-          <i class="bi bi-bag"></i>
-          <span class="nav-badge cart-count-badge" style="display:none">0</span>
-        </button>
-      </div>
-    </div>
-  </header>
 
-  <!-- ─── SPLIT AUTH LAYOUT ─── -->
-  <main class="auth-split-wrapper">
-    <div class="auth-split-card">
-      <!-- LEFT: Fashion Editorial Visual -->
-      <div class="auth-visual-side">
-        <div>
-          <img src="assets/images/logo.png" alt="Suyog Textile" style="height:56px;margin-bottom:12px;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.35))">
-          <span style="letter-spacing:2px;font-size:0.75rem;text-transform:uppercase;color:var(--gold-light);font-weight:700;display:block">Suyog Couture</span>
-          <h2 style="margin-top:8px">Elegance That Defines You</h2>
+      <div id="authAlert" class="alert d-none small"></div>
+
+      <!-- Sign In Form -->
+      <form id="signInForm" onsubmit="handleSignIn(event)">
+        <h2 style="font-family: var(--font-brand); font-size: 1.45rem; margin-bottom: 6px;">Welcome Back</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 22px;">Access your saved addresses, orders, and wishlist.</p>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Email Address</label>
+          <input type="email" id="signInEmail" class="form-control" required placeholder="your.email@domain.com">
         </div>
-        <p style="font-size:0.9rem;color:rgba(255,255,255,0.85);line-height:1.6;margin:18px 0">
-          “Tradition reimagined for modern celebrations. Access exclusive handcrafted edits, personalized style recommendations, and fast-track checkout.”
-        </p>
-        <div style="font-size:0.8rem;color:var(--gold-light);font-weight:600">
-          ✨ Over 10,000 Happy Patrons Across India
-        </div>
-      </div>
-
-      <!-- RIGHT: Login Form -->
-      <div class="auth-form-side">
-        <div class="mb-4">
-          <div style="color:var(--primary);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Welcome Back</div>
-          <h1 style="font-family:var(--font-brand);font-size:clamp(1.5rem, 3vw, 2rem);margin:4px 0 6px">Sign in</h1>
-          <p style="font-size:0.85rem;color:var(--text-muted);margin:0">Enter your credentials to access your bag, orders, and wishlist.</p>
-        </div>
-
-        <div id="loginError" style="display:none;background:rgba(198,40,40,0.08);color:var(--error);padding:12px 14px;border-radius:var(--radius-sm);margin-bottom:18px;font-size:0.82rem;border-left:3px solid var(--error)"></div>
-
-        <form id="loginForm" onsubmit="handleLogin(event)">
-          <div class="form-group mb-3">
-            <label class="form-label" for="loginEmail" style="font-size:0.82rem;font-weight:600;margin-bottom:4px">Email or Mobile Number</label>
-            <input type="text" id="loginEmail" class="form-control" placeholder="name@example.com or 10-digit mobile" required autofocus style="min-height:46px;font-size:0.9rem">
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="form-label small fw-bold mb-0">Password</label>
+            <a href="javascript:void(0)" onclick="showForgotPassword()" class="small text-muted" style="text-decoration:none;">Forgot password?</a>
           </div>
-
-          <div class="form-group mb-3">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label mb-0" for="loginPass" style="font-size:0.82rem;font-weight:600">Password</label>
-              <a href="javascript:void(0)" onclick="Store.showToast('Please contact hello@suyogtextile.com for password reset support')" style="font-size:0.78rem;color:var(--primary);text-decoration:none">Forgot Password?</a>
-            </div>
-            <input type="password" id="loginPass" class="form-control" placeholder="Enter your password" required style="min-height:46px;font-size:0.9rem">
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100" style="min-height:48px;font-weight:700;font-size:0.95rem;border-radius:var(--radius-sm);margin-top:8px">
-            SIGN IN
-          </button>
-
-          <!-- Quick Demo Sign In Box -->
-          <div class="p-3 my-4 rounded" style="background:#FFFDF9;border:1px dashed var(--gold);">
-            <div class="small fw-bold mb-2 text-primary">⚡ Quick Sign-In Options:</div>
-            <div class="d-flex gap-2">
-              <button type="button" class="btn btn-sm btn-outline flex-grow-1" onclick="quickFill('customer')">Customer Demo</button>
-              <button type="button" class="btn btn-sm btn-gold flex-grow-1" onclick="quickFill('admin')">Admin Portal</button>
-            </div>
-          </div>
-        </form>
-
-        <div class="divider" style="height:1px;background:var(--border);margin:16px 0"></div>
-
-        <div class="text-center" style="font-size:0.85rem;color:var(--text-muted)">
-          Don't have an account yet? <br class="d-sm-none">
-          <a href="register.html" class="btn btn-outline btn-sm mt-2 w-100" style="min-height:44px;font-weight:600;display:flex;align-items:center;justify-content:center;">
-            CREATE ACCOUNT
-          </a>
+          <input type="password" id="signInPassword" class="form-control" required placeholder="••••••••">
         </div>
+
+        <button type="submit" id="btnSignInSubmit" class="btn btn-primary w-100 py-2 fw-bold mt-2">Sign In</button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signUpForm" onsubmit="handleSignUp(event)" style="display:none;">
+        <h2 style="font-family: var(--font-brand); font-size: 1.45rem; margin-bottom: 6px;">Create Account</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 22px;">Create an account to track orders and save your delivery details.</p>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Full Name</label>
+          <input type="text" id="signUpName" class="form-control" required placeholder="Full Name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Mobile Number</label>
+          <input type="tel" id="signUpPhone" class="form-control" required pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Email Address</label>
+          <input type="email" id="signUpEmail" class="form-control" required placeholder="your.email@domain.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Create Password (min 6 chars)</label>
+          <input type="password" id="signUpPassword" class="form-control" required minlength="6" placeholder="••••••••">
+        </div>
+
+        <button type="submit" id="btnSignUpSubmit" class="btn btn-primary w-100 py-2 fw-bold mt-2">Create Account</button>
+      </form>
+
+      <!-- Forgot Password Modal / View -->
+      <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)" style="display:none;">
+        <h2 style="font-family: var(--font-brand); font-size: 1.45rem; margin-bottom: 6px;">Reset Password</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 22px;">Enter your email to receive password reset instructions.</p>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Registered Email</label>
+          <input type="email" id="forgotEmail" class="form-control" required placeholder="your.email@domain.com">
+        </div>
+
+        <button type="submit" id="btnForgotSubmit" class="btn btn-primary w-100 py-2 fw-bold mt-2">Send Reset Link</button>
+        <button type="button" class="btn btn-link w-100 text-muted small mt-2" onclick="switchAuthMode('signin')">Back to Sign In</button>
+      </form>
+
+      <!-- Guest Order Tracking Link -->
+      <div class="text-center mt-4 pt-3 border-top">
+        <span class="text-muted small">Checked out as a guest?</span><br>
+        <a href="account.html#guest-track" class="small fw-bold" style="color:var(--primary);text-decoration:none;">Track Guest Order with Order # & Phone &rarr;</a>
       </div>
     </div>
   </main>
 
-  <!-- ─── FOOTER ─── -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="container footer-bottom">
-      <p>© 2026 Suyog Textile. All rights reserved. Made with ❤️ in India.</p>
-      <a href="index.html" style="color:var(--gold-light);text-decoration:underline;">&larr; Return to Showroom</a>
+      <p>© 2026 Suyog Textile. Real-Time Indian Clothing.</p>
     </div>
   </footer>
 
-  <!-- Floating Stylist Assistant -->
-  <div id="stylist-widget" style="position:fixed;bottom:24px;right:24px;z-index:999;font-family:var(--font-sans)">
-    <button id="stylist-toggle-btn" onclick="toggleStylistChat()" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg, var(--primary), var(--velvet));color:#fff;border:2px solid var(--gold);box-shadow:0 6px 24px rgba(139,26,74,0.35);cursor:pointer;font-size:1.6rem;display:flex;align-items:center;justify-content:center;" title="Stylist Assistant">
-      🥻
-    </button>
-    <div id="stylist-chat-box" style="display:none;position:absolute;bottom:70px;right:0;width:340px;height:420px;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.2);border:1px solid var(--border);flex-direction:column;overflow:hidden">
-      <div style="background:var(--primary);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-weight:700;font-size:0.9rem">🪷 Suyog Stylist Help</span>
-        <button onclick="toggleStylistChat()" style="background:transparent;border:none;color:#fff;font-size:1.2rem;cursor:pointer">✕</button>
-      </div>
-      <div style="flex:1;padding:14px;background:var(--cream);font-size:0.85rem;">
-        Namaste! 🙏 Signing in gives you access to custom blouse measurement records and private bridal couture lookbooks.
-      </div>
-    </div>
-  </div>
-
-  <script src="assets/js/products.js"></script>
+  <!-- Scripts: Pinned Supabase JS + Store Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabaseClient.js"></script>
   <script src="assets/js/store.js"></script>
   <script>
-    function quickFill(type) {
-      if (type === 'admin') {
-        document.getElementById('loginEmail').value = 'admin@suyogtextile.com';
-        document.getElementById('loginPass').value = 'admin123';
+    function showAlert(msg, isError = true) {
+      const el = document.getElementById('authAlert');
+      el.className = `alert small ${isError ? 'alert-danger' : 'alert-success'}`;
+      el.textContent = msg;
+      el.classList.remove('d-none');
+    }
+
+    function clearAlert() {
+      document.getElementById('authAlert').classList.add('d-none');
+    }
+
+    function switchAuthMode(mode) {
+      clearAlert();
+      const tabSignIn = document.getElementById('tabSignInBtn');
+      const tabSignUp = document.getElementById('tabSignUpBtn');
+      const formSignIn = document.getElementById('signInForm');
+      const formSignUp = document.getElementById('signUpForm');
+      const formForgot = document.getElementById('forgotPasswordForm');
+
+      formForgot.style.display = 'none';
+
+      if (mode === 'signup') {
+        tabSignIn.classList.remove('active');
+        tabSignUp.classList.add('active');
+        formSignIn.style.display = 'none';
+        formSignUp.style.display = 'block';
       } else {
-        document.getElementById('loginEmail').value = 'priya@example.com';
-        document.getElementById('loginPass').value = 'customer123';
+        tabSignIn.classList.add('active');
+        tabSignUp.classList.remove('active');
+        formSignIn.style.display = 'block';
+        formSignUp.style.display = 'none';
       }
     }
 
-    function handleLogin(e) {
+    function showForgotPassword() {
+      clearAlert();
+      document.getElementById('signInForm').style.display = 'none';
+      document.getElementById('signUpForm').style.display = 'none';
+      document.getElementById('forgotPasswordForm').style.display = 'block';
+    }
+
+    async function handleSignIn(e) {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPass').value;
-      const isAdmin = email.toLowerCase().includes('admin');
+      clearAlert();
+      const email = document.getElementById('signInEmail').value.trim();
+      const password = document.getElementById('signInPassword').value;
+      const btn = document.getElementById('btnSignInSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Signing In...';
 
-      const user = {
-        name: isAdmin ? 'Store Administrator' : (email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1)),
-        email: email,
-        phone: '+91 86693 96037',
-        isAdmin: isAdmin,
-        loginDate: new Date().toLocaleDateString()
-      };
+      if (!window.isSupabaseConfigured()) {
+        showAlert('Authentication backend is currently offline. Please contact showroom directly.');
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+        return;
+      }
 
-      localStorage.setItem('suyog_auth_user', JSON.stringify(user));
-      Store.showToast(`✨ Welcome back, ${user.name}!`);
+      try {
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          showAlert(error.message || 'Invalid email or password.');
+          btn.disabled = false;
+          btn.textContent = 'Sign In';
+          return;
+        }
 
-      setTimeout(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const next = urlParams.get('next');
-        if (next) {
-          window.location.href = next;
-        } else if (isAdmin) {
-          window.location.href = 'admin.html';
-        } else {
+        // Redirect to account dashboard
+        window.location.href = 'account.html';
+      } catch (err) {
+        showAlert('An unexpected connection error occurred.');
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    }
+
+    async function handleSignUp(e) {
+      e.preventDefault();
+      clearAlert();
+      const fullName = document.getElementById('signUpName').value.trim();
+      const phone = document.getElementById('signUpPhone').value.trim();
+      const email = document.getElementById('signUpEmail').value.trim();
+      const password = document.getElementById('signUpPassword').value;
+      const btn = document.getElementById('btnSignUpSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Creating Account...';
+
+      if (!window.isSupabaseConfigured()) {
+        showAlert('Account creation is temporarily offline. Please contact showroom directly.');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        return;
+      }
+
+      try {
+        const { data, error } = await window.supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+              phone: phone
+            }
+          }
+        });
+
+        if (error) {
+          showAlert(error.message || 'Unable to register account.');
+          btn.disabled = false;
+          btn.textContent = 'Create Account';
+          return;
+        }
+
+        showAlert('Account created! Please check your email inbox to confirm your address before signing in.', false);
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      } catch (err) {
+        showAlert('Registration error. Please check your inputs.');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    }
+
+    async function handleForgotPassword(e) {
+      e.preventDefault();
+      clearAlert();
+      const email = document.getElementById('forgotEmail').value.trim();
+      const btn = document.getElementById('btnForgotSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Sending Link...';
+
+      if (window.isSupabaseConfigured()) {
+        try {
+          await window.supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/account.html'
+          });
+        } catch (e) {}
+      }
+
+      // Never reveal whether an email exists
+      showAlert('If an account exists with this email, you will receive password reset instructions shortly.', false);
+      btn.disabled = false;
+      btn.textContent = 'Send Reset Link';
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.isSupabaseConfigured()) {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (session && session.user) {
           window.location.href = 'account.html';
         }
-      }, 500);
-    }
-
-    function toggleStylistChat() {
-      const box = document.getElementById('stylist-chat-box');
-      if (!box) return;
-      box.style.display = (box.style.display === 'none' || !box.style.display) ? 'flex' : 'none';
-    }
+      }
+    });
   </script>
 </body>
 </html>
