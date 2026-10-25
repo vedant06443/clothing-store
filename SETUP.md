@@ -144,14 +144,16 @@ Because `profiles.role` cannot be updated through the browser or public API (pro
 1. Connect your GitHub repository to Render.
 2. Select **Static Site**.
 3. **Build Command**: Leave empty (no build step is needed).
-4. **Publish Directory**: `./` (root directory).
+4. **Publish Directory**: `./public` (or `public`).
 5. **Environment Variables**: None required (all public config is in `assets/js/config.js`).
 6. The `render.yaml` file in the repo root will automatically apply standard URL redirects.
 
-### Apache / cPanel Deployment:
-1. Upload the repository files into `public_html/`.
-2. The included `.htaccess` file automatically forces HTTPS, serves `index.html` for clean URLs, and configures gzip compression and browser caching.
-3. Clean paths like `https://suyogtextile.in/admin/` will automatically route to `admin/index.html`.
+### Apache / cPanel Deployment (Git Version Control):
+1. In cPanel, go to **Domains** and verify the exact **Document Root** for `suyogtextile.in` (e.g. `/home/username/public_html/` or `/home/username/suyogtextile.in/`).
+2. Open `.cpanel.yml` and set `export DEPLOYPATH=/home/YOUR_CPANEL_USER/YOUR_DOCUMENT_ROOT/`.
+3. In cPanel -> **Git™ Version Control**, click **Update from Remote** followed by **Deploy HEAD Commit**.
+4. Test self-verification: visit `https://suyogtextile.in/deploy-check.txt` in your browser. It will immediately print the deployed commit SHA and timestamp!
+5. All live web files are automatically copied from `public/.` into your document root, while `supabase/`, docs, and backend test scripts stay protected outside the web server.
 
 ---
 

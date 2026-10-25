@@ -1,10 +1,153 @@
+# ==============================================================================
+# Suyog Textile — cPanel Git Deployment Configuration (.cpanel.yml)
+#
+# IMPORTANT / LOUD TODO:
+# In cPanel, find your exact Linux username and the Document Root for suyogtextile.in:
+#   1. Check cPanel -> Domains -> "Document Root" for suyogtextile.in
+#      (e.g., /home/suyog/public_html/ or /home/suyog/suyogtextile.in/)
+#   2. Replace 'TODO_CPANEL_USER' with your actual cPanel username.
+#   3. Replace 'TODO_DOCUMENT_ROOT' with your actual domain document root folder.
+# ==============================================================================
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=$HOME/public_html/
+    - export DEPLOYPATH=/home/TODO_CPANEL_USER/TODO_DOCUMENT_ROOT/
     - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -rf .htaccess $DEPLOYPATH/
-    - /bin/cp -rf *.html $DEPLOYPATH/
-    - /bin/cp -rf assets $DEPLOYPATH/
-    - /bin/cp -rf robots.txt $DEPLOYPATH/
-    - /bin/cp -rf sitemap.xml $DEPLOYPATH/
+    - /bin/cp -R public/. $DEPLOYPATH
+    - /bin/sh -c 'echo "commit $(git rev-parse --short HEAD 2>/dev/null) deployed $(date -u)" > $DEPLOYPATH/deploy-check.txt'
+    # Safe cleanup of legacy files that no longer exist in the current site (no rm -rf, only /bin/rm -f per file)
+    - /bin/rm -f $DEPLOYPATH/index.php
+    - /bin/rm -f $DEPLOYPATH/index.htm
+    - /bin/rm -f $DEPLOYPATH/default.html
+    - /bin/rm -f $DEPLOYPATH/home.html
+    - /bin/rm -f $DEPLOYPATH/.python-version
+    - /bin/rm -f $DEPLOYPATH/admin.html
+    - /bin/rm -f $DEPLOYPATH/admin/categories.html
+    - /bin/rm -f $DEPLOYPATH/admin/coupons.html
+    - /bin/rm -f $DEPLOYPATH/admin/customers.html
+    - /bin/rm -f $DEPLOYPATH/admin/dashboard.html
+    - /bin/rm -f $DEPLOYPATH/admin/notifications.html
+    - /bin/rm -f $DEPLOYPATH/admin/orders.html
+    - /bin/rm -f $DEPLOYPATH/admin/product-form.html
+    - /bin/rm -f $DEPLOYPATH/admin/product_form.html
+    - /bin/rm -f $DEPLOYPATH/admin/products.html
+    - /bin/rm -f $DEPLOYPATH/admin/reviews.html
+    - /bin/rm -f $DEPLOYPATH/invoice.html
+    - /bin/rm -f $DEPLOYPATH/order-detail.html
+    - /bin/rm -f $DEPLOYPATH/orders.html
+    - /bin/rm -f $DEPLOYPATH/register.html
+    - /bin/rm -f $DEPLOYPATH/static/css/responsive.css
+    - /bin/rm -f $DEPLOYPATH/static/css/style.css
+    - /bin/rm -f $DEPLOYPATH/static/images/favicon.png
+    - /bin/rm -f $DEPLOYPATH/static/images/logo.jpg
+    - /bin/rm -f $DEPLOYPATH/static/images/logo.png
+    - /bin/rm -f $DEPLOYPATH/static/images/placeholder.jpg
+    - /bin/rm -f $DEPLOYPATH/static/images/placeholder.svg
+    - /bin/rm -f $DEPLOYPATH/static/images/products/.gitkeep
+    - /bin/rm -f $DEPLOYPATH/static/js/products.js
+    - /bin/rm -f $DEPLOYPATH/static/js/store.js
+    - /bin/rm -f $DEPLOYPATH/vastravibe/.env.example
+    - /bin/rm -f $DEPLOYPATH/vastravibe/.gitignore
+    - /bin/rm -f $DEPLOYPATH/vastravibe/.python-version
+    - /bin/rm -f $DEPLOYPATH/vastravibe/Procfile
+    - /bin/rm -f $DEPLOYPATH/vastravibe/README.md
+    - /bin/rm -f $DEPLOYPATH/vastravibe/alembic.ini
+    - /bin/rm -f $DEPLOYPATH/vastravibe/alembic/README
+    - /bin/rm -f $DEPLOYPATH/vastravibe/alembic/env.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/alembic/script.py.mako
+    - /bin/rm -f $DEPLOYPATH/vastravibe/alembic/versions/001_create_notifications_table.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/config.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/database.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/main.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/__init__.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/address.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/banner.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/cart.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/category.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/coupon.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/newsletter.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/notification.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/order.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/payment.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/product.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/product_image.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/product_variant.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/review.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/user.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/models/wishlist.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/addresses.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/admin.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/auth.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/cart.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/orders.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/pages.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/payments.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/products.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/reviews.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/routers/wishlist.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/schemas/cart.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/schemas/product.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/schemas/user.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/services/auth_service.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/services/cart_service.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/services/notification_service.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/services/order_service.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/services/payment_service.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/services/pincode_service.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/services/product_service.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/css/responsive.css
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/css/style.css
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/images/favicon.png
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/images/logo.jpg
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/images/logo.png
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/images/placeholder.jpg
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/images/placeholder.svg
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/images/products/.gitkeep
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/js/admin_notifications.js
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/js/cart.js
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/js/main.js
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/js/product.js
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/static/js/responsive.js
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/account.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/base.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/categories.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/coupons.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/customers.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/dashboard.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/notifications.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/orders.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/product_form.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/products.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/admin/reviews.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/auth/login.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/auth/register.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/base.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/cart.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/checkout.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/errors/404.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/errors/500.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/home.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/invoice.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/order_confirmation.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/order_detail.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/orders.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/partials/chat_widget.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/partials/product_card.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/partials/size_guide_modal.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/product_detail.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/products.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/studio.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/templates/wishlist.html
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/utils/dependencies.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/utils/helpers.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/utils/image_upload.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/app/utils/security.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/passenger_wsgi.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/requirements.txt
+    - /bin/rm -f $DEPLOYPATH/vastravibe/run.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/scripts/analyze_mangaldeep.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/scripts/inspect_mangaldeep.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/scripts/mangaldeep_analysis.json
+    - /bin/rm -f $DEPLOYPATH/vastravibe/scripts/seed_products.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/tests/conftest.py
+    - /bin/rm -f $DEPLOYPATH/vastravibe/tests/test_api.py
